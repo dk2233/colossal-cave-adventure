@@ -2,9 +2,7 @@
 #include "misc.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-#define TRUE  (0==0)
-#define FALSE (0!=0)
+#include <stdbool.h>
 
 /*  I/O ROUTINES (SPEAK, PSPEAK, RSPEAK, SETPRM, GETIN, YES) */
 

@@ -1,3 +1,7 @@
+
+#ifndef _SHARE_H
+#define _SHARE_H
+
 extern void score(long);
 extern long ABBNUM, ACTSPK[], AMBER, ATTACK, AXE, BACK, BATTER, BEAR,
    BIRD, BLOOD, BONUS,
@@ -22,3 +26,4 @@ extern long ABBNUM, ACTSPK[], AMBER, ATTACK, AXE, BACK, BATTER, BEAR,
    VOLCAN, VRBSIZ, VRSION, WATER, WD1, WD1X, WD2, WD2X,
    WZDARK, ZZWORD;
 
+#endif

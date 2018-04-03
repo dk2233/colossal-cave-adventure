@@ -4,12 +4,10 @@
 #include "funcs.h"
 #include <stdio.h>
 
-#define TRUE  (0==0)
-#define FALSE (0!=0)
 
 
 static int raw_init(void);
-static finish_init(void);
+static int finish_init(void);
 static void report(void);
 static int quick_save(void);
 static int quick_init(void);
@@ -381,7 +379,7 @@ L1092:	LOCSND[K]=KK;
  *  CORRECT LINK TO USE.)  ABB IS ZEROED; IT CONTROLS WHETHER THE ABBREVIATED
  *  DESCRIPTION IS PRINTED.  COUNTS MOD 5 UNLESS "LOOK" IS USED. */
 
-static finish_init() {
+static int finish_init() {
 	/* 1101 */ for (I=1; I<=100; I++) {
 	PLACE[I]=0;
 	PROP[I]=0;
@@ -647,7 +645,11 @@ static FILE *f;
 static void quick_item(long*);
 static void quick_array(long*, long);
 
-static int quick_init(void) {
+
+
+
+static int quick_init(void)
+{
 #ifdef AMIGA
 	f = fopen("ram:adventure.data", READ_MODE);
 #else

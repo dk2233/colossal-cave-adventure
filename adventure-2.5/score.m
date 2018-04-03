@@ -2,9 +2,7 @@
 #include "main.h"
 #include "share.h"
 #import <stdlib.h>
-
-#define TRUE  (0==0)
-#define FALSE (0!=0)
+#import <Foundation/Foundation.h>
 
 /*
  * SCORING AND WRAP-UP

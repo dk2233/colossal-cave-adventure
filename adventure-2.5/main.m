@@ -6,11 +6,15 @@
 //  Copyright © 2018 code masterss. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#include "main.h"
 #include "misc.h"
 
 
-long ABB[186], ATAB[331], ATLOC[186], BLKLIN = TRUE, DFLAG,
+long ABB[186],
+ATAB[331],
+ATLOC[186],
+BLKLIN = TRUE,
+DFLAG,
 DLOC[7], FIXED[101], HOLDNG,
 KTAB[331], *LINES_ADV, LINK[201], LNLENG, LNPOSN,
 PARMS[26], PLACE[101], PTEXT[101], RTEXT[278],
