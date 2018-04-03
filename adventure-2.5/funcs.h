@@ -1,6 +1,6 @@
 
-#ifndef _FUNC_H_
-#define  _FUNC_H
+#ifndef _FUNCS_H_
+#define _FUNCS_H_
 /*  STATEMENT FUNCTIONS
  *
  *  AT(OBJ)	= TRUE IF ON EITHER SIDE OF TWO-PLACED OBJECT

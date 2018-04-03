@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		E713976C2070FC24003E5E17 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E713976B2070FC24003E5E17 /* main.m */; };
-		E71397812070FC45003E5E17 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = E71397742070FC43003E5E17 /* score.c */; };
-		E71397822070FC45003E5E17 /* actions1.c in Sources */ = {isa = PBXBuildFile; fileRef = E71397772070FC43003E5E17 /* actions1.c */; };
-		E71397832070FC45003E5E17 /* misc.c in Sources */ = {isa = PBXBuildFile; fileRef = E71397782070FC44003E5E17 /* misc.c */; };
-		E71397842070FC45003E5E17 /* datime.c in Sources */ = {isa = PBXBuildFile; fileRef = E71397792070FC44003E5E17 /* datime.c */; };
-		E71397862070FC45003E5E17 /* init.c in Sources */ = {isa = PBXBuildFile; fileRef = E713977D2070FC44003E5E17 /* init.c */; };
-		E71397872070FC45003E5E17 /* actions2.c in Sources */ = {isa = PBXBuildFile; fileRef = E713977F2070FC44003E5E17 /* actions2.c */; };
+		E71BC5602074171A003E7939 /* score.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC55F2074171A003E7939 /* score.m */; };
+		E71BC56220741721003E7939 /* misc.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56120741721003E7939 /* misc.m */; };
+		E71BC56720741795003E7939 /* actions2.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56320741794003E7939 /* actions2.m */; };
+		E71BC56820741795003E7939 /* datime.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56420741794003E7939 /* datime.m */; };
+		E71BC56920741795003E7939 /* init.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56520741794003E7939 /* init.m */; };
+		E71BC56A20741795003E7939 /* actions1.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56620741795003E7939 /* actions1.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,17 +32,17 @@
 		E71397682070FC24003E5E17 /* AdventureOrig */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AdventureOrig; sourceTree = BUILT_PRODUCTS_DIR; };
 		E713976B2070FC24003E5E17 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E71397722070FC43003E5E17 /* misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = misc.h; sourceTree = "<group>"; };
-		E71397742070FC43003E5E17 /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = score.c; sourceTree = "<group>"; };
 		E71397752070FC43003E5E17 /* funcs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = funcs.h; sourceTree = "<group>"; };
 		E71397762070FC43003E5E17 /* adventure.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = adventure.text; sourceTree = "<group>"; };
-		E71397772070FC43003E5E17 /* actions1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = actions1.c; sourceTree = "<group>"; };
-		E71397782070FC44003E5E17 /* misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = misc.c; sourceTree = "<group>"; };
-		E71397792070FC44003E5E17 /* datime.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = datime.c; sourceTree = "<group>"; };
 		E713977A2070FC44003E5E17 /* share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = share.h; sourceTree = "<group>"; };
 		E713977C2070FC44003E5E17 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		E713977D2070FC44003E5E17 /* init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = init.c; sourceTree = "<group>"; };
 		E713977E2070FC44003E5E17 /* copyright */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyright; sourceTree = "<group>"; };
-		E713977F2070FC44003E5E17 /* actions2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = actions2.c; sourceTree = "<group>"; };
+		E71BC55F2074171A003E7939 /* score.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = score.m; sourceTree = "<group>"; };
+		E71BC56120741721003E7939 /* misc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = misc.m; path = "/Users/danielk/Documents/coding/adventureFromGithub/adventure-2.5/misc.m"; sourceTree = "<absolute>"; };
+		E71BC56320741794003E7939 /* actions2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = actions2.m; sourceTree = "<group>"; };
+		E71BC56420741794003E7939 /* datime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = datime.m; sourceTree = "<group>"; };
+		E71BC56520741794003E7939 /* init.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = init.m; sourceTree = "<group>"; };
+		E71BC56620741795003E7939 /* actions1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = actions1.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,20 +59,20 @@
 		E713975F2070FC24003E5E17 = {
 			isa = PBXGroup;
 			children = (
-				E71397772070FC43003E5E17 /* actions1.c */,
-				E713977F2070FC44003E5E17 /* actions2.c */,
+				E71BC56620741795003E7939 /* actions1.m */,
+				E71BC56320741794003E7939 /* actions2.m */,
 				E71397762070FC43003E5E17 /* adventure.text */,
 				E713977E2070FC44003E5E17 /* copyright */,
-				E71397792070FC44003E5E17 /* datime.c */,
+				E71BC56420741794003E7939 /* datime.m */,
 				E71397752070FC43003E5E17 /* funcs.h */,
-				E713977D2070FC44003E5E17 /* init.c */,
+				E71BC56520741794003E7939 /* init.m */,
 				E713977C2070FC44003E5E17 /* main.h */,
-				E71397782070FC44003E5E17 /* misc.c */,
-				E71397722070FC43003E5E17 /* misc.h */,
-				E71397742070FC43003E5E17 /* score.c */,
-				E713977A2070FC44003E5E17 /* share.h */,
 				E713976B2070FC24003E5E17 /* main.m */,
+				E71397722070FC43003E5E17 /* misc.h */,
+				E71BC56120741721003E7939 /* misc.m */,
 				E71397692070FC24003E5E17 /* Products */,
+				E71BC55F2074171A003E7939 /* score.m */,
+				E713977A2070FC44003E5E17 /* share.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,13 +141,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E71397832070FC45003E5E17 /* misc.c in Sources */,
-				E71397842070FC45003E5E17 /* datime.c in Sources */,
-				E71397812070FC45003E5E17 /* score.c in Sources */,
-				E71397862070FC45003E5E17 /* init.c in Sources */,
-				E71397822070FC45003E5E17 /* actions1.c in Sources */,
-				E71397872070FC45003E5E17 /* actions2.c in Sources */,
+				E71BC56720741795003E7939 /* actions2.m in Sources */,
+				E71BC5602074171A003E7939 /* score.m in Sources */,
+				E71BC56820741795003E7939 /* datime.m in Sources */,
 				E713976C2070FC24003E5E17 /* main.m in Sources */,
+				E71BC56220741721003E7939 /* misc.m in Sources */,
+				E71BC56A20741795003E7939 /* actions1.m in Sources */,
+				E71BC56920741795003E7939 /* init.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

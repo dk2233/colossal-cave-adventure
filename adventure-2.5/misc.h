@@ -5,6 +5,17 @@
 #define READ_MODE "r"
 #define WRITE_MODE "w"
 
+extern int carry(void );
+extern int discard(long);
+extern int attack(void);
+extern int throw(void);
+extern int feed(void);
+extern int fill(void);
+
+extern void initialise(void );
+extern void score(long );
+extern int action(long);
+
 
 extern void fSPEAK(long);
 #define SPEAK(N) fSPEAK(N)
@@ -17,7 +28,7 @@ extern void fSETPRM(long,long,long);
 extern void fGETIN(long*,long*,long*,long*);
 #define GETIN(WORD1,WORD1X,WORD2,WORD2X) fGETIN(&WORD1,&WORD1X,&WORD2,&WORD2X)
 extern long fYES(long,long,long);
-#define YES(X,Y,Z) fYES(X,Y,Z)
+#define YES_ADV(X,Y,Z) fYES(X,Y,Z)
 extern long fGETNUM(long);
 #define GETNUM(K) fGETNUM(K)
 extern long fGETTXT(long,long,long,long);

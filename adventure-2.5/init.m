@@ -502,7 +502,7 @@ L1300:	HINTLC[I]=0;
 	BACK=VOCWRD(2010311,0);
 	CAVE=VOCWRD(3012205,0);
 	DPRSSN=VOCWRD(405161805,0);
-	ENTER=VOCWRD(514200518,0);
+	ENTER_ADV=VOCWRD(514200518,0);
 	ENTRNC=VOCWRD(514201801,0);
 	LOOK=VOCWRD(12151511,0);
 	NUL=VOCWRD(14211212,0);
@@ -510,7 +510,7 @@ L1300:	HINTLC[I]=0;
 
 /*  AND SOME ACTION VERBS. */
 
-	FIND=VOCWRD(6091404,2);
+	FIND_ADV=VOCWRD(6091404,2);
 	INVENT=VOCWRD(914220514,2);
 	LOCK=VOCWRD(12150311,2);
 	SAY=VOCWRD(190125,2);
@@ -653,7 +653,7 @@ static int quick_init(void)
 #ifdef AMIGA
 	f = fopen("ram:adventure.data", READ_MODE);
 #else
-	extern char *getenv();
+    //extern char *getenv();
 	char *adv = getenv("ADVENTURE");
 	f = NULL;
 	if(adv)f = fopen(adv,READ_MODE);

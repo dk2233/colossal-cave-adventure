@@ -5,7 +5,6 @@
 #include <stdlib.h>
 
 
-extern carry(), discard(long), attack(), throw(), feed(), fill();
 
 /* This stuff was broken off as part of an effort to get the main program
  * to compile without running out of memory.  We're called with a number
@@ -16,7 +15,8 @@ extern carry(), discard(long), attack(), throw(), feed(), fill();
 /*  ANALYSE A VERB.  REMEMBER WHAT IT WAS, GO BACK FOR OBJECT IF SECOND WORD
  *  UNLESS VERB IS "SAY", WHICH SNARFS ARBITRARY SECOND WORD. */
 
-action(STARTAT)long STARTAT; {
+int action(STARTAT)long STARTAT;
+{
 	switch(STARTAT) {
 	   case 4000: goto L4000;
 	   case 4090: goto L4090;
@@ -103,7 +103,7 @@ L5130:	if(OBJ != KNIFE || KNFLOC != LOC) goto L5140;
 L5140:	if(OBJ != ROD || !HERE(ROD2)) goto L5190;
 	OBJ=ROD2;
 	 goto L5010;
-L5190:	if((VERB == FIND || VERB == INVENT) && WD2 <= 0) goto L5010;
+L5190:	if((VERB == FIND_ADV || VERB == INVENT) && WD2 <= 0) goto L5010;
 	SETPRM(1,WD1,WD1X);
 	RSPEAK(256);
 	 return(2012);
@@ -214,7 +214,16 @@ L8070:	if(HERE(LAMP) && PROP[LAMP] == 0 && LIMIT >= 0)OBJ=LAMP;
 	if(HERE(URN) && PROP[URN] == 1)OBJ=OBJ*100+URN;
 	if(OBJ == 0 || OBJ > 100) return(8000);
 
-L9070:	if(OBJ == URN) goto L9073;
+L9070:
+    if(OBJ == URN)
+    {
+    SPK=38;
+    if(PROP[URN] == 0) return(2011);
+    SPK=209;
+    PROP[URN]=2;
+    return(2011);
+    }
+    
 	if(OBJ != LAMP) return(2011);
 	SPK=184;
 	if(LIMIT < 0) return(2011);
@@ -223,11 +232,7 @@ L9070:	if(OBJ == URN) goto L9073;
 	if(WZDARK) return(2000);
 	 return(2012);
 
-L9073:	SPK=38;
-	if(PROP[URN] == 0) return(2011);
-	SPK=209;
-	PROP[URN]=2;
-	 return(2011);
+
 
 /*  EXTINGUISH.  LAMP, URN, DRAGON/VOLCANO (NICE TRY). */
 
@@ -355,7 +360,7 @@ L9170:	return(throw());
 
 /*  QUIT.  INTRANSITIVE ONLY.  VERIFY INTENT AND EXIT IF THAT'S WHAT HE WANTS. */
 
-L8180:	if(YES(22,54,54)) score(1);
+L8180:	if(YES_ADV(22,54,54)) score(1);
 	 return(2012);
 
 /*  FIND.  MIGHT BE CARRYING IT, OR IT MIGHT BE HERE.  ELSE GIVE CAVEAT. */
@@ -448,7 +453,7 @@ L9270:	if(DARK(0)) goto L5190;
 	PSPEAK(OBJ,OBJTXT[OBJ]+PROP[OBJ]);
 	 return(2012);
 
-L9275:	CLSHNT=YES(192,193,54);
+L9275:	CLSHNT=YES_ADV(192,193,54);
 	 return(2012);
 
 /*  BREAK.  ONLY WORKS FOR MIRROR IN REPOSITORY AND, OF COURSE, THE VASE. */
@@ -477,7 +482,7 @@ L9290:	if(OBJ != DWARF || !CLOSED) return(2011);
 
 L8300:	SPK=201;
 	RSPEAK(260);
-	if(!YES(200,54,54)) return(2012);
+	if(!YES_ADV(200,54,54)) return(2012);
 	SAVED=SAVED+5;
 	KK= -1;
 
@@ -527,7 +532,7 @@ L8305:	DATIME(I,K);
 L8310:	KK=1;
 	if(LOC == 1 && ABB[1] == 1) goto L8305;
 	RSPEAK(268);
-	if(!YES(200,54,54)) return(2012);
+	if(!YES_ADV(200,54,54)) return(2012);
 	 goto L8305;
 
 L8312:	SETPRM(1,K/10,MOD(K,10));

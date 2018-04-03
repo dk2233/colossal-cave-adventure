@@ -8,7 +8,8 @@
  * SCORING AND WRAP-UP
  */
 
-void score(MODE)long MODE; {
+void score(long MODE)
+{
 	/* <0 if scoring, >0 if quitting, =0 if died or won */
 
 /*  THE PRESENT SCORING ALGORITHM IS AS FOLLOWS:

@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #include "main.h"
 #include "misc.h"
 #include <stdio.h>
@@ -201,10 +202,10 @@ L22:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 #undef WORD2
 #undef WORD2X
 #define GETIN(WORD1,WORD1X,WORD2,WORD2X) fGETIN(&WORD1,&WORD1X,&WORD2,&WORD2X)
-#undef YES
+#undef YES_ADV
 long fYES(X,Y,Z)long X, Y, Z; {
 
-long YES, REPLY, JUNK1, JUNK2, JUNK3;
+long YES_ADV, REPLY, JUNK1, JUNK2, JUNK3;
 
 /*  PRINT MESSAGE X, WAIT FOR YES/NO ANSWER.  IF YES, PRINT Y AND RETURN TRUE;
  *  IF NO, PRINT Z AND RETURN FALSE. */
@@ -215,12 +216,12 @@ L1:	RSPEAK(X);
 	if(REPLY == MAKEWD(1415) || REPLY == MAKEWD(14)) goto L20;
 	RSPEAK(185);
 	 goto L1;
-L10:	YES=TRUE;
+L10:	YES_ADV=TRUE;
 	RSPEAK(Y);
-	return(YES);
-L20:	YES=FALSE;
+	return(YES_ADV);
+L20:	YES_ADV=FALSE;
 	RSPEAK(Z);
-	return(YES);
+	return(YES_ADV);
 }
 
 
@@ -236,7 +237,7 @@ L20:	YES=FALSE;
  *  MACHINE DEPENDENT I/O STUFF IS ON THE FOLLOWING PAGE.  SEE THAT PAGE
  *  FOR A DESCRIPTION OF MAPCOM'S INLINE ARRAY. */
 
-#define YES(X,Y,Z) fYES(X,Y,Z)
+#define YES_ADV(X,Y,Z) fYES(X,Y,Z)
 #undef GETNUM
 long fGETNUM(K)long K; {
 long DIGIT, GETNUM, SIGN;
@@ -838,7 +839,7 @@ void fBUG(NUM)long NUM; {
  *	28	INVALID MONTH RETURNED BY DATE FUNCTION
  *	29	TOO MANY PARAMETERS GIVEN TO SETPRM */
 
-	printf("Fatal error %d.  See source code for interpretation.\n",
+	printf("Fatal error %ld.  See source code for interpretation.\n",
 	   NUM);
 	exit(FALSE);
 }
