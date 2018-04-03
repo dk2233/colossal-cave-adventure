@@ -147,6 +147,7 @@
 78	The canyon runs into a mass of boulders -- dead end.
 79	The stream flows out through a pair of 1 foot diameter sewer pipes.
 79	It would be advisable to use the exit.
+
 80	You are in a maze of twisty little passages, all alike.
 81	Dead end
 82	Dead end
@@ -1366,7 +1367,7 @@
 3013	THANK
 3050	SESAM
 3050	OPENS
-3050	ABRA
+3050	ABRA::
 3050	ABRAC
 3050	SHAZA
 3050	HOCUS

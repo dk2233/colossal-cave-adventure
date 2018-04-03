@@ -2,9 +2,8 @@
 #include "main.h"
 #include "share.h"
 #include "funcs.h"
+#import <Foundation/Foundation.h>
 
-#define TRUE  (0==0)
-#define FALSE (0!=0)
 
 /*  CARRY AN OBJECT.  SPECIAL CASES FOR BIRD AND CAGE (IF BIRD IN CAGE, CAN'T
  *  TAKE ONE WITHOUT THE OTHER).  LIQUIDS ALSO SPECIAL, SINCE THEY DEPEND ON

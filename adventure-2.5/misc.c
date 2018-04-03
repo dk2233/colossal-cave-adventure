@@ -1,6 +1,7 @@
 #include "main.h"
 #include "misc.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 #define TRUE  (0==0)
 #define FALSE (0!=0)
@@ -11,7 +12,7 @@
 void fSPEAK(N)long N; {
 long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 
-/*  PRINT THE MESSAGE WHICH STARTS AT LINES(N).  PRECEDE IT WITH A BLANK LINE
+/*  PRINT THE MESSAGE WHICH STARTS AT LINES_ADV(N).  PRECEDE IT WITH A BLANK LINE
  *  UNLESS BLKLIN IS FALSE. */
 
 
@@ -19,13 +20,13 @@ long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 	BLANK=BLKLIN;
 	K=N;
 	NPARMS=1;
-L10:	L=IABS(LINES[K])-1;
+L10:	L=IABS(LINES_ADV[K])-1;
 	K=K+1;
 	LNLENG=0;
 	LNPOSN=1;
 	STATE=0;
 	/* 20 */ for (I=K; I<=L; I++) {
-L20:	PUTTXT(LINES[I],STATE,2,I);
+L20:	PUTTXT(LINES_ADV[I],STATE,2,I);
 	} /* end loop */
 	LNPOSN=0;
 L30:	LNPOSN=LNPOSN+1;
@@ -104,7 +105,7 @@ L40:	if(BLANK)TYPE0();
 	BLANK=FALSE;
 	TYPE();
 	K=L+1;
-	if(LINES[K] >= 0) goto L10;
+	if(LINES_ADV[K] >= 0) goto L10;
 	return;
 }
 
@@ -122,8 +123,8 @@ long I, M;
 	M=PTEXT[MSG];
 	if(SKIP < 0) goto L9;
 	/* 3 */ for (I=0; I<=SKIP; I++) {
-L1:	M=IABS(LINES[M]);
-	if(LINES[M] >= 0) goto L1;
+L1:	M=IABS(LINES_ADV[M]);
+	if(LINES_ADV[M] >= 0) goto L1;
 L3:	/*etc*/ ;
 	} /* end loop */
 L9:	SPEAK(M);
