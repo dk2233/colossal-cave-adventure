@@ -177,7 +177,13 @@ static int quick_io(void);
 
 void initialise(void) {
 	printf("Initialising...\n");
-	if(!quick_init()){raw_init(); report(); quick_save();}
+	if(!quick_init())
+    {
+        raw_init();
+        report();
+        quick_save();
+        
+    }
 	finish_init();
 }
 
@@ -194,41 +200,77 @@ static int raw_init(void ) {
  *  SECTION 6'S STUFF.  CTEXT(N) POINTS TO A PLAYER-CLASS MESSAGE.  TTEXT IS FOR
  *  SECTION 14.  WE ALSO CLEAR COND (SEE DESCRIPTION OF SECTION 9 FOR DETAILS). */
 
-	/* 1001 */ for (I=1; I<=300; I++) {
-	if(I <= 100)PTEXT[I]=0;
-	if(I <= RTXSIZ)RTEXT[I]=0;
-	if(I <= CLSMAX)CTEXT[I]=0;
-	if(I <= 100)OBJSND[I]=0;
-	if(I <= 100)OBJTXT[I]=0;
-	if(I > LOCSIZ) goto L1001;
-	STEXT[I]=0;
-	LTEXT[I]=0;
-	COND[I]=0;
-	KEY[I]=0;
-	LOCSND[I]=0;
-L1001:	/*etc*/ ;
-	} /* end loop */
+	/* 1001 */
+    for (I=1; I<=300; I++)
+    {
+        if(I <= 100)PTEXT[I]=0;
+        if(I <= RTXSIZ)RTEXT[I]=0;
+        if(I <= CLSMAX)CTEXT[I]=0;
+        if(I <= 100)OBJSND[I]=0;
+        if(I <= 100)OBJTXT[I]=0;
+        if(I > LOCSIZ) break;
+        STEXT[I]=0;
+        LTEXT[I]=0;
+        COND[I]=0;
+        KEY[I]=0;
+        LOCSND[I]=0;
+    
+    } /* end loop */
 
 	LINUSE=1;
 	TRVS=1;
 	CLSSES=0;
 	TRNVLS=0;
 
+    
+    
+    
+    
+    
 /*  START NEW DATA SECTION.  SECT IS THE SECTION NUMBER. */
 
 L1002:	SECT=GETNUM(1);
 	OLDLOC= -1;
-	switch (SECT) { case 0: return(0); case 1: goto L1004; case 2: goto
-		L1004; case 3: goto L1030; case 4: goto L1040; case 5: goto L1004;
-		case 6: goto L1004; case 7: goto L1050; case 8: goto L1060; case
-		9: goto L1070; case 10: goto L1004; case 11: goto L1080; case 12:
-		break; case 13: goto L1090; case 14: goto L1004; }
+	switch (SECT)
+    { case 0: return(0);
+        case 1: goto L1004;
+        case 2: goto L1004;
+        case 3: goto L1030;
+        case 4: goto L1040;
+        case 5: goto L1004;
+        case 6: goto L1004;
+        case 7:
+            /*  READ IN THE INITIAL LOCATIONS FOR EACH OBJECT.  ALSO THE IMMOVABILITY INFO.
+             *  PLAC CONTAINS INITIAL LOCATIONS OF OBJECTS.  FIXD IS -1 FOR IMMOVABLE
+             *  OBJECTS (INCLUDING THE SNAKE), OR = SECOND LOC FOR TWO-PLACED OBJECTS. */
+            
+            OBJ = 0;
+            while (OBJ != -1)
+            {
+                
+                PLAC[OBJ]=GETNUM(0);
+                FIXD[OBJ]=GETNUM(0);
+                OBJ=GETNUM(1);
+            }
+            goto L1002;
+            
+        case 8: goto L1060;
+        case 9: goto L1070;
+        case 10: goto L1004;
+        case 11: goto L1080;
+        case 12: break;
+        case 13: goto L1090;
+        case 14: goto L1004;
+            
+    }
 /*	      (0)  (1)  (2)  (3)  (4)  (5)  (6)  (7)  (8)  (9)
  *	     (10) (11) (12) (13) (14) */
 	BUG(9);
 
 /*  SECTIONS 1, 2, 5, 6, 10, 14.  READ MESSAGES AND SET UP POINTERS. */
 
+    
+    
 L1004:	KK=LINUSE;
 L1005:	LINUSE=KK;
 	LOC=GETNUM(1);
@@ -246,18 +288,23 @@ L1006:	KK=KK+1;
 	if(SECT == 14) goto L1014;
 	if(SECT == 10) goto L1012;
 	if(SECT == 6) goto L1011;
-	if(SECT == 5) goto L1010;
-	if(LOC > LOCSIZ)BUG(10);
-	if(SECT == 1) goto L1008;
+    if(SECT == 5)
+    {
+        if(LOC > 0 && LOC <= 100)PTEXT[LOC]=LINUSE;
+        goto L1005;
+    }
+	if(LOC > LOCSIZ) BUG(10);
+    if(SECT == 1)
+    {
+        LTEXT[LOC]=LINUSE;
+        goto L1005;
+    }
 
 	STEXT[LOC]=LINUSE;
 	 goto L1005;
 
-L1008:	LTEXT[LOC]=LINUSE;
-	 goto L1005;
-
-L1010:	if(LOC > 0 && LOC <= 100)PTEXT[LOC]=LINUSE;
-	 goto L1005;
+    
+  
 
 L1011:	if(LOC > RTXSIZ)BUG(6);
 	RTEXT[LOC]=LINUSE;
@@ -305,23 +352,22 @@ L1039:	TRVS--; TRAVEL[TRVS]= -TRAVEL[TRVS]; TRVS++;
  *  WOULD MAKE IT HARDER TO DETECT PARTICULAR INPUT WORDS.) */
 
 L1040:	J=10000;
-	/* 1042 */ for (TABNDX=1; TABNDX<=TABSIZ; TABNDX++) {
-L1043:	KTAB[TABNDX]=GETNUM(1);
-	if(KTAB[TABNDX] == -1) goto L1002;
-	J=J+7;
-L1042:	ATAB[TABNDX]=GETTXT(TRUE,TRUE,TRUE,0)+J*J;
-	} /* end loop */
+	/* 1042 */
+    for (TABNDX=1; TABNDX<=TABSIZ; TABNDX++)
+    {
+        KTAB[TABNDX]=GETNUM(1);
+        if(KTAB[TABNDX] == -1)
+        {
+            
+            goto L1002;
+        }
+        J=J+7;
+        ATAB[TABNDX]=GETTXT(TRUE,TRUE,TRUE,0)+J*J;
+        //printf("%ld -> %ld ",TABNDX,ATAB[TABNDX]);
+    } /* end loop */
 	BUG(4);
 
-/*  READ IN THE INITIAL LOCATIONS FOR EACH OBJECT.  ALSO THE IMMOVABILITY INFO.
- *  PLAC CONTAINS INITIAL LOCATIONS OF OBJECTS.  FIXD IS -1 FOR IMMOVABLE
- *  OBJECTS (INCLUDING THE SNAKE), OR = SECOND LOC FOR TWO-PLACED OBJECTS. */
 
-L1050:	OBJ=GETNUM(1);
-	if(OBJ == -1) goto L1002;
-	PLAC[OBJ]=GETNUM(0);
-	FIXD[OBJ]=GETNUM(0);
-	 goto L1050;
 
 /*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
 
@@ -410,11 +456,13 @@ L1102:	ATLOC[I]=0;
 L1106:	/*etc*/ ;
 	} /* end loop */
 
-	/* 1107 */ for (I=1; I<=100; I++) {
-	K=101-I;
-	FIXED[K]=FIXD[K];
-L1107:	if(PLAC[K] != 0 && FIXD[K] <= 0)DROP(K,PLAC[K]);
-	} /* end loop */
+    /* 1107 */
+    for (I=1; I<=100; I++)
+    {
+        K=101-I;
+        FIXED[K]=FIXD[K];
+        if(PLAC[K] != 0 && FIXD[K] <= 0)DROP(K,PLAC[K]);
+    } /* end loop */
 
 /*  TREASURES, AS NOTED EARLIER, ARE OBJECTS 50 THROUGH MAXTRS (CURRENTLY 79).
  *  THEIR PROPS ARE INITIALLY -1, AND ARE SET TO 0 THE FIRST TIME THEY ARE
@@ -423,18 +471,21 @@ L1107:	if(PLAC[K] != 0 && FIXD[K] <= 0)DROP(K,PLAC[K]);
 
 	MAXTRS=79;
 	TALLY=0;
-	/* 1200 */ for (I=50; I<=MAXTRS; I++) {
-	if(PTEXT[I] != 0)PROP[I]= -1;
-L1200:	TALLY=TALLY-PROP[I];
-	} /* end loop */
+	/* 1200 */
+    for (I=50; I<=MAXTRS; I++)
+    {
+        if(PTEXT[I] != 0)PROP[I]= -1;
+        TALLY=TALLY-PROP[I];
+    } /* end loop */
 
 /*  CLEAR THE HINT STUFF.  HINTLC(I) IS HOW LONG HE'S BEEN AT LOC WITH COND BIT
  *  I.  HINTED(I) IS TRUE IFF HINT I HAS BEEN USED. */
 
-	/* 1300 */ for (I=1; I<=HNTMAX; I++) {
-	HINTED[I]=FALSE;
-L1300:	HINTLC[I]=0;
-	} /* end loop */
+	for (I=1; I<=HNTMAX; I++)
+    {
+        HINTED[I]=FALSE;
+        HINTLC[I]=0;
+    } /* end loop */
 
 /*  DEFINE SOME HANDY MNEMONICS.  THESE CORRESPOND TO OBJECT NUMBERS. */
 
@@ -532,9 +583,11 @@ L1300:	HINTLC[I]=0;
 
 	CHLOC=114;
 	CHLOC2=140;
-	/* 1700 */ for (I=1; I<=6; I++) {
-L1700:	DSEEN[I]=FALSE;
-	} /* end loop */
+	/* 1700 */
+    for (I=1; I<=6; I++)
+    {
+        DSEEN[I]=FALSE;
+    } /* end loop */
 	DFLAG=0;
 	DLOC[1]=19;
 	DLOC[2]=27;
@@ -577,9 +630,10 @@ L1700:	DSEEN[I]=FALSE;
 	KNFLOC=0;
 	DETAIL=0;
 	ABBNUM=5;
-	/* 1800 */ for (I=0; I<=4; I++) {
-L1800:	{long x = 2*I+81; if(RTEXT[x] != 0)MAXDIE=I+1;}
-	} /* end loop */
+	for (I=0; I<=4; I++)
+    {
+        {long x = 2*I+81; if(RTEXT[x] != 0)MAXDIE=I+1;}
+    } /* end loop */
 	NUMDIE=0;
 	HOLDNG=0;
 	DKILL=0;

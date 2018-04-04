@@ -32,18 +32,26 @@ L4000:	VERB=K;
 
 /*  ANALYSE AN INTRANSITIVE VERB (IE, NO OBJECT GIVEN YET). */
 
-L4080:	switch (VERB-1) { case 0: goto L8010; case 1: return(8000); case 2:
-		return(8000); case 3: goto L8040; case 4: return(2009); case 5: goto L8040;
-		case 6: goto L8070; case 7: goto L8080; case 8: return(8000); case
-		9: return(8000); case 10: return(2011); case 11: goto L9120; case 12:
-		goto L9130; case 13: goto L8140; case 14: goto L9150; case 15:
-		return(8000); case 16: return(8000); case 17: goto L8180; case 18:
-		return(8000); case 19: goto L8200; case 20: return(8000); case 21:
-		goto L9220; case 22: goto L9230; case 23: goto L8240; case 24:
-		goto L8250; case 25: goto L8260; case 26: goto L8270; case 27:
-		return(8000); case 28: return(8000); case 29: goto L8300; case 30:
-		goto L8310; case 31: goto L8320; case 32: goto L8330; case 33:
-		goto L8340; }
+L4080:	switch (VERB-1)
+    {
+        case 0: goto L8010; case 1: return(8000); case 2:
+            return(8000); case 3: goto L8040; case 4: return(2009); case 5: goto L8040;
+        case 6: goto L8070; case 7: goto L8080; case 8: return(8000); case
+            9: return(8000); case 10: return(2011); case 11: goto L9120; case 12:
+            goto L9130; case 13: goto L8140; case 14: goto L9150; case 15:
+            return(8000); case 16: return(8000); case 17: goto L8180; case 18:
+            return(8000); case 19: goto L8200; case 20: return(8000); case 21:
+            goto L9220; case 22: goto L9230; case 23: goto L8240; case 24:
+            goto L8250; case 25: goto L8260; case 26: goto L8270; case 27:
+            return(8000); case 28: return(8000); case 29: goto L8300;
+        case 30:
+            goto L8310;
+        case 31: goto L8320;
+        case 32: goto L8330;
+        case 33:
+            goto L8340;
+            
+    }
 /*	     TAKE DROP  SAY OPEN NOTH LOCK   ON  OFF WAVE CALM
  *	     WALK KILL POUR  EAT DRNK  RUB TOSS QUIT FIND INVN
  *	     FEED FILL BLST SCOR  FOO  BRF READ BREK WAKE SUSP
