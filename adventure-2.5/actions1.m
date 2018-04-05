@@ -17,18 +17,21 @@
 
 int action(STARTAT)long STARTAT;
 {
-	switch(STARTAT) {
-	   case 4000: goto L4000;
-	   case 4090: goto L4090;
-	   case 5000: goto L5000;
-	   }
+	switch(STARTAT)
+    {
+        case 4000:
+            VERB=K;
+            SPK=ACTSPK[VERB];
+            if(WD2 > 0 && VERB != SAY) return(2800);
+            if(VERB == SAY)OBJ=WD2;
+            if(OBJ > 0) goto L4090;
+            
+        case 4090: goto L4090;
+        case 5000: goto L5000;
+    }
 	BUG(99);
 
-L4000:	VERB=K;
-	SPK=ACTSPK[VERB];
-	if(WD2 > 0 && VERB != SAY) return(2800);
-	if(VERB == SAY)OBJ=WD2;
-	if(OBJ > 0) goto L4090;
+
 
 /*  ANALYSE AN INTRANSITIVE VERB (IE, NO OBJECT GIVEN YET). */
 
@@ -42,8 +45,20 @@ L4080:	switch (VERB-1)
             return(8000); case 16: return(8000); case 17: goto L8180; case 18:
             return(8000); case 19: goto L8200; case 20: return(8000); case 21:
             goto L9220; case 22: goto L9230; case 23: goto L8240; case 24:
-            goto L8250; case 25: goto L8260; case 26: goto L8270; case 27:
-            return(8000); case 28: return(8000); case 29: goto L8300;
+            goto L8250;
+        case 25:
+            
+            /*  BRIEF.  INTRANSITIVE ONLY.  SUPPRESS LONG DESCRIPTIONS AFTER FIRST TIME. */
+            
+            SPK=156;
+            ABBNUM=10000;
+            DETAIL=3;
+            return(2011);
+        case 26: goto L8270;
+        case 27:
+            return(8000);
+        case 28: return(8000);
+        case 29: goto L8300;
         case 30:
             goto L8310;
         case 31: goto L8320;
@@ -441,12 +456,7 @@ L8252:	FOOBAR=K;
 	PSPEAK(EGGS,K);
 	 return(2012);
 
-/*  BRIEF.  INTRANSITIVE ONLY.  SUPPRESS LONG DESCRIPTIONS AFTER FIRST TIME. */
 
-L8260:	SPK=156;
-	ABBNUM=10000;
-	DETAIL=3;
-	 return(2011);
 
 /*  READ.  PRINT STUFF BASED ON OBJTXT.  OYSTER (?) IS SPECIAL CASE. */
 

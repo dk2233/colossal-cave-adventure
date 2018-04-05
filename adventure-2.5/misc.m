@@ -279,6 +279,8 @@ L42:	GETNUM=GETNUM*SIGN;
 long fGETTXT(SKIP,ONEWRD,UPPER,HASH)long HASH, ONEWRD, SKIP, UPPER; {
 long CHAR, GETTXT, I; static long SPLITTING = -1;
 
+    char * tab_s;
+    
 /*  TAKE CHARACTERS FROM AN INPUT LINE AND PACK THEM INTO 30-BIT WORDS.
  *  SKIP SAYS TO SKIP LEADING BLANKS.  ONEWRD SAYS STOP IF WE COME TO A
  *  BLANK.  UPPER SAYS TO MAP ALL LETTERS TO UPPERCASE.  HASH MAY BE USED
@@ -295,26 +297,33 @@ L10:	if(LNPOSN > LNLENG)return(GETTXT);
 	 goto L10;
 
 L11:	GETTXT=0;
-	/* 15 */ for (I=1; I<=5; I++) {
-	GETTXT=GETTXT*64;
-	if(LNPOSN > LNLENG || (ONEWRD && INLINE[LNPOSN] == 0)) goto L15;
-	CHAR=INLINE[LNPOSN];
-	if(CHAR >= 63) goto L12;
-	SPLITTING = -1;
-	if(UPPER && CHAR >= 37)CHAR=CHAR-26;
-	GETTXT=GETTXT+CHAR;
-	 goto L14;
-
-L12:	if(SPLITTING == LNPOSN) goto L13;
-	GETTXT=GETTXT+63;
-	SPLITTING = LNPOSN;
-	 goto L15;
-
-L13:	GETTXT=GETTXT+CHAR-63;
-	SPLITTING = -1;
-L14:	LNPOSN=LNPOSN+1;
-L15:	/*etc*/ ;
-	} /* end loop */
+	/* 15 */
+    for (I=1; I<=5; I++)
+    {
+        GETTXT=GETTXT*64;
+        if(LNPOSN > LNLENG || (ONEWRD && INLINE[LNPOSN] == 0)) goto L15;
+        CHAR=INLINE[LNPOSN];
+       
+        tab_s =INLINE;
+        //test only
+        //printf("%s \n",tab_s);
+        if(CHAR >= 63) goto L12;
+        SPLITTING = -1;
+        if(UPPER && CHAR >= 37)
+            CHAR=CHAR-26;
+        GETTXT=GETTXT+CHAR;
+        goto L14;
+        
+    L12:	if(SPLITTING == LNPOSN) goto L13;
+        GETTXT=GETTXT+63;
+        SPLITTING = LNPOSN;
+        goto L15;
+        
+    L13:	GETTXT=GETTXT+CHAR-63;
+        SPLITTING = -1;
+    L14:	LNPOSN=LNPOSN+1;
+    L15:	/*etc*/ ;
+    } /* end loop */
 
 	if(HASH)GETTXT=GETTXT+MOD(HASH*13579L+5432L,97531L)*12345L+HASH;
 	return(GETTXT);
@@ -892,22 +901,34 @@ long I, VAL; static FILE *OPENED = NULL;
 	if(feof(stdin)) score(1);
 	 goto L20;
 
-L15:	if(!OPENED){
+L15:	if(!OPENED)
+{
 #ifdef AMIGA
-		OPENED=fopen("ram:adventure.text","r" /* NOT binary */);
-		if(!OPENED)
+    OPENED=fopen("ram:adventure.text","r" /* NOT binary */);
+    if(!OPENED)
 #endif
-		OPENED=fopen("adventure.text","r" /* NOT binary */);
-		if(!OPENED){printf("Can't read adventure.text!\n"); exit(FALSE);}
-		}
+        OPENED=fopen("adventure.text","r" /* NOT binary */);
+    
+    if(!OPENED)
+    {
+        printf("Can't read adventure.text!\n");
+        exit(FALSE);
+        
+    }
+}
 	fgets(INLINE+1,100,OPENED);
 
 L20:	LNLENG=0;
-	/* 25 */ for (I=1; I<=100 && INLINE[I]!=0; I++) {
-	VAL=INLINE[I]+1;
-	INLINE[I]=MAP1[VAL];
-L25:	if(INLINE[I] != 0)LNLENG=I;
-	} /* end loop */
+	/* here we have in INLINE text from file
+     and translate it to long values
+     */
+    for (I=1; I<=100 && INLINE[I]!=0; I++)
+    {
+        printf("%c",INLINE[I]);
+        VAL=INLINE[I]+1;
+        INLINE[I]=MAP1[VAL];
+        if(INLINE[I] != 0)LNLENG=I;
+    } /* end loop */
 	LNPOSN=1;
 	if(FIL && LNLENG == 0) goto L15;
 /*  ABOVE IS TO GET AROUND AN F40 COMPILER BUG WHEREIN IT READS A BLANK
@@ -937,7 +958,7 @@ L10:	if(MAP2[1] == 0)MPINIT();
 L20:	{long x = VAL+1; INLINE[I]=MAP2[x];}
 	} /* end loop */
 	{long x = LNLENG+1; INLINE[x]=0;}
-	printf("%s\n",INLINE+1);
+	printf(" %s\n",INLINE+1);
 	return;
 }
 
