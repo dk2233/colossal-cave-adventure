@@ -861,84 +861,95 @@ void fBUG(NUM)long NUM; {
 
 #define BUG(NUM) fBUG(NUM)
 #undef MAPLIN
-void fMAPLIN(FIL)long FIL; {
-long I, VAL; static FILE *OPENED = NULL;
-
-/*  READ A LINE OF INPUT, EITHER FROM A FILE (IF FIL=.TRUE.) OR FROM THE
- *  KEYBOARD, TRANSLATE THE CHARS TO INTEGERS IN THE RANGE 0-126 AND STORE
- *  THEM IN THE COMMON ARRAY "INLINE".  INTEGER VALUES ARE AS FOLLOWS:
- *     0   = SPACE [ASCII CODE 40 OCTAL, 32 DECIMAL]
- *    1-2  = !" [ASCII 41-42 OCTAL, 33-34 DECIMAL]
- *    3-10 = '()*+,-. [ASCII 47-56 OCTAL, 39-46 DECIMAL]
- *   11-36 = UPPER-CASE LETTERS
- *   37-62 = LOWER-CASE LETTERS
- *    63   = PERCENT (%) [ASCII 45 OCTAL, 37 DECIMAL]
- *   64-73 = DIGITS, 0 THROUGH 9
- *  REMAINING CHARACTERS CAN BE TRANSLATED ANY WAY THAT IS CONVENIENT;
- *  THE "TYPE" ROUTINE BELOW IS USED TO MAP THEM BACK TO CHARACTERS WHEN
- *  NECESSARY.  THE ABOVE MAPPINGS ARE REQUIRED SO THAT CERTAIN SPECIAL
- *  CHARACTERS ARE KNOWN TO FIT IN 6 BITS AND/OR CAN BE EASILY SPOTTED.
- *  ARRAY ELEMENTS BEYOND THE END OF THE LINE SHOULD BE FILLED WITH 0,
- *  AND LNLENG SHOULD BE SET TO THE INDEX OF THE LAST CHARACTER.
- *
- *  IF THE DATA FILE USES A CHARACTER OTHER THAN SPACE (E.G., TAB) TO
- *  SEPARATE NUMBERS, THAT CHARACTER SHOULD ALSO TRANSLATE TO 0.
- *
- *  THIS PROCEDURE MAY USE THE MAP1,MAP2 ARRAYS TO MAINTAIN STATIC DATA FOR
- *  THE MAPPING.  MAP2(1) IS SET TO 0 WHEN THE PROGRAM STARTS
- *  AND IS NOT CHANGED THEREAFTER UNLESS THE ROUTINES ON THIS PAGE CHOOSE
- *  TO DO SO.
- *
- *  NOTE THAT MAPLIN IS EXPECTED TO OPEN THE FILE THE FIRST TIME IT IS
- *  ASKED TO READ A LINE FROM IT.  THAT IS, THERE IS NO OTHER PLACE WHERE
- *  THE DATA FILE IS OPENED. */
-
-
-	if(MAP2[1] == 0)MPINIT();
-
-	if(FIL) goto L15;
-	gets(INLINE+1);
-	if(feof(stdin)) score(1);
-	 goto L20;
-
-L15:	if(!OPENED)
+void fMAPLIN(long FIL)
 {
-#ifdef AMIGA
-    OPENED=fopen("ram:adventure.text","r" /* NOT binary */);
-    if(!OPENED)
-#endif
-        OPENED=fopen("adventure.text","r" /* NOT binary */);
+    long I, VAL;
+    static FILE *OPENED = NULL;
     
-    if(!OPENED)
+    /*  READ A LINE OF INPUT, EITHER FROM A FILE (IF FIL=.TRUE.) OR FROM THE
+     *  KEYBOARD, TRANSLATE THE CHARS TO INTEGERS IN THE RANGE 0-126 AND STORE
+     *  THEM IN THE COMMON ARRAY "INLINE".  INTEGER VALUES ARE AS FOLLOWS:
+     *     0   = SPACE [ASCII CODE 40 OCTAL, 32 DECIMAL]
+     *    1-2  = !" [ASCII 41-42 OCTAL, 33-34 DECIMAL]
+     *    3-10 = '()*+,-. [ASCII 47-56 OCTAL, 39-46 DECIMAL]
+     *   11-36 = UPPER-CASE LETTERS
+     *   37-62 = LOWER-CASE LETTERS
+     *    63   = PERCENT (%) [ASCII 45 OCTAL, 37 DECIMAL]
+     *   64-73 = DIGITS, 0 THROUGH 9
+     *  REMAINING CHARACTERS CAN BE TRANSLATED ANY WAY THAT IS CONVENIENT;
+     *  THE "TYPE" ROUTINE BELOW IS USED TO MAP THEM BACK TO CHARACTERS WHEN
+     *  NECESSARY.  THE ABOVE MAPPINGS ARE REQUIRED SO THAT CERTAIN SPECIAL
+     *  CHARACTERS ARE KNOWN TO FIT IN 6 BITS AND/OR CAN BE EASILY SPOTTED.
+     *  ARRAY ELEMENTS BEYOND THE END OF THE LINE SHOULD BE FILLED WITH 0,
+     *  AND LNLENG SHOULD BE SET TO THE INDEX OF THE LAST CHARACTER.
+     *
+     *  IF THE DATA FILE USES A CHARACTER OTHER THAN SPACE (E.G., TAB) TO
+     *  SEPARATE NUMBERS, THAT CHARACTER SHOULD ALSO TRANSLATE TO 0.
+     *
+     *  THIS PROCEDURE MAY USE THE MAP1,MAP2 ARRAYS TO MAINTAIN STATIC DATA FOR
+     *  THE MAPPING.  MAP2(1) IS SET TO 0 WHEN THE PROGRAM STARTS
+     *  AND IS NOT CHANGED THEREAFTER UNLESS THE ROUTINES ON THIS PAGE CHOOSE
+     *  TO DO SO.
+     *
+     *  NOTE THAT MAPLIN IS EXPECTED TO OPEN THE FILE THE FIRST TIME IT IS
+     *  ASKED TO READ A LINE FROM IT.  THAT IS, THERE IS NO OTHER PLACE WHERE
+     *  THE DATA FILE IS OPENED. */
+    
+    
+    if(MAP2[1] == 0)fMapInit();
+    
+    do
     {
-        printf("Can't read adventure.text!\n");
-        exit(FALSE);
-        
+        if(FIL)
+        {
+            if(!OPENED)
+            {
+                
+                OPENED=fopen("adventure.text","r" /* NOT binary */);
+                
+                if(!OPENED)
+                {
+                    printf("Can't read adventure.text!\n");
+                    exit(FALSE);
+                    
+                }
+            }
+            
+            fgets(INLINE+1,100,OPENED);
+            
+            char *tab_s;
+            
+            tab_s  = INLINE+1;
+            printf("%s",tab_s);
+        }
+        else
+        {
+            gets(INLINE+1);
+            if(feof(stdin)) score(1);
+            
+        }
+        LNLENG=0;
+        /* here we have in INLINE text from file
+         and translate it to long values with Map1 tab
+         */
+        for (I=1; I<=100 && INLINE[I]!=0; I++)
+        {
+            
+            VAL=INLINE[I]+1;
+            INLINE[I]=MAP1[VAL];
+            if(INLINE[I] != 0)LNLENG=I;
+        } /* end loop */
+        LNPOSN=1;
     }
-}
-	fgets(INLINE+1,100,OPENED);
-
-L20:	LNLENG=0;
-	/* here we have in INLINE text from file
-     and translate it to long values
-     */
-    for (I=1; I<=100 && INLINE[I]!=0; I++)
-    {
-        printf("%c",INLINE[I]);
-        VAL=INLINE[I]+1;
-        INLINE[I]=MAP1[VAL];
-        if(INLINE[I] != 0)LNLENG=I;
-    } /* end loop */
-	LNPOSN=1;
-	if(FIL && LNLENG == 0) goto L15;
-/*  ABOVE IS TO GET AROUND AN F40 COMPILER BUG WHEREIN IT READS A BLANK
- *  LINE WHENEVER A CRLF IS BROKEN ACROSS A RECORD BOUNDARY. */
-	return;
+    while((FIL && LNLENG == 0));
+    /*  ABOVE IS TO GET AROUND AN F40 COMPILER BUG WHEREIN IT READS A BLANK
+     *  LINE WHENEVER A CRLF IS BROKEN ACROSS A RECORD BOUNDARY. */
+    return;
 }
 
 
 
-#define MAPLIN(FIL) fMAPLIN(FIL)
+
 #undef TYPE
 void fTYPE() {
 long I, VAL;
@@ -952,11 +963,14 @@ long I, VAL;
 	printf("\n");
 	return;
 
-L10:	if(MAP2[1] == 0)MPINIT();
-	/* 20 */ for (I=1; I<=LNLENG; I++) {
-	VAL=INLINE[I];
-L20:	{long x = VAL+1; INLINE[I]=MAP2[x];}
-	} /* end loop */
+L10:	if(MAP2[1] == 0)fMapInit();
+	/* 20 */
+    for (I=1; I<=LNLENG; I++)
+    {
+        VAL=INLINE[I];
+        long x = VAL+1;
+        INLINE[I]=MAP2[x];
+    } /* end loop */
 	{long x = LNLENG+1; INLINE[x]=0;}
 	printf(" %s\n",INLINE+1);
 	return;
@@ -965,44 +979,56 @@ L20:	{long x = VAL+1; INLINE[I]=MAP2[x];}
 
 
 #define TYPE() fTYPE()
-#undef MPINIT
-void fMPINIT() {
-long FIRST, I, J, LAST, VAL;
-static long RUNS[7][2] = {32,34, 39,46, 65,90, 97,122, 37,37, 48,57, 0,126};
+/*
+ This function initialize
+ maping of letters
+ to other values
+ */
+void fMapInit(void)
+{
+    long FIRST, I, J, LAST, VAL;
+    static long RUNS[7][2] = {32,34, 39,46, 65,90, 97,122, 37,37, 48,57, 0,126};
+    
+	for (I=1; I<=128; I++)
+    {
+        MAP1[I]= -1;
+    }
+    VAL=0;
+     for (I=0; I<7; I++)
+     {
+        FIRST=RUNS[I][0];
+        LAST=RUNS[I][1];
+        for (J=FIRST; J<=LAST; J++)
+        {
+            
+            if(MAP1[++J] < 0)
+            {
+                MAP1[J]=VAL;
+                VAL=VAL+1;
+            }
+            J--;
+        }
 
-
-	/* 10 */ for (I=1; I<=128; I++) {
-L10:	MAP1[I]= -1;
-	} /* end loop */
-	VAL=0;
-	/* 20 */ for (I=0; I<7; I++) {
-	FIRST=RUNS[I][0];
-	LAST=RUNS[I][1];
-	/* 22 */ for (J=FIRST; J<=LAST; J++) {
-	J++; if(MAP1[J] >= 0) goto L22;
-	MAP1[J]=VAL;
-	VAL=VAL+1;
-L22:	J--;
-	} /* end loop */
-L20:	/*etc*/ ;
-	} /* end loop */
-	MAP1[128]=MAP1[10];
-/*  FOR THIS VERSION, TAB (9) MAPS TO SPACE (32), SO DEL (127) USES TAB'S VALUE */
-	MAP1[10]=MAP1[33];
-	MAP1[11]=MAP1[33];
-
-	/* 30 */ for (I=0; I<=126; I++) {
-	I++; VAL=MAP1[I]+1; I--;
-	MAP2[VAL]=I*('B'-'A');
-L30:	if(I >= 64)MAP2[VAL]=(I-64)*('B'-'A')+'@';
-	} /* end loop */
-
-	return;
+    }
+    MAP1[128]=MAP1[10];
+    /*  FOR THIS VERSION, TAB (9) MAPS TO SPACE (32), SO DEL (127) USES TAB'S VALUE */
+    MAP1[10]=MAP1[33];
+    MAP1[11]=MAP1[33];
+    
+    for (I=0; I<=126; I++)
+    {
+        VAL=MAP1[++I]+1;
+        I--;
+        MAP2[VAL]=I*('B'-'A');
+    	if(I >= 64)MAP2[VAL]=(I-64)*('B'-'A')+'@';
+    } 
+    
+    return;
 }
 
 
 
-#define MPINIT() fMPINIT()
+
 #undef SAVEIO
 void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP; {
 static FILE *F; char NAME[50];
@@ -1033,7 +1059,6 @@ L30:	if(IN)fread(ARR,4,250,F);
 	return;
 
 }
-
 
 
 long fIABS(N)long N; {return(N<0? -N : N);}

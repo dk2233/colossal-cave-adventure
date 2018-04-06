@@ -77,8 +77,8 @@ extern void fMAPLIN(long);
 #define MAPLIN(FIL) fMAPLIN(FIL)
 extern void fTYPE(void);
 #define TYPE() fTYPE()
-extern void fMPINIT(void);
-#define MPINIT() fMPINIT()
+extern void fMapInit(void);
+
 extern void fSAVEIO(long,long,long*);
 #define SAVEIO(OP,IN,ARR) fSAVEIO(OP,IN,ARR)
 extern void fDATIME(long*,long*);

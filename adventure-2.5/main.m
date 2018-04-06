@@ -7,7 +7,7 @@
 //
 #include "main.h"
 #include "misc.h"
-
+#include "funcs.h"
 
 
 long a;
@@ -26,7 +26,9 @@ long *LINES_ADV;
 long LINK[201], LNLENG, LNPOSN,
 PARMS[26], PLACE[101], PTEXT[101], RTEXT[278],
 SETUP = 0, TABSIZ = 330;
-char INLINE[101], MAP1[129], MAP2[129];
+char INLINE[101];
+char MAP1[129] ;
+char MAP2[129] ;
 
 long ABBNUM, ACTSPK[36], AMBER, ATTACK, AXE, BACK, BATTER, BEAR, BIRD, BLOOD, BONUS,
 BOTTLE, CAGE, CAVE, CAVITY, CHAIN, CHASM, CHEST, CHLOC, CHLOC2,
@@ -85,7 +87,6 @@ int main(int argc, const char * argv[]) {
      *  PANIC SAYS WHETHER HE'S FOUND OUT HE'S TRAPPED IN THE CAVE
      *  WZDARK SAYS WHETHER THE LOC HE'S LEAVING WAS DARK */
     
-#include "funcs.h"
     
     /*  READ THE DATABASE IF WE HAVE NOT YET DONE SO */
     //@autoreleasepool {
