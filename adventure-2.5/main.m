@@ -24,13 +24,18 @@ KTAB[331];
 
 long *LINES_ADV;
 long LINK[201], LNLENG, LNPOSN,
-PARMS[26], PLACE[101], PTEXT[101], RTEXT[278],
+PARMS[26], PLACE[101], PTEXT[101],
+RTEXT[278],
 SETUP = 0, TABSIZ = 330;
 char INLINE[101];
 char MAP1[129] ;
 char MAP2[129] ;
 
-long ABBNUM, ACTSPK[36], AMBER, ATTACK, AXE, BACK, BATTER, BEAR, BIRD, BLOOD, BONUS,
+long ABBNUM,
+ACTSPK[36],
+AMBER,
+ATTACK,
+AXE, BACK, BATTER, BEAR, BIRD, BLOOD, BONUS,
 BOTTLE, CAGE, CAVE, CAVITY, CHAIN, CHASM, CHEST, CHLOC, CHLOC2,
 CLAM, CLOCK1, CLOCK2, CLOSED, CLOSNG, CLSHNT, CLSMAX = 12, CLSSES,
 COINS, COND[186], CONDS, CTEXT[13], CVAL[13], DALTLC, DETAIL,
@@ -99,21 +104,25 @@ int main(int argc, const char * argv[]) {
     
     MAP2[1] = 0;
     if(!SETUP)initialise();
-    if(SETUP > 0) goto L1;
     
-    /*  UNLIKE EARLIER VERSIONS, ADVENTURE IS NO LONGER RESTARTABLE.  (THIS
-     *  LETS US GET AWAY WITH MODIFYING THINGS SUCH AS OBJSND(BIRD) WITHOUT
-     *  HAVING TO BE ABLE TO UNDO THE CHANGES LATER.)  IF A "USED" COPY IS
-     *  RERUN, WE COME HERE AND TELL THE PLAYER TO RUN A FRESH COPY. */
+    //fRSPEAK(141);
     
-    RSPEAK(201);
-    exit(FALSE);
-    
+    if(SETUP <=0)
+    {
+        
+        /*  UNLIKE EARLIER VERSIONS, ADVENTURE IS NO LONGER RESTARTABLE.  (THIS
+         *  LETS US GET AWAY WITH MODIFYING THINGS SUCH AS OBJSND(BIRD) WITHOUT
+         *  HAVING TO BE ABLE TO UNDO THE CHANGES LATER.)  IF A "USED" COPY IS
+         *  RERUN, WE COME HERE AND TELL THE PLAYER TO RUN A FRESH COPY. */
+        
+        fRSPEAK(201);
+        exit(FALSE);
+    }
     
     
     /*  START-UP, DWARF STUFF */
     
-L1:    SETUP= -1;
+    SETUP= -1;
     I=RAN(-1);
     ZZWORD=RNDVOC(3,0)+MESH*2;
     NOVICE=YES_ADV(65,1,0);
@@ -125,7 +134,7 @@ L1:    SETUP= -1;
     /*  CAN'T LEAVE CAVE ONCE IT'S CLOSING (EXCEPT BY MAIN OFFICE). */
     
 L2:    if(!OUTSID(NEWLOC) || NEWLOC == 0 || !CLOSNG) goto L71;
-    RSPEAK(130);
+    fRSPEAK(130);
     NEWLOC=LOC;
     if(!PANIC)CLOCK2=15;
     PANIC=TRUE;
@@ -138,7 +147,7 @@ L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3)) goto L74;
     /* 73 */ for (I=1; I<=5; I++) {
         if(ODLOC[I] != NEWLOC || !DSEEN[I]) goto L73;
         NEWLOC=LOC;
-        RSPEAK(2);
+        fRSPEAK(2);
         goto L74;
     L73:    /*etc*/ ;
     } /* end loop */
@@ -173,7 +182,7 @@ L6000:    if(DFLAG != 1) goto L6010;
         if(DLOC[I] == LOC)DLOC[I]=DALTLC;
     L6002:    ODLOC[I]=DLOC[I];
     } /* end loop */
-    RSPEAK(3);
+    fRSPEAK(3);
     DROP(AXE,LOC);
     goto L2000;
     
@@ -227,14 +236,14 @@ L6010:    DTOTAL=0;
         } /* end loop */
         if(TALLY == 1 && K == 0 && PLACE[CHEST] == 0 && HERE(LAMP) && PROP[LAMP]
            == 1) goto L6025;
-        if(ODLOC[6] != DLOC[6] && PCT(20))RSPEAK(127);
+        if(ODLOC[6] != DLOC[6] && PCT(20))fRSPEAK(127);
         goto L6030;
         
     L6021:    if(PLACE[CHEST] != 0) goto L6022;
         /*  INSTALL CHEST ONLY ONCE, TO INSURE IT IS THE LAST TREASURE IN THE LIST. */
         MOVE(CHEST,CHLOC);
         MOVE(MESSAG,CHLOC2);
-    L6022:    RSPEAK(128);
+    L6022:    fRSPEAK(128);
         /* 6023 */ for (J=50; J<=MAXTRS; J++) {
             if(J == PYRAM && (LOC == PLAC[PYRAM] || LOC == PLAC[EMRALD])) goto L6023;
             if(AT(J) && FIXED[J] == 0)CARRY(J,LOC);
@@ -246,7 +255,7 @@ L6010:    DTOTAL=0;
         DSEEN[6]=FALSE;
         goto L6030;
         
-    L6025:    RSPEAK(186);
+    L6025:    fRSPEAK(186);
         MOVE(CHEST,CHLOC);
         MOVE(MESSAG,CHLOC2);
         goto L6024;
@@ -263,19 +272,19 @@ L6010:    DTOTAL=0;
     
     /*  NOW WE KNOW WHAT'S HAPPENING.  LET'S TELL THE POOR SUCKER ABOUT IT.
      *  NOTE THAT VARIOUS OF THE "KNIFE" MESSAGES MUST HAVE SPECIFIC RELATIVE
-     *  POSITIONS IN THE RSPEAK DATABASE. */
+     *  POSITIONS IN THE fRSPEAK DATABASE. */
     
     if(DTOTAL == 0) goto L2000;
     SETPRM(1,DTOTAL,0);
-    RSPEAK(4+1/DTOTAL);
+    fRSPEAK(4+1/DTOTAL);
     if(ATTACK == 0) goto L2000;
     if(DFLAG == 2)DFLAG=3;
     SETPRM(1,ATTACK,0);
     K=6;
     if(ATTACK > 1)K=250;
-    RSPEAK(K);
+    fRSPEAK(K);
     SETPRM(1,STICK,0);
-    RSPEAK(K+1+2/(1+STICK));
+    fRSPEAK(K+1+2/(1+STICK));
     if(STICK == 0) goto L2000;
     OLDLC2=LOC;
     goto L99;
@@ -295,11 +304,11 @@ L2000:    if(LOC == 0) goto L99;
     if(FORCED(LOC) || !DARK(0)) goto L2001;
     if(WZDARK && PCT(35)) goto L90;
     KK=RTEXT[16];
-L2001:    if(TOTING(BEAR))RSPEAK(141);
+L2001:    if(TOTING(BEAR))fRSPEAK(141);
     SPEAK(KK);
     K=1;
     if(FORCED(LOC)) goto L8;
-    if(LOC == 33 && PCT(25) && !CLOSNG)RSPEAK(7);
+    if(LOC == 33 && PCT(25) && !CLOSNG)fRSPEAK(7);
     
     /*  PRINT OUT DESCRIPTIONS OF OBJECTS AT THIS LOCATION.  IF NOT CLOSING AND
      *  PROPERTY VALUE IS NEGATIVE, TALLY OFF ANOTHER TREASURE.  RUG IS SPECIAL
@@ -338,7 +347,7 @@ L2008:    I=LINK[I];
     
 L2009:    K=54;
 L2010:    SPK=K;
-L2011:    RSPEAK(SPK);
+L2011:    fRSPEAK(SPK);
     
 L2012:    VERB=0;
     OLDOBJ=OBJ;
@@ -411,7 +420,7 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
         FIXED[CHAIN]=0;
         PROP[AXE]=0;
         FIXED[AXE]=0;
-        RSPEAK(129);
+        fRSPEAK(129);
         CLOCK1= -1;
         CLOSNG=TRUE;
         goto L19999;
@@ -467,7 +476,7 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
         L11010: if(TOTING(I))DSTROY(I);
         } /* end loop */
         
-        RSPEAK(132);
+        fRSPEAK(132);
         CLOSED=TRUE;
         goto L2;
     }
@@ -484,7 +493,7 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
      *  CONTINUE.  12200 IS FOR OTHER CASES OF LAMP DYING.  12400 IS WHEN IT GOES
      *  OUT.  EVEN THEN, HE CAN EXPLORE OUTSIDE FOR A WHILE IF DESIRED. */
     
-L12000: RSPEAK(188);
+L12000: fRSPEAK(188);
     PROP[BATTER]=1;
     if(TOTING(BATTER))DROP(BATTER,LOC);
     LIMIT=LIMIT+2500;
@@ -496,12 +505,12 @@ L12200: if(LMWARN || !HERE(LAMP)) goto L19999;
     SPK=187;
     if(PLACE[BATTER] == 0)SPK=183;
     if(PROP[BATTER] == 1)SPK=189;
-    RSPEAK(SPK);
+    fRSPEAK(SPK);
     goto L19999;
     
 L12400: LIMIT= -1;
     PROP[LAMP]=0;
-    if(HERE(LAMP))RSPEAK(184);
+    if(HERE(LAMP))fRSPEAK(184);
     goto L19999;
     
 
@@ -519,15 +528,15 @@ L19999: K=43;
     if(V1 == ENTER_ADV && WD2 > 0) goto L2800;
     if((V1 != 1000+WATER && V1 != 1000+OIL) || (V2 != 1000+PLANT && V2 !=
                                                 1000+DOOR)) goto L2610;
-    {long x = V2-1000; if(AT(x))WD2=MAKEWD(16152118);}
+    {long x = V2-1000; if(AT(x))WD2=funcMakeWorD(16152118);}
 L2610:    if(V1 == 1000+CAGE && V2 == 1000+BIRD && HERE(CAGE) &&
-             HERE(BIRD))WD1=MAKEWD(301200308);
-L2620:    if(WD1 != MAKEWD(23051920)) goto L2625;
+             HERE(BIRD))WD1=funcMakeWorD(301200308);
+L2620:    if(WD1 != funcMakeWorD(23051920)) goto L2625;
     IWEST=IWEST+1;
-    if(IWEST == 10)RSPEAK(17);
-L2625:    if(WD1 != MAKEWD( 715) || WD2 == 0) goto L2630;
+    if(IWEST == 10)fRSPEAK(17);
+L2625:    if(WD1 != funcMakeWorD( 715) || WD2 == 0) goto L2630;
     IGO=IGO+1;
-    if(IGO == 10)RSPEAK(276);
+    if(IGO == 10)fRSPEAK(276);
 L2630:    I=VOCAB(WD1,-1);
     if(I == -1) goto L3000;
     K=MOD(I,1000);
@@ -546,7 +555,7 @@ L2800:    WD1=WD2;
     /*  GEE, I DON'T UNDERSTAND. */
     
 L3000:    SETPRM(1,WD1,WD1X);
-    RSPEAK(254);
+    fRSPEAK(254);
     goto L2600;
     
     /* VERB AND OBJECT ANALYSIS MOVED TO SEPARATE MODULE. */
@@ -570,9 +579,9 @@ Laction:
         case 8000: goto L8000;
             /*  OH DEAR, HE'S DISTURBED THE DWARVES. */
         case 18999:
-            RSPEAK(SPK);
+            fRSPEAK(SPK);
         case 19000:
-            RSPEAK(136);
+            fRSPEAK(136);
             score(0);
     }
     BUG(99);
@@ -584,7 +593,7 @@ Laction:
     
     
 L8000:    SETPRM(1,WD1,WD1X);
-    RSPEAK(257);
+    fRSPEAK(257);
     OBJ=0;
     goto L2600;
   
@@ -637,7 +646,7 @@ L14:    if(NEWLOC != 0 && !PCT(NEWLOC)) goto L12;
 L16:    NEWLOC=MOD(LL,1000);
     if(NEWLOC <= 300) goto L2;
     if(NEWLOC <= 500) goto L30000;
-    RSPEAK(NEWLOC-500);
+    fRSPEAK(NEWLOC-500);
     NEWLOC=LOC;
     goto L2;
     
@@ -656,7 +665,7 @@ L30000: NEWLOC=NEWLOC-300;
 L30100: NEWLOC=99+100-LOC;
     if(HOLDNG == 0 || (HOLDNG == 1 && TOTING(EMRALD))) goto L2;
     NEWLOC=LOC;
-    RSPEAK(117);
+    fRSPEAK(117);
     goto L2;
     
     /*  TRAVEL 302.  PLOVER TRANSPORT.  DROP THE EMERALD (ONLY USE SPECIAL TRAVEL IF
@@ -686,7 +695,7 @@ L30300: if(PROP[TROLL] != 1) goto L30310;
 L30310: NEWLOC=PLAC[TROLL]+FIXD[TROLL]-LOC;
     if(PROP[TROLL] == 0)PROP[TROLL]=1;
     if(!TOTING(BEAR)) goto L2;
-    RSPEAK(162);
+    fRSPEAK(162);
     PROP[CHASM]=1;
     PROP[TROLL]=2;
     DROP(BEAR,NEWLOC);
@@ -708,7 +717,7 @@ L20:    K=OLDLOC;
     if(K == LOC)K2=91;
     if(CNDBIT(LOC,4))K2=274;
     if(K2 == 0) goto L21;
-    RSPEAK(K2);
+    fRSPEAK(K2);
     goto L2;
     
 L21:    LL=MOD((IABS(TRAVEL[KK])/1000),1000);
@@ -722,7 +731,7 @@ L22:    if(TRAVEL[KK] < 0) goto L23;
     
 L23:    KK=K2;
     if(KK != 0) goto L25;
-    RSPEAK(140);
+    fRSPEAK(140);
     goto L2;
     
 L25:    K=MOD(IABS(TRAVEL[KK]),1000);
@@ -732,7 +741,7 @@ L25:    K=MOD(IABS(TRAVEL[KK]),1000);
     /*  LOOK.  CAN'T GIVE MORE DETAIL.  PRETEND IT WASN'T DARK (THOUGH IT MAY "NOW"
      *  BE DARK) SO HE WON'T FALL INTO A PIT WHILE STARING INTO THE GLOOM. */
     
-L30:    if(DETAIL < 3)RSPEAK(15);
+L30:    if(DETAIL < 3)fRSPEAK(15);
     DETAIL=DETAIL+1;
     WZDARK=FALSE;
     ABB[LOC]=0;
@@ -742,7 +751,7 @@ L30:    if(DETAIL < 3)RSPEAK(15);
     
 L40:    K=58;
     if(OUTSID(LOC) && LOC != 8)K=57;
-    RSPEAK(K);
+    fRSPEAK(K);
     goto L2;
     
     /*  NON-APPLICABLE MOTION.  VARIOUS MESSAGES DEPENDING ON WORD GIVEN. */
@@ -755,7 +764,7 @@ L50:    SPK=12;
     if(VERB == FIND_ADV || VERB == INVENT)SPK=59;
     if(K == 62 || K == 65)SPK=42;
     if(K == 17)SPK=80;
-    RSPEAK(SPK);
+    fRSPEAK(SPK);
     goto L2;
     
     
@@ -781,7 +790,7 @@ L50:    SPK=12;
     
     /*  THE EASIEST WAY TO GET KILLED IS TO FALL INTO A PIT IN PITCH DARKNESS. */
     
-L90:    RSPEAK(23);
+L90:    fRSPEAK(23);
     OLDLC2=LOC;
     
     /*  OKAY, HE'S DEAD.  LET'S GET ON WITH IT. */
@@ -807,7 +816,7 @@ L99:    if(CLOSNG) goto L95;
     
     /*  HE DIED DURING CLOSING TIME.  NO RESURRECTION.  TALLY UP A DEATH AND EXIT. */
     
-L95:    RSPEAK(131);
+L95:    fRSPEAK(131);
     NUMDIE=NUMDIE+1;
     score(0);
     
@@ -833,7 +842,7 @@ L40000:    switch (HINT-1) { case 0: goto L40100; case 1: goto L40200; case 2: g
 L40010: HINTLC[HINT]=0;
     if(!YES_ADV(HINTS[HINT][3],0,54)) goto L2602;
     SETPRM(1,HINTS[HINT][2],HINTS[HINT][2]);
-    RSPEAK(261);
+    fRSPEAK(261);
     HINTED[HINT]=YES_ADV(175,HINTS[HINT][4],54);
     if(HINTED[HINT] && LIMIT > 30)LIMIT=LIMIT+30*HINTS[HINT][2];
 L40020: HINTLC[HINT]=0;

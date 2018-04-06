@@ -65,7 +65,7 @@ int discard(just_do_it)long just_do_it;
 	if(TOTING(ROD2) && OBJ == ROD && !TOTING(ROD))OBJ=ROD2;
 	if(!TOTING(OBJ)) return(2011);
 	if(OBJ != BIRD || !HERE(SNAKE)) goto L9023;
-	RSPEAK(30);
+	fRSPEAK(30);
 	if(CLOSED) return(19000);
 	DSTROY(SNAKE);
 /*  SET PROP FOR USE BY TRAVEL OPTIONS */
@@ -81,7 +81,7 @@ L9021:	K=LIQ(0);
 	 return(2012);
 
 L9023:	if(!(GSTONE(OBJ) && AT(CAVITY) && PROP[CAVITY] != 0)) goto L9024;
-	RSPEAK(218);
+	fRSPEAK(218);
 	PROP[OBJ]=1;
 	PROP[CAVITY]=0;
 	if(!HERE(RUG) || !((OBJ == EMRALD && PROP[RUG] != 2) || (OBJ == RUBY &&
@@ -89,7 +89,7 @@ L9023:	if(!(GSTONE(OBJ) && AT(CAVITY) && PROP[CAVITY] != 0)) goto L9024;
 	SPK=219;
 	if(TOTING(RUG))SPK=220;
 	if(OBJ == RUBY)SPK=221;
-	RSPEAK(SPK);
+	fRSPEAK(SPK);
 	if(SPK == 220) goto L9021;
 	K=2-PROP[RUG];
 	PROP[RUG]=K;
@@ -104,13 +104,13 @@ L9024:	if(OBJ != COINS || !HERE(VEND)) goto L9025;
 	 return(2012);
 
 L9025:	if(OBJ != BIRD || !AT(DRAGON) || PROP[DRAGON] != 0) goto L9026;
-	RSPEAK(154);
+	fRSPEAK(154);
 	DSTROY(BIRD);
 	PROP[BIRD]=0;
 	 return(2012);
 
 L9026:	if(OBJ != BEAR || !AT(TROLL)) goto L9027;
-	RSPEAK(163);
+	fRSPEAK(163);
 	MOVE(TROLL,0);
 	MOVE(TROLL+100,0);
 	MOVE(TROLL2,PLAC[TROLL]);
@@ -120,7 +120,7 @@ L9026:	if(OBJ != BEAR || !AT(TROLL)) goto L9027;
 	 goto L9021;
 
 L9027:	if(OBJ == VASE && LOC != PLAC[PILLOW]) goto L9028;
-	RSPEAK(54);
+	fRSPEAK(54);
 	 goto L9021;
 
 L9028:	PROP[VASE]=2;
@@ -176,11 +176,11 @@ L9126:	if(OBJ == 0)SPK=44;
 /*  FUN STUFF FOR DRAGON.  IF HE INSISTS ON ATTACKING IT, WIN!  SET PROP TO DEAD,
  *  MOVE DRAGON TO CENTRAL LOC (STILL FIXED), MOVE RUG THERE (NOT FIXED), AND
  *  MOVE HIM THERE, TOO.  THEN DO A NULL MOTION TO GET NEW DESCRIPTION. */
-	RSPEAK(49);
+	fRSPEAK(49);
 	VERB=0;
 	OBJ=0;
 	GETIN(WD1,WD1X,WD2,WD2X);
-	if(WD1 != MAKEWD(25) && WD1 != MAKEWD(250519)) return(2607);
+	if(WD1 != funcMakeWorD(25) && WD1 != funcMakeWorD(250519)) return(2607);
 	PSPEAK(DRAGON,3);
 	PROP[DRAGON]=1;
 	PROP[RUG]=0;
@@ -198,8 +198,8 @@ L9127:	/*etc*/ ;
 	K=NUL;
 	 return(8);
 
-L9128:	RSPEAK(SPK);
-	RSPEAK(6);
+L9128:	fRSPEAK(SPK);
+	fRSPEAK(6);
 	DSTROY(OGRE);
 	K=0;
 	/* 9129 */ for (I=1; I<=5; I++) {
@@ -242,7 +242,7 @@ L9172:	SPK=48;
 	SPK=47;
 	DKILL=DKILL+1;
 	if(DKILL == 1)SPK=149;
-L9175:	RSPEAK(SPK);
+L9175:	fRSPEAK(SPK);
 	DROP(AXE,LOC);
 	K=NUL;
 	 return(8);
@@ -335,7 +335,7 @@ int fill(void) {
 L9222:	SPK=29;
 	if(LIQLOC(LOC) == 0)SPK=144;
 	if(LIQLOC(LOC) == 0 || !TOTING(VASE)) return(2011);
-	RSPEAK(145);
+	fRSPEAK(145);
 	PROP[VASE]=2;
 	FIXED[VASE]= -1;
 	 return(discard(TRUE));

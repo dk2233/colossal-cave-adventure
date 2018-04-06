@@ -32,7 +32,7 @@ static int GOTX = 0, GOTY;
 #include "sys/time.h"
 #include "misc.h"
 
-void fDATIME(X,Y)long *X, *Y; {
+void fGetDateTime(long *X, long  *Y) {
 	struct timeval now;
 	gettimeofday(&now, 0);
 	*X = now.tv_sec;

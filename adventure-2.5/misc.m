@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/*  I/O ROUTINES (SPEAK, PSPEAK, RSPEAK, SETPRM, GETIN, YES) */
+/*  I/O ROUTINES (SPEAK, PSPEAK, fRSPEAK, SETPRM, GETIN, YES) */
 
 #undef SPEAK
 void fSPEAK(N)long N; {
@@ -133,7 +133,7 @@ L9:	SPEAK(M);
 
 
 #define PSPEAK(MSG,SKIP) fPSPEAK(MSG,SKIP)
-#undef RSPEAK
+#undef fRSPEAK
 void fRSPEAK(I)long I; {
 ;
 
@@ -146,7 +146,7 @@ void fRSPEAK(I)long I; {
 
 
 
-#define RSPEAK(I) fRSPEAK(I)
+#define fRSPEAK(I) fRSPEAK(I)
 #undef SETPRM
 void fSETPRM(FIRST,P1,P2)long FIRST, P1, P2; {
 ;
@@ -191,7 +191,7 @@ L12:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 L22:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 	if(JUNK > 0) goto L22;
 	if(GETTXT(TRUE,TRUE,TRUE,0) <= 0)return;
-	RSPEAK(53);
+	fRSPEAK(53);
 	 goto L10;
 }
 
@@ -210,17 +210,17 @@ long YES_ADV, REPLY, JUNK1, JUNK2, JUNK3;
 /*  PRINT MESSAGE X, WAIT FOR YES/NO ANSWER.  IF YES, PRINT Y AND RETURN TRUE;
  *  IF NO, PRINT Z AND RETURN FALSE. */
 
-L1:	RSPEAK(X);
+L1:	fRSPEAK(X);
 	GETIN(REPLY,JUNK1,JUNK2,JUNK3);
-	if(REPLY == MAKEWD(250519) || REPLY == MAKEWD(25)) goto L10;
-	if(REPLY == MAKEWD(1415) || REPLY == MAKEWD(14)) goto L20;
-	RSPEAK(185);
+	if(REPLY == funcMakeWorD(250519) || REPLY == funcMakeWorD(25)) goto L10;
+	if(REPLY == funcMakeWorD(1415) || REPLY == funcMakeWorD(14)) goto L20;
+	fRSPEAK(185);
 	 goto L1;
 L10:	YES_ADV=TRUE;
-	RSPEAK(Y);
+	fRSPEAK(Y);
 	return(YES_ADV);
 L20:	YES_ADV=FALSE;
-	RSPEAK(Z);
+	fRSPEAK(Z);
 	return(YES_ADV);
 }
 
@@ -228,7 +228,7 @@ L20:	YES_ADV=FALSE;
 
 
 
-/*  LINE-PARSING ROUTINES (GETNUM, GETTXT, MAKEWD, PUTTXT, SHFTXT, TYPE0)
+/*  LINE-PARSING ROUTINES (GETNUM, GETTXT, funcMakeWorD, PUTTXT, SHFTXT, TYPE0)
 		*/
 
 /*  THE ROUTINES ON THIS PAGE HANDLE ALL THE STUFF THAT WOULD NORMALLY BE
@@ -332,9 +332,9 @@ L11:	GETTXT=0;
 
 
 #define GETTXT(SKIP,ONEWRD,UPPER,HASH) fGETTXT(SKIP,ONEWRD,UPPER,HASH)
-#undef MAKEWD
-long fMAKEWD(LETTRS)long LETTRS; {
-long I, L, MAKEWD;
+
+long funcMakeWorD(LETTRS)long LETTRS; {
+long I, L, funcMakeWorD;
 
 /*  COMBINE FIVE UPPERCASE LETTERS (REPRESENTED BY PAIRS OF DECIMAL DIGITS
  *  IN LETTRS) TO FORM A 30-BIT VALUE MATCHING THE ONE THAT GETTXT WOULD
@@ -344,22 +344,22 @@ long I, L, MAKEWD;
  *  THE NEXT PAIR OF DIGITS. */
 
 
-	MAKEWD=0;
+	funcMakeWorD=0;
 	I=1;
 	L=LETTRS;
-L10:	MAKEWD=MAKEWD+I*(MOD(L,50)+10);
+L10:	funcMakeWorD=funcMakeWorD+I*(MOD(L,50)+10);
 	I=I*64;
-	if(MOD(L,100) > 50)MAKEWD=MAKEWD+I*5;
+	if(MOD(L,100) > 50)funcMakeWorD=funcMakeWorD+I*5;
 	L=L/100;
 	if(L != 0) goto L10;
 	I=64L*64L*64L*64L*64L/I;
-	MAKEWD=MAKEWD*I;
-	return(MAKEWD);
+	funcMakeWorD=funcMakeWorD*I;
+	return(funcMakeWorD);
 }
 
 
 
-#define MAKEWD(LETTRS) fMAKEWD(LETTRS)
+
 #undef PUTTXT
 #define STATE (*sTATE)
 void fPUTTXT(WORD,sTATE,CASE,HASH)long CASE, HASH, *sTATE, WORD; {
@@ -774,7 +774,7 @@ static long D, R = 0, RAN, T;
 
 	D=1;
 	if(R != 0 && RANGE >= 0) goto L1;
-	DATIME(D,T);
+	fGetDateTime(&D,&T);
 	R=MOD(T+5,1048576L);
 	D=1000+MOD(D,1000);
 L1:	/* 2 */ for (T=1; T<=D; T++) {
@@ -820,7 +820,7 @@ L8:	ATAB[I]=RNDVOC+J*J;
 
 
 #define RNDVOC(CHAR,FORCE) fRNDVOC(CHAR,FORCE)
-#undef BUG
+
 void fBUG(NUM)long NUM; {
 
 /*  THE FOLLOWING CONDITIONS ARE CURRENTLY CONSIDERED FATAL BUGS.  NUMBERS < 20
@@ -859,8 +859,6 @@ void fBUG(NUM)long NUM; {
 
 /*  MACHINE DEPENDENT ROUTINES (MAPLIN, TYPE, MPINIT, SAVEIO) */
 
-#define BUG(NUM) fBUG(NUM)
-#undef MAPLIN
 void fMAPLIN(long FIL)
 {
     long I, VAL;
@@ -920,7 +918,7 @@ void fMAPLIN(long FIL)
             char *tab_s;
             
             tab_s  = INLINE+1;
-            printf("%s",tab_s);
+            //printf("%s",tab_s);
         }
         else
         {
@@ -950,7 +948,7 @@ void fMAPLIN(long FIL)
 
 
 
-#undef TYPE
+
 void fTYPE() {
 long I, VAL;
 
@@ -1021,7 +1019,7 @@ void fMapInit(void)
         I--;
         MAP2[VAL]=I*('B'-'A');
     	if(I >= 64)MAP2[VAL]=(I-64)*('B'-'A')+'@';
-    } 
+    }
     
     return;
 }

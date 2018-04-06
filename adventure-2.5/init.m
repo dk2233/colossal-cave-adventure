@@ -288,7 +288,13 @@ L1006:	KK=KK+1;
 	LINES_ADV[LINUSE]= -KK;
 	if(SECT == 14) goto L1014;
 	if(SECT == 10) goto L1012;
-	if(SECT == 6) goto L1011;
+    if(SECT == 6)
+    {
+        if(LOC > RTXSIZ)BUG(6);
+        RTEXT[LOC]=LINUSE;
+        goto L1005;
+    }
+    
     if(SECT == 5)
     {
         if(LOC > 0 && LOC <= 100)PTEXT[LOC]=LINUSE;
@@ -306,11 +312,6 @@ L1006:	KK=KK+1;
 
     
   
-
-L1011:	if(LOC > RTXSIZ)BUG(6);
-	RTEXT[LOC]=LINUSE;
-	 goto L1005;
-
 L1012:	CLSSES=CLSSES+1;
 	if(CLSSES > CLSMAX)BUG(11);
 	CTEXT[CLSSES]=LINUSE;
@@ -691,7 +692,7 @@ L1993:	SETPRM(1,LINUSE,LINSIZ);
 	SETPRM(15,CLSSES,CLSMAX);
 	SETPRM(17,HNTMAX,HNTSIZ);
 	SETPRM(19,TRNVLS,TRNSIZ);
-	RSPEAK(267);
+	fRSPEAK(267);
 	TYPE0();
 }
 

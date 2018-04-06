@@ -22,7 +22,7 @@ extern void fSPEAK(long);
 extern void fPSPEAK(long,long);
 #define PSPEAK(MSG,SKIP) fPSPEAK(MSG,SKIP)
 extern void fRSPEAK(long);
-#define RSPEAK(I) fRSPEAK(I)
+
 extern void fSETPRM(long,long,long);
 #define SETPRM(FIRST,P1,P2) fSETPRM(FIRST,P1,P2)
 extern void fGETIN(long*,long*,long*,long*);
@@ -33,8 +33,8 @@ extern long fGETNUM(long);
 #define GETNUM(K) fGETNUM(K)
 extern long fGETTXT(long,long,long,long);
 #define GETTXT(SKIP,ONEWRD,UPPER,HASH) fGETTXT(SKIP,ONEWRD,UPPER,HASH)
-extern long fMAKEWD(long);
-#define MAKEWD(LETTRS) fMAKEWD(LETTRS)
+extern long funcMakeWorD(long);
+
 extern void fPUTTXT(long,long*,long,long);
 #define PUTTXT(WORD,STATE,CASE,HASH) fPUTTXT(WORD,&STATE,CASE,HASH)
 extern void fSHFTXT(long,long);
@@ -81,8 +81,7 @@ extern void fMapInit(void);
 
 extern void fSAVEIO(long,long,long*);
 #define SAVEIO(OP,IN,ARR) fSAVEIO(OP,IN,ARR)
-extern void fDATIME(long*,long*);
-#define DATIME(D,T) fDATIME(&D,&T)
+extern void fGetDateTime(long*,long*);
 extern long fIABS(long);
 #define IABS(N) fIABS(N)
 extern long fMOD(long,long);
