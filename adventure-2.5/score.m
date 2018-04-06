@@ -95,11 +95,11 @@ L20030: if(HINTED[I])SCORE=SCORE-HINTS[I][2];
 
 /*  THAT SHOULD BE GOOD ENOUGH.  LET'S TELL HIM ALL ABOUT IT. */
 
-	if(SCORE+TRNLUZ+1 >= MXSCOR && TRNLUZ != 0)fRSPEAK(242);
-	if(SCORE+SAVED+1 >= MXSCOR && SAVED != 0)fRSPEAK(143);
+	if(SCORE+TRNLUZ+1 >= MXSCOR && TRNLUZ != 0)RandomMessageSpeakFromSect6(242);
+	if(SCORE+SAVED+1 >= MXSCOR && SAVED != 0)RandomMessageSpeakFromSect6(143);
 	SETPRM(1,SCORE,MXSCOR);
 	SETPRM(3,TURNS,TURNS);
-	fRSPEAK(262);
+	RandomMessageSpeakFromSect6(262);
 	/* 20200 */ for (I=1; I<=CLSSES; I++) {
 	if(CVAL[I] >= SCORE) goto L20210;
 L20200: /*etc*/ ;
@@ -113,7 +113,7 @@ L20210: SPEAK(CTEXT[I]);
 	I=CVAL[I]+1-SCORE;
 	SETPRM(1,I,I);
 	SPK=263;
-L25000: fRSPEAK(SPK);
+L25000: RandomMessageSpeakFromSect6(SPK);
 	exit(FALSE);
 
 }

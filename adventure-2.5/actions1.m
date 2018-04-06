@@ -104,7 +104,7 @@ L5000:	OBJ=K;
 L5010:	if(WD2 > 0) return(2800);
 	if(VERB != 0) goto L4090;
 	SETPRM(1,WD1,WD1X);
-	fRSPEAK(255);
+	RandomMessageSpeakFromSect6(255);
 	 return(2600);
 
 L5100:	if(K != GRATE) goto L5110;
@@ -128,7 +128,7 @@ L5140:	if(OBJ != ROD || !HERE(ROD2)) goto L5190;
 	 goto L5010;
 L5190:	if((VERB == FIND_ADV || VERB == INVENT) && WD2 <= 0) goto L5010;
 	SETPRM(1,WD1,WD1X);
-	fRSPEAK(256);
+	RandomMessageSpeakFromSect6(256);
 	 return(2012);
 
 
@@ -157,7 +157,7 @@ L9030:	SETPRM(1,WD2,WD2X);
 	if(WD2 > 0)WD1=WD2;
 	I=VOCAB(WD1,-1);
 	if(I == 62 || I == 65 || I == 71 || I == 2025 || I == 2034) goto L9035;
-	fRSPEAK(258);
+	RandomMessageSpeakFromSect6(258);
 	 return(2012);
 
 L9035:	WD2=0;
@@ -251,7 +251,7 @@ L9070:
 	SPK=184;
 	if(LIMIT < 0) return(2011);
 	PROP[LAMP]=1;
-	fRSPEAK(39);
+	RandomMessageSpeakFromSect6(39);
 	if(WZDARK) return(2000);
 	 return(2012);
 
@@ -273,8 +273,8 @@ L9083:	PROP[URN]=PROP[URN]/2;
 	 return(2011);
 
 L9086:	PROP[LAMP]=0;
-	fRSPEAK(40);
-	if(DARK(0))fRSPEAK(16);
+	RandomMessageSpeakFromSect6(40);
+	if(DARK(0))RandomMessageSpeakFromSect6(16);
 	 return(2012);
 
 /*  WAVE.  NO EFFECT UNLESS WAVING ROD AT FISSURE OR AT BIRD. */
@@ -286,7 +286,7 @@ L9090:	if((!TOTING(OBJ)) && (OBJ != ROD || !TOTING(ROD2)))SPK=29;
 	if(SPK == 206 && LOC == PLACE[STEPS] && PROP[JADE] < 0) goto L9094;
 	if(CLOSED) return(18999);
 	if(CLOSNG || !AT(FISSUR)) return(2011);
-	if(HERE(BIRD))fRSPEAK(SPK);
+	if(HERE(BIRD))RandomMessageSpeakFromSect6(SPK);
 	PROP[FISSUR]=1-PROP[FISSUR];
 	PSPEAK(FISSUR,2-PROP[FISSUR]);
 	 return(2012);
@@ -399,7 +399,7 @@ L9190:	if(AT(OBJ) || (LIQ(0) == OBJ && AT(BOTTLE)) || K == LIQLOC(LOC) || (OBJ =
 L8200:	SPK=98;
 	/* 8201 */ for (I=1; I<=100; I++) {
 	if(I == BEAR || !TOTING(I)) goto L8201;
-	if(SPK == 98)fRSPEAK(99);
+	if(SPK == 98)RandomMessageSpeakFromSect6(99);
 	BLKLIN=FALSE;
 	PSPEAK(I,-1);
 	BLKLIN=TRUE;
@@ -420,7 +420,7 @@ L9230:	if(PROP[ROD2] < 0 || !CLOSED) return(2011);
 	BONUS=133;
 	if(LOC == 115)BONUS=134;
 	if(HERE(ROD2))BONUS=135;
-	fRSPEAK(BONUS);
+	RandomMessageSpeakFromSect6(BONUS);
 	 score(0);
 
 /*  SCORE.  CALL SCORING ROUTINE BUT TELL IT TO RETURN. */
@@ -428,7 +428,7 @@ L9230:	if(PROP[ROD2] < 0 || !CLOSED) return(2011);
 L8240:	score(-1);
 	SETPRM(1,SCORE,MXSCOR);
 	SETPRM(3,TURNS,TURNS);
-	fRSPEAK(259);
+	RandomMessageSpeakFromSect6(259);
 	 return(2012);
 
 /*  FEE FIE FOE FOO (AND FUM).  ADVANCE TO NEXT STATE IF GIVEN IN PROPER ORDER.
@@ -499,7 +499,7 @@ L9290:	if(OBJ != DWARF || !CLOSED) return(2011);
  *  LEARNING ZZWORD). */
 
 L8300:	SPK=201;
-	fRSPEAK(260);
+	RandomMessageSpeakFromSect6(260);
 	if(!YES_ADV(200,54,54)) return(2012);
 	SAVED=SAVED+5;
 	KK= -1;
@@ -542,23 +542,23 @@ L8305:	fGetDateTime(&I,&K);
 	K=NUL;
 	ZZWORD=RNDVOC(3,ZZWORD-MESH*2)+MESH*2;
 	if(KK > 0) return(8);
-	fRSPEAK(266);
+	RandomMessageSpeakFromSect6(266);
 	exit(FALSE);
 
 /*  RESUME.  READ A SUSPENDED GAME BACK FROM A FILE. */
 
 L8310:	KK=1;
 	if(LOC == 1 && ABB[1] == 1) goto L8305;
-	fRSPEAK(268);
+	RandomMessageSpeakFromSect6(268);
 	if(!YES_ADV(200,54,54)) return(2012);
 	 goto L8305;
 
 L8312:	SETPRM(1,K/10,MOD(K,10));
 	SETPRM(3,VRSION/10,MOD(VRSION,10));
-	fRSPEAK(269);
+	RandomMessageSpeakFromSect6(269);
 	 return(2000);
 
-L8318:	fRSPEAK(270);
+L8318:	RandomMessageSpeakFromSect6(270);
 	exit(FALSE);
 
 /*  FLY.  SNIDE REMARKS UNLESS HOVERING RUG IS HERE. */
@@ -576,7 +576,7 @@ L9320:	if(OBJ != RUG) return(2011);
 	NEWLOC=PLACE[RUG]+FIXED[RUG]-LOC;
 	SPK=226;
 	if(PROP[SAPPH] >= 0)SPK=227;
-	fRSPEAK(SPK);
+	RandomMessageSpeakFromSect6(SPK);
 	 return(2);
 
 /*  LISTEN.  INTRANSITIVE ONLY.  PRINT STUFF BASED ON OBJSND/LOCSND. */
@@ -584,7 +584,7 @@ L9320:	if(OBJ != RUG) return(2011);
 L8330:	SPK=228;
 	K=LOCSND[LOC];
 	if(K == 0) goto L8332;
-	fRSPEAK(IABS(K));
+	RandomMessageSpeakFromSect6(IABS(K));
 	if(K < 0) return(2012);
 	SPK=0;
 L8332:	SETPRM(1,ZZWORD-MESH*2,0);
@@ -605,7 +605,7 @@ L8340:	if(!AT(RESER) && LOC != FIXED[RESER]-1) return(2011);
 	if(AT(RESER)) return(2012);
 	OLDLC2=LOC;
 	NEWLOC=0;
-	fRSPEAK(241);
+	RandomMessageSpeakFromSect6(241);
 	 return(2);
 
 }

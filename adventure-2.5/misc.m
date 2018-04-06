@@ -7,8 +7,8 @@
 
 /*  I/O ROUTINES (SPEAK, PSPEAK, fRSPEAK, SETPRM, GETIN, YES) */
 
-#undef SPEAK
-void fSPEAK(N)long N; {
+void fSPEAK(long N)
+{
 long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 
 /*  PRINT THE MESSAGE WHICH STARTS AT LINES_ADV(N).  PRECEDE IT WITH A BLANK LINE
@@ -110,38 +110,43 @@ L40:	if(BLANK)TYPE0();
 
 
 
-#define SPEAK(N) fSPEAK(N)
-#undef PSPEAK
-void fPSPEAK(MSG,SKIP)long MSG, SKIP; {
-long I, M;
-
-/*  FIND THE SKIP+1ST MESSAGE FROM MSG AND PRINT IT.  MSG SHOULD BE THE INDEX OF
- *  THE INVENTORY MESSAGE FOR OBJECT.  (INVEN+N+1 MESSAGE IS PROP=N MESSAGE). */
 
 
-	M=PTEXT[MSG];
-	if(SKIP < 0) goto L9;
-	/* 3 */ for (I=0; I<=SKIP; I++) {
-L1:	M=IABS(LINES_ADV[M]);
-	if(LINES_ADV[M] >= 0) goto L1;
-L3:	/*etc*/ ;
-	} /* end loop */
-L9:	SPEAK(M);
-	return;
+void fPSPEAK(MSG,SKIP)long MSG, SKIP;
+{
+    long I, M;
+    
+    /*  FIND THE SKIP+1ST MESSAGE FROM MSG AND PRINT IT.  MSG SHOULD BE THE INDEX OF
+     *  THE INVENTORY MESSAGE FOR OBJECT.  (INVEN+N+1 MESSAGE IS PROP=N MESSAGE). */
+    
+    M=PTEXT[MSG];
+    
+    printf("%ld ",M);
+    if(SKIP < 0)
+    {
+        fSPEAK(M);
+    }
+    else
+    {
+        for (I=0; I<=SKIP; I++)
+        {
+        L1:	M=IABS(LINES_ADV[M]);
+            if(LINES_ADV[M] >= 0) goto L1;
+        
+        }
+    }
+
+    return;
 }
 
 
-
-#define PSPEAK(MSG,SKIP) fPSPEAK(MSG,SKIP)
-#undef fRSPEAK
-void fRSPEAK(I)long I; {
-;
-
-/*  PRINT THE I-TH "RANDOM" MESSAGE (SECTION 6 OF DATABASE). */
-
-
-	if(I != 0)SPEAK(RTEXT[I]);
-	return;
+void RandomMessageSpeakFromSect6(long I)
+{
+    
+    /*  PRINT THE I-TH "RANDOM" MESSAGE (SECTION 6 OF DATABASE). */
+    
+    if(I != 0)fSPEAK(RandomSection6Texts[I]);
+    return;
 }
 
 
@@ -191,7 +196,7 @@ L12:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 L22:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 	if(JUNK > 0) goto L22;
 	if(GETTXT(TRUE,TRUE,TRUE,0) <= 0)return;
-	fRSPEAK(53);
+	RandomMessageSpeakFromSect6(53);
 	 goto L10;
 }
 
@@ -210,17 +215,17 @@ long YES_ADV, REPLY, JUNK1, JUNK2, JUNK3;
 /*  PRINT MESSAGE X, WAIT FOR YES/NO ANSWER.  IF YES, PRINT Y AND RETURN TRUE;
  *  IF NO, PRINT Z AND RETURN FALSE. */
 
-L1:	fRSPEAK(X);
+L1:	RandomMessageSpeakFromSect6(X);
 	GETIN(REPLY,JUNK1,JUNK2,JUNK3);
 	if(REPLY == funcMakeWorD(250519) || REPLY == funcMakeWorD(25)) goto L10;
 	if(REPLY == funcMakeWorD(1415) || REPLY == funcMakeWorD(14)) goto L20;
-	fRSPEAK(185);
+	RandomMessageSpeakFromSect6(185);
 	 goto L1;
 L10:	YES_ADV=TRUE;
-	fRSPEAK(Y);
+	RandomMessageSpeakFromSect6(Y);
 	return(YES_ADV);
 L20:	YES_ADV=FALSE;
-	fRSPEAK(Z);
+	RandomMessageSpeakFromSect6(Z);
 	return(YES_ADV);
 }
 

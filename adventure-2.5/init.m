@@ -204,7 +204,7 @@ static int raw_init(void ) {
     for (I=1; I<=300; I++)
     {
         if(I <= 100)PTEXT[I]=0;
-        if(I <= RTXSIZ)RTEXT[I]=0;
+        if(I <= RTXSIZ)RandomSection6Texts[I]=0;
         if(I <= CLSMAX)CTEXT[I]=0;
         if(I <= 100)OBJSND[I]=0;
         if(I <= 100)OBJTXT[I]=0;
@@ -291,13 +291,14 @@ L1006:	KK=KK+1;
     if(SECT == 6)
     {
         if(LOC > RTXSIZ)BUG(6);
-        RTEXT[LOC]=LINUSE;
+        RandomSection6Texts[LOC]=LINUSE;
         goto L1005;
     }
-    
+    //section for objects messages
     if(SECT == 5)
     {
         if(LOC > 0 && LOC <= 100)PTEXT[LOC]=LINUSE;
+        fPSPEAK(BATTER, 0);
         goto L1005;
     }
 	if(LOC > LOCSIZ) BUG(10);
@@ -635,7 +636,7 @@ static int finish_init()
     ABBNUM=5;
     for (I=0; I<=4; I++)
     {
-        {long x = 2*I+81; if(RTEXT[x] != 0)MAXDIE=I+1;}
+        {long x = 2*I+81; if(RandomSection6Texts[x] != 0)MAXDIE=I+1;}
     } /* end loop */
     NUMDIE=0;
     HOLDNG=0;
@@ -678,7 +679,7 @@ L1995:	if(KTAB[K]/1000 == 2)VERB=KTAB[K]-2000;
 
 	/* 1994 */ for (K=1; K<=RTXSIZ; K++) {
 	J=RTXSIZ+1-K;
-	if(RTEXT[J] != 0) goto L1993;
+	if(RandomSection6Texts[J] != 0) goto L1993;
 L1994:	/*etc*/ ;
 	} /* end loop */
 
@@ -692,7 +693,7 @@ L1993:	SETPRM(1,LINUSE,LINSIZ);
 	SETPRM(15,CLSSES,CLSMAX);
 	SETPRM(17,HNTMAX,HNTSIZ);
 	SETPRM(19,TRNVLS,TRNSIZ);
-	fRSPEAK(267);
+	RandomMessageSpeakFromSect6(267);
 	TYPE0();
 }
 
@@ -746,7 +747,7 @@ static int quick_io(void) {
 	quick_item(&TABNDX);
 	quick_item(&HNTMAX);
 	quick_array(PTEXT,100);
-	quick_array(RTEXT,RTXSIZ);
+	quick_array(RandomSection6Texts,RTXSIZ);
 	quick_array(CTEXT,CLSMAX);
 	quick_array(OBJSND,100);
 	quick_array(OBJTXT,100);
