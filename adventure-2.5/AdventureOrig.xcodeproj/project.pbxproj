@@ -39,7 +39,7 @@
 		E713977C2070FC44003E5E17 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		E713977E2070FC44003E5E17 /* copyright */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copyright; sourceTree = "<group>"; };
 		E71BC55F2074171A003E7939 /* score.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = score.m; sourceTree = "<group>"; };
-		E71BC56120741721003E7939 /* misc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = misc.m; path = "/Users/danielk/Documents/coding/adventureFromGithub/adventure-2.5/misc.m"; sourceTree = "<absolute>"; };
+		E71BC56120741721003E7939 /* misc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = misc.m; sourceTree = "<group>"; };
 		E71BC56320741794003E7939 /* actions2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = actions2.m; sourceTree = "<group>"; };
 		E71BC56420741794003E7939 /* datime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = datime.m; sourceTree = "<group>"; };
 		E71BC56520741794003E7939 /* init.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = init.m; sourceTree = "<group>"; };
