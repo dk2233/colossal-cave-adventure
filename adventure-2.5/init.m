@@ -298,7 +298,6 @@ L1006:	KK=KK+1;
     if(SECT == 5)
     {
         if(LOC > 0 && LOC <= 100)PTEXT[LOC]=LINUSE;
-        fPSPEAK(BATTER, 0);
         goto L1005;
     }
 	if(LOC > LOCSIZ) BUG(10);

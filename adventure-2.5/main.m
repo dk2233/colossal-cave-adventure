@@ -108,7 +108,7 @@ int main(int argc, const char * argv[]) {
     if(!SETUP)initialise();
     
     //fRSPEAK(141);
-    fPSPEAK(100, -1);
+    //fPSPEAK(100, -1);
     
     
     if(SETUP <=0)

@@ -121,12 +121,8 @@ void fPSPEAK(MSG,SKIP)long MSG, SKIP;
     
     M=PTEXT[MSG];
     
-    printf("%ld ",M);
-    if(SKIP < 0)
-    {
-        fSPEAK(M);
-    }
-    else
+    //printf("%ld ",M);
+    if(SKIP >= 0)
     {
         for (I=0; I<=SKIP; I++)
         {
@@ -136,6 +132,7 @@ void fPSPEAK(MSG,SKIP)long MSG, SKIP;
         }
     }
 
+    fSPEAK(M);
     return;
 }
 
