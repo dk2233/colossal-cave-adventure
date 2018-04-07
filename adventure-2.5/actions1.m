@@ -25,7 +25,7 @@ int action(STARTAT)long STARTAT;
             if(WD2 > 0 && VERB != SAY) return(2800);
             if(VERB == SAY)OBJ=WD2;
             if(OBJ > 0) goto L4090;
-            
+            goto L4080;
         case 4090: goto L4090;
         case 5000: goto L5000;
     }

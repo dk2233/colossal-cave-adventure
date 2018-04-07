@@ -311,8 +311,7 @@ L11:	GETTXT=0;
         //printf("%s \n",tab_s);
         if(CHAR >= 63) goto L12;
         SPLITTING = -1;
-        if(UPPER && CHAR >= 37)
-            CHAR=CHAR-26;
+        if(UPPER && CHAR >= 37) CHAR=CHAR-26;
         GETTXT=GETTXT+CHAR;
         goto L14;
         
