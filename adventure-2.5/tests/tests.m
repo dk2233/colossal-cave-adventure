@@ -7,6 +7,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "misc.h"
+#import "main.h"
+
 
 @interface tests : XCTestCase
 
@@ -27,7 +30,52 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    int K = 1;
+    NSLog(@" test 1 ");
+    XCTAssertEqual(K, 1,@"aaa" );
 }
+
+-(void)testIsGetnum{
+    long K = 0;
+    long ret;
+    
+    strcpy(INLINE," abc");
+    ret = fGETNUM(K);
+    NSLog(@"\n \n ret %ld \n\n",ret );
+    XCTAssertEqual(ret, 0);
+    
+    
+}
+
+-(void)testIsGetnumA{
+    // test what if letter not digit
+    long K = 0;
+    long ret;
+    LNPOSN = 0;
+    LineLength = 8;
+    strcpy(INLINE,"abc723");
+    ret = fGETNUM(K);
+    NSLog(@"\n \n ret %ld \n Line %s \n",ret,INLINE );
+    XCTAssertEqual(ret, 0);
+    
+    
+}
+
+
+-(void)testIsGetnum723{
+    // test what if letter not digit
+    long K = 0;
+    long ret;
+    LNPOSN = 3;
+    LineLength = 8;
+    strcpy(INLINE,"abc723");
+    ret = fGETNUM(K);
+    NSLog(@"\n \n ret %ld \n Line %s \n",ret,INLINE );
+    XCTAssertEqual(ret, 723);
+    
+    
+}
+
 
 - (void)testPerformanceExample {
     // This is an example of a performance test case.

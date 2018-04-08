@@ -15,7 +15,7 @@
 /*  ANALYSE A VERB.  REMEMBER WHAT IT WAS, GO BACK FOR OBJECT IF SECOND WORD
  *  UNLESS VERB IS "SAY", WHICH SNARFS ARBITRARY SECOND WORD. */
 
-int action(STARTAT)long STARTAT;
+int action(long STARTAT)
 {
 	switch(STARTAT)
     {
@@ -73,10 +73,20 @@ L4080:	switch (VERB-1)
  *	     RESU FLY  LSTN ZZZZ */
 	BUG(23);
 
-/*  ANALYSE A TRANSITIVE VERB. */
+/*  ANALYSE A TRANSITIVE VERB.
+ using simple algoithm
+ word are in section 4 of Text file
+ from number 2001 to 2034
+ 
+ for 2001 -1 we have carry -> that is case 0
+ 
+ */
 
-L4090:	switch (VERB-1) { case 0: goto L9010; case 1: goto L9020; case 2: goto
-		L9030; case 3: goto L9040; case 4: return(2009); case 5: goto L9040;
+L4090:	switch (VERB-1) {
+    case 0: goto L9010;
+    case 1: goto L9020;
+    case 2: goto L9030;
+    case 3: goto L9040; case 4: return(2009); case 5: goto L9040;
 		case 6: goto L9070; case 7: goto L9080; case 8: goto L9090; case
 		9: return(2011); case 10: return(2011); case 11: goto L9120; case 12:
 		goto L9130; case 13: goto L9140; case 14: goto L9150; case 15:

@@ -73,8 +73,8 @@ extern long fRNDVOC(long,long);
 #define RNDVOC(CHAR,FORCE) fRNDVOC(CHAR,FORCE)
 extern void fBUG(long);
 #define BUG(NUM) fBUG(NUM)
-extern void fMAPLIN(long);
-#define MAPLIN(FIL) fMAPLIN(FIL)
+extern void fMapLine(long);
+
 extern void fTYPE(void);
 #define TYPE() fTYPE()
 extern void fMapInit(void);

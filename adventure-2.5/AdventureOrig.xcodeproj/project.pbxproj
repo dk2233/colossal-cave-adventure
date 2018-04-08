@@ -15,6 +15,13 @@
 		E71BC56920741795003E7939 /* init.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56520741794003E7939 /* init.m */; };
 		E71BC56A20741795003E7939 /* actions1.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56620741795003E7939 /* actions1.m */; };
 		E71BC57420774877003E7939 /* tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC57320774877003E7939 /* tests.m */; };
+		E7FCFF12207A83FE00153572 /* misc.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56120741721003E7939 /* misc.m */; };
+		E7FCFF14207A842A00153572 /* actions1.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56620741795003E7939 /* actions1.m */; };
+		E7FCFF15207A842A00153572 /* actions2.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56320741794003E7939 /* actions2.m */; };
+		E7FCFF16207A842A00153572 /* datime.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56420741794003E7939 /* datime.m */; };
+		E7FCFF18207A842A00153572 /* init.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC56520741794003E7939 /* init.m */; };
+		E7FCFF1A207A842A00153572 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E713976B2070FC24003E5E17 /* main.m */; };
+		E7FCFF1B207A842A00153572 /* score.m in Sources */ = {isa = PBXBuildFile; fileRef = E71BC55F2074171A003E7939 /* score.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -209,6 +216,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7FCFF14207A842A00153572 /* actions1.m in Sources */,
+				E7FCFF15207A842A00153572 /* actions2.m in Sources */,
+				E7FCFF16207A842A00153572 /* datime.m in Sources */,
+				E7FCFF18207A842A00153572 /* init.m in Sources */,
+				E7FCFF1A207A842A00153572 /* main.m in Sources */,
+				E7FCFF1B207A842A00153572 /* score.m in Sources */,
+				E7FCFF12207A83FE00153572 /* misc.m in Sources */,
 				E71BC57420774877003E7939 /* tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +338,9 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YURMR997RR;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_TESTABILITY = YES;
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -333,6 +350,9 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YURMR997RR;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_TESTABILITY = YES;
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -21,7 +21,7 @@ long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 	NPARMS=1;
 L10:	L=IABS(LINES_ADV[K])-1;
 	K=K+1;
-	LNLENG=0;
+	LineLength=0;
 	LNPOSN=1;
 	STATE=0;
 	/* 20 */ for (I=K; I<=L; I++) {
@@ -29,7 +29,7 @@ L20:	PUTTXT(LINES_ADV[I],STATE,2,I);
 	} /* end loop */
 	LNPOSN=0;
 L30:	LNPOSN=LNPOSN+1;
-L32:	if(LNPOSN > LNLENG) goto L40;
+L32:	if(LNPOSN > LineLength) goto L40;
 	if(INLINE[LNPOSN] != 63) goto L30;
 	{long x = LNPOSN+1; PRMTYP=INLINE[x];}
 /*  63 IS A "%"; THE NEXT CHARACTER DETERMINE THE TYPE OF PARAMETER:  1 (!) =
@@ -182,7 +182,7 @@ long JUNK;
 
 
 L10:	if(BLKLIN)TYPE0();
-	MAPLIN(FALSE);
+	fMapLine(FALSE);
 	WORD1=GETTXT(TRUE,TRUE,TRUE,0);
 	if(BLKLIN && WORD1 < 0) goto L10;
 	WORD1X=GETTXT(FALSE,TRUE,TRUE,0);
@@ -241,37 +241,44 @@ L20:	YES_ADV=FALSE;
 
 #define YES_ADV(X,Y,Z) fYES(X,Y,Z)
 #undef GETNUM
-long fGETNUM(K)long K; {
-long DIGIT, GETNUM, SIGN;
-
-/*  OBTAIN THE NEXT INTEGER FROM AN INPUT LINE.  IF K>0, WE FIRST READ A
- *  NEW INPUT LINE FROM A FILE; IF K<0, WE READ A LINE FROM THE KEYBOARD;
- *  IF K=0 WE USE A LINE THAT HAS ALREADY BEEN READ (AND PERHAPS PARTIALLY
- *  SCANNED).  IF WE'RE AT THE END OF THE LINE OR ENCOUNTER AN ILLEGAL
- *  CHARACTER (NOT A DIGIT, HYPHEN, OR BLANK), WE RETURN 0. */
-
-
-	if(K != 0)MAPLIN(K > 0);
-	GETNUM=0;
-L10:	if(LNPOSN > LNLENG)return(GETNUM);
-	if(INLINE[LNPOSN] != 0) goto L20;
-	LNPOSN=LNPOSN+1;
-	 goto L10;
-
+long fGETNUM(long K)
+{
+    long DIGIT, GETNUM = 0, SIGN = 1;
+    
+    /*  OBTAIN THE NEXT INTEGER FROM AN INPUT LINE.
+     IF K>0, WE FIRST READ A
+     *  NEW INPUT LINE FROM A FILE;
+     IF K<0, WE READ A LINE FROM THE KEYBOARD;
+     *  IF K=0 WE USE A LINE THAT HAS ALREADY BEEN READ (AND PERHAPS PARTIALLY
+     *  SCANNED).
+     IF WE'RE AT THE END OF THE LINE OR ENCOUNTER AN ILLEGAL
+     *  CHARACTER (NOT A DIGIT, HYPHEN, OR BLANK), WE RETURN 0. */
+    
+    
+    if(K != 0) fMapLine(K > 0);
+    
+L10:	if(LNPOSN > LineLength)return(GETNUM);
+    if(INLINE[LNPOSN] != 0) goto L20;
+    LNPOSN=LNPOSN+1;
+    goto L10;
+    
 L20:	SIGN=1;
-	if(INLINE[LNPOSN] != 9) goto L32;
-	SIGN= -1;
+    if(INLINE[LNPOSN] != 9) goto L32;
+    SIGN= -1;
+    
 L30:	LNPOSN=LNPOSN+1;
-L32:	if(LNPOSN > LNLENG || INLINE[LNPOSN] == 0) goto L42;
-	DIGIT=INLINE[LNPOSN]-64;
-	if(DIGIT < 0 || DIGIT > 9) goto L40;
-	GETNUM=GETNUM*10+DIGIT;
-	 goto L30;
+L32:	if(LNPOSN > LineLength || INLINE[LNPOSN] == 0) goto L42;
 
+    DIGIT=INLINE[LNPOSN]-64;
+    printf("char : %c nr =  %ld ",INLINE[LNPOSN],DIGIT);
+    if(DIGIT < 0 || DIGIT > 9) goto L40;
+    GETNUM=GETNUM*10+DIGIT;
+    goto L30;
+    
 L40:	GETNUM=0;
 L42:	GETNUM=GETNUM*SIGN;
-	LNPOSN=LNPOSN+1;
-	return(GETNUM);
+    LNPOSN=LNPOSN+1;
+    return(GETNUM);
 }
 
 
@@ -293,7 +300,7 @@ long CHAR, GETTXT, I; static long SPLITTING = -1;
 
 	if(LNPOSN != SPLITTING)SPLITTING = -1;
 	GETTXT= -1;
-L10:	if(LNPOSN > LNLENG)return(GETTXT);
+L10:	if(LNPOSN > LineLength)return(GETTXT);
 	if((!SKIP) || INLINE[LNPOSN] != 0) goto L11;
 	LNPOSN=LNPOSN+1;
 	 goto L10;
@@ -303,7 +310,7 @@ L11:	GETTXT=0;
     for (I=1; I<=5; I++)
     {
         GETTXT=GETTXT*64;
-        if(LNPOSN > LNLENG || (ONEWRD && INLINE[LNPOSN] == 0)) goto L15;
+        if(LNPOSN > LineLength || (ONEWRD && INLINE[LNPOSN] == 0)) goto L15;
         CHAR=INLINE[LNPOSN];
        
         tab_s =INLINE;
@@ -415,14 +422,14 @@ long I, II, JJ;
  *  NEGATIVE.  LNLENG IS UPDATED; LNPOSN IS NOT CHANGED. */
 
 
-	if(LNLENG < FROM || DELTA == 0) goto L2;
-	/* 1 */ for (I=FROM; I<=LNLENG; I++) {
+	if(LineLength < FROM || DELTA == 0) goto L2;
+	/* 1 */ for (I=FROM; I<=LineLength; I++) {
 	II=I;
-	if(DELTA > 0)II=FROM+LNLENG-I;
+	if(DELTA > 0)II=FROM+LineLength-I;
 	JJ=II+DELTA;
 L1:	INLINE[JJ]=INLINE[II];
 	} /* end loop */
-L2:	LNLENG=LNLENG+DELTA;
+L2:	LineLength=LineLength+DELTA;
 	return;
 }
 
@@ -437,10 +444,10 @@ long TEMP;
  *  WHO OTHERWISE HAVE NO USE FOR MAPCOM. */
 
 
-	TEMP=LNLENG;
-	LNLENG=0;
+	TEMP=LineLength;
+	LineLength=0;
 	TYPE();
-	LNLENG=TEMP;
+	LineLength=TEMP;
 	return;
 }
 
@@ -858,9 +865,9 @@ void fBUG(NUM)long NUM; {
 
 
 
-/*  MACHINE DEPENDENT ROUTINES (MAPLIN, TYPE, MPINIT, SAVEIO) */
+/*  MACHINE DEPENDENT ROUTINES (fMapLine, TYPE, MPINIT, SAVEIO) */
 
-void fMAPLIN(long FIL)
+void fMapLine(long FIL)
 {
     long I, VAL;
     static FILE *OPENED = NULL;
@@ -890,7 +897,7 @@ void fMAPLIN(long FIL)
      *  AND IS NOT CHANGED THEREAFTER UNLESS THE ROUTINES ON THIS PAGE CHOOSE
      *  TO DO SO.
      *
-     *  NOTE THAT MAPLIN IS EXPECTED TO OPEN THE FILE THE FIRST TIME IT IS
+     *  NOTE THAT fMapLine IS EXPECTED TO OPEN THE FILE THE FIRST TIME IT IS
      *  ASKED TO READ A LINE FROM IT.  THAT IS, THERE IS NO OTHER PLACE WHERE
      *  THE DATA FILE IS OPENED. */
     
@@ -927,7 +934,7 @@ void fMAPLIN(long FIL)
             if(feof(stdin)) score(1);
             
         }
-        LNLENG=0;
+        LineLength=0;
         /* here we have in INLINE text from file
          and translate it to long values with Map1 tab
          */
@@ -936,11 +943,11 @@ void fMAPLIN(long FIL)
             
             VAL=INLINE[I]+1;
             INLINE[I]=MAP1[VAL];
-            if(INLINE[I] != 0)LNLENG=I;
+            if(INLINE[I] != 0)LineLength=I;
         } /* end loop */
         LNPOSN=1;
     }
-    while((FIL && LNLENG == 0));
+    while((FIL && LineLength == 0));
     /*  ABOVE IS TO GET AROUND AN F40 COMPILER BUG WHEREIN IT READS A BLANK
      *  LINE WHENEVER A CRLF IS BROKEN ACROSS A RECORD BOUNDARY. */
     return;
@@ -958,19 +965,19 @@ long I, VAL;
  *  I=1,LNLENG MAY BE CHANGED BY THIS ROUTINE. */
 
 
-	if(LNLENG != 0) goto L10;
+	if(LineLength != 0) goto L10;
 	printf("\n");
 	return;
 
 L10:	if(MAP2[1] == 0)fMapInit();
 	/* 20 */
-    for (I=1; I<=LNLENG; I++)
+    for (I=1; I<=LineLength; I++)
     {
         VAL=INLINE[I];
         long x = VAL+1;
         INLINE[I]=MAP2[x];
     } /* end loop */
-	{long x = LNLENG+1; INLINE[x]=0;}
+	{long x = LineLength+1; INLINE[x]=0;}
 	printf(" %s\n",INLINE+1);
 	return;
 }

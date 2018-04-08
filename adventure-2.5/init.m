@@ -254,7 +254,12 @@ L1002:	SECT=GETNUM(1);
             }
             goto L1002;
             
-        case 8: goto L1060;
+        case 8:
+            /*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
+            VERB=GETNUM(1);
+            if(VERB == -1) goto L1002;
+            ACTSPK[VERB]=GETNUM(0);
+            
         case 9: goto L1070;
         case 10: goto L1004;
         case 11: goto L1080;
@@ -274,9 +279,9 @@ L1002:	SECT=GETNUM(1);
 L1004:	KK=LINUSE;
 L1005:	LINUSE=KK;
 	LOC=GETNUM(1);
-	if(LNLENG >= LNPOSN+70)BUG(0);
+	if(LineLength >= LNPOSN+70)BUG(0);
 	if(LOC == -1) goto L1002;
-	if(LNLENG < LNPOSN)BUG(1);
+	if(LineLength < LNPOSN)BUG(1);
 L1006:	KK=KK+1;
 	if(KK >= LINSIZ)BUG(2);
 	LINES_ADV[KK]=GETTXT(FALSE,FALSE,FALSE,KK);
@@ -371,12 +376,8 @@ L1040:	J=10000;
 
 
 
-/*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
 
-L1060:	VERB=GETNUM(1);
-	if(VERB == -1) goto L1002;
-	ACTSPK[VERB]=GETNUM(0);
-	 goto L1060;
+
 
 /*  READ INFO ABOUT AVAILABLE LIQUIDS AND OTHER CONDITIONS, STORE IN COND. */
 
@@ -429,14 +430,18 @@ L1092:	LOCSND[K]=KK;
 
 static int finish_init()
 {
-    /* 1101 */ for (I=1; I<=100; I++) {
+    
+    for (I=1; I<=100; I++)
+    {
         PLACE[I]=0;
         PROP[I]=0;
         LINK[I]=0;
-    L1101:	{long x = I+100; LINK[x]=0;}
-    } /* end loop */
+        long x = I+100;
+        LINK[x]=0;
+    }
     
-    /* 1102 */ for (I=1; I<=LOCSIZ; I++) {
+    for (I=1; I<=LOCSIZ; I++)
+    {
         ABB[I]=0;
         if(LTEXT[I] == 0 || KEY[I] == 0) goto L1102;
         K=KEY[I];
@@ -451,7 +456,7 @@ static int finish_init()
      *  "PLAC" AND "FIXD".  ALSO, SINCE TWO-PLACED OBJECTS ARE TYPICALLY BEST
      *  DESCRIBED LAST, WE'LL DROP THEM FIRST. */
     
-    /* 1106 */ for (I=1; I<=100; I++) {
+    for (I=1; I<=100; I++) {
         K=101-I;
         if(FIXD[K] <= 0) goto L1106;
         DROP(K+100,FIXD[K]);
