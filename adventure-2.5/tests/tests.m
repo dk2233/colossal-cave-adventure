@@ -125,11 +125,12 @@
     INLINE[1]=11;
     INLINE[2]=34;
     INLINE[3]=15;
-    INLINE[4]=' ';
+    INLINE[4]=0;
+    INLINE[5]=' ';
     //INLINE[3]='d';
     //INLINE[4]='e';
     LineLength = strlen(INLINE);
-    printf(" %ld ",LineLength);
+    printf(" line length : %ld ",LineLength);
     fTYPE();
     
     NSLog(@" word coded %s ",INLINE);
