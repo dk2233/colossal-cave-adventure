@@ -292,7 +292,7 @@ L9086:	PROP[LAMP]=0;
 L9090:	if((!TOTING(OBJ)) && (OBJ != ROD || !TOTING(ROD2)))SPK=29;
 	if(OBJ != ROD || !TOTING(OBJ) || (!HERE(BIRD) && (CLOSNG || !AT(FISSUR))))
 		return(2011);
-	if(HERE(BIRD))SPK=206+MOD(PROP[BIRD],2);
+	if(HERE(BIRD))SPK=206+fmod(PROP[BIRD],2);
 	if(SPK == 206 && LOC == PLACE[STEPS] && PROP[JADE] < 0) goto L9094;
 	if(CLOSED) return(18999);
 	if(CLOSNG || !AT(FISSUR)) return(2011);
@@ -329,7 +329,7 @@ L9130:	if(OBJ == BOTTLE || OBJ == 0)OBJ=LIQ(0);
 	SPK=112;
 	if(OBJ != WATER) return(2011);
 	PSPEAK(PLANT,PROP[PLANT]+3);
-	PROP[PLANT]=MOD(PROP[PLANT]+1,3);
+	PROP[PLANT]=fmod(PROP[PLANT]+1,3);
 	PROP[PLANT2]=PROP[PLANT];
 	K=NUL;
 	 return(8);
@@ -563,8 +563,8 @@ L8310:	KK=1;
 	if(!YES_ADV(200,54,54)) return(2012);
 	 goto L8305;
 
-L8312:	SETPRM(1,K/10,MOD(K,10));
-	SETPRM(3,VRSION/10,MOD(VRSION,10));
+L8312:	SETPRM(1,K/10,fmod(K,10));
+	SETPRM(3,VRSION/10,fmod(VRSION,10));
 	RandomMessageSpeakFromSect6(269);
 	 return(2000);
 
@@ -594,7 +594,7 @@ L9320:	if(OBJ != RUG) return(2011);
 L8330:	SPK=228;
 	K=LOCSND[LOC];
 	if(K == 0) goto L8332;
-	RandomMessageSpeakFromSect6(IABS(K));
+    RandomMessageSpeakFromSect6(labs(K));
 	if(K < 0) return(2012);
 	SPK=0;
 L8332:	SETPRM(1,ZZWORD-MESH*2,0);

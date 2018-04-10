@@ -3,6 +3,8 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
+#import <math.h>
+
 #import <Foundation/Foundation.h>
 
 extern long ABB[], ATAB[], ATLOC[], BLKLIN, DFLAG, DLOC[], FIXED[], HOLDNG,

@@ -19,12 +19,12 @@ long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 	BLANK=BLKLIN;
 	K=N;
 	NPARMS=1;
-L10:	L=IABS(LINES_ADV[K])-1;
+L10:	L=labs(LINES_ADV[K])-1;
 	K=K+1;
 	LineLength=0;
 	LNPOSN=1;
 	STATE=0;
-	/* 20 */ for (I=K; I<=L; I++) {
+	for (I=K; I<=L; I++) {
 L20:	PUTTXT(LINES_ADV[I],STATE,2,I);
 	} /* end loop */
 	LNPOSN=0;
@@ -49,12 +49,12 @@ L32:	if(LNPOSN > LineLength) goto L40;
 	if(PRMTYP < 1 || PRMTYP > 9) goto L30;
 	SHFTXT(LNPOSN+2,PRMTYP-2);
 	LNPOSN=LNPOSN+PRMTYP;
-	PARM=IABS(PARMS[NPARMS]);
+	PARM=labs(PARMS[NPARMS]);
 	NEG=0;
 	if(PARMS[NPARMS] < 0)NEG=9;
 	/* 390 */ for (I=1; I<=PRMTYP; I++) {
 	LNPOSN=LNPOSN-1;
-	INLINE[LNPOSN]=MOD(PARM,10)+64;
+	INLINE[LNPOSN]=fmod(PARM,10)+64;
 	if(I == 1 || PARM != 0) goto L390;
 	INLINE[LNPOSN]=NEG;
 	NEG=0;
@@ -126,7 +126,7 @@ void fPSPEAK(MSG,SKIP)long MSG, SKIP;
     {
         for (I=0; I<=SKIP; I++)
         {
-        L1:	M=IABS(LINES_ADV[M]);
+        L1:	M=labs(LINES_ADV[M]);
             if(LINES_ADV[M] >= 0) goto L1;
         
         }
@@ -270,7 +270,9 @@ L30:	LNPOSN=LNPOSN+1;
 L32:	if(LNPOSN > LineLength || INLINE[LNPOSN] == 0) goto L42;
 
     DIGIT=INLINE[LNPOSN]-64;
+#ifdef TESTING
     printf("char : %c nr =  %ld ",INLINE[LNPOSN],DIGIT);
+#endif
     if(DIGIT < 0 || DIGIT > 9) goto L40;
     GETNUM=GETNUM*10+DIGIT;
     goto L30;
@@ -306,7 +308,7 @@ L10:	if(LNPOSN > LineLength)return(GETTXT);
 	 goto L10;
 
 L11:	GETTXT=0;
-	/* 15 */
+	
     for (I=1; I<=5; I++)
     {
         GETTXT=GETTXT*64;
@@ -333,7 +335,7 @@ L11:	GETTXT=0;
     L15:	/*etc*/ ;
     } /* end loop */
 
-	if(HASH)GETTXT=GETTXT+MOD(HASH*13579L+5432L,97531L)*12345L+HASH;
+	if(HASH)GETTXT=GETTXT+fmod(HASH*13579L+5432L,97531L)*12345L+HASH;
 	return(GETTXT);
 }
 
@@ -341,8 +343,9 @@ L11:	GETTXT=0;
 
 #define GETTXT(SKIP,ONEWRD,UPPER,HASH) fGETTXT(SKIP,ONEWRD,UPPER,HASH)
 
-long funcMakeWorD(LETTRS)long LETTRS; {
-long I, L, funcMakeWorD;
+long funcMakeWorD(long LETTRS)
+{
+long I, L, MWord;
 
 /*  COMBINE FIVE UPPERCASE LETTERS (REPRESENTED BY PAIRS OF DECIMAL DIGITS
  *  IN LETTRS) TO FORM A 30-BIT VALUE MATCHING THE ONE THAT GETTXT WOULD
@@ -352,17 +355,22 @@ long I, L, funcMakeWorD;
  *  THE NEXT PAIR OF DIGITS. */
 
 
-	funcMakeWorD=0;
+	MWord=0;
 	I=1;
 	L=LETTRS;
-L10:	funcMakeWorD=funcMakeWorD+I*(MOD(L,50)+10);
-	I=I*64;
-	if(MOD(L,100) > 50)funcMakeWorD=funcMakeWorD+I*5;
-	L=L/100;
-	if(L != 0) goto L10;
+    
+    do
+    {
+        MWord=MWord+I*(fmod(L,50)+10);
+        I=I*64;
+        if(fmod(L,100) > 50)MWord=MWord+I*5;
+        L=L/100;
+        
+        
+    } while(L != 0);
 	I=64L*64L*64L*64L*64L/I;
-	funcMakeWorD=funcMakeWorD*I;
-	return(funcMakeWorD);
+	MWord=MWord*I;
+	return(MWord);
 }
 
 
@@ -386,14 +394,14 @@ long ALPH1, ALPH2, BYTE, DIV, I, W;
 
 
 	ALPH1=13*CASE+24;
-	ALPH2=26*IABS(CASE)+ALPH1;
-	if(IABS(CASE) > 1)ALPH1=ALPH2;
+	ALPH2=26*labs(CASE)+ALPH1;
+	if(labs(CASE) > 1)ALPH1=ALPH2;
 /*  ALPH1&2 DEFINE RANGE OF WRONG-CASE CHARS, 11-36 OR 37-62 OR EMPTY. */
 	DIV=64L*64L*64L*64L;
 	W=WORD;
-	if(HASH)W=W-MOD(HASH*13579L+5432L,97531L)*12345L-HASH;
+	if(HASH)W=W-fmod(HASH*13579L+5432L,97531L)*12345L-HASH;
 	/* 18 */ for (I=1; I<=5; I++) {
-	if(W <= 0 && STATE == 0 && IABS(CASE) <= 1)return;
+	if(W <= 0 && STATE == 0 && labs(CASE) <= 1)return;
 	BYTE=W/DIV;
 	if(STATE != 0 || BYTE != 63) goto L12;
 	STATE=63;
@@ -512,32 +520,32 @@ static long BUF[250], CKSUM = 0, H1, HASH = 0, N = 0, STATE = 0;
 		0) { case -1: goto L30; case 0: goto L10; case 1: goto L30; }}
 	if(STATE == 0)return;
 	if(N == 250)SAVEIO(1,STATE > 0,BUF);
-	N=MOD(N,250)+1;
-	H1=MOD(HASH*1093L+221573L,1048576L);
-	HASH=MOD(H1*1093L+221573L,1048576L);
-	H1=MOD(H1,1234)*765432+MOD(HASH,123);
+	N=fmod(N,250)+1;
+	H1=fmod(HASH*1093L+221573L,1048576L);
+	HASH=fmod(H1*1093L+221573L,1048576L);
+	H1=fmod(H1,1234)*765432+fmod(HASH,123);
 	N--;
 	if(STATE > 0)WORD=BUF[N]+H1;
 	BUF[N]=WORD-H1;
 	N++;
-	CKSUM=MOD(CKSUM*13+WORD,1000000000L);
+	CKSUM=fmod(CKSUM*13+WORD,1000000000L);
 	return;
 
 L10:	STATE=OP;
 	SAVEIO(0,STATE > 0,BUF);
 	N=1;
 	if(STATE > 0) goto L15;
-	HASH=MOD(WORD,1048576L);
+	HASH=fmod(WORD,1048576L);
 	BUF[0]=1234L*5678L-HASH;
 L13:	CKSUM=BUF[0];
 	return;
 
 L15:	SAVEIO(1,TRUE,BUF);
-	HASH=MOD(1234L*5678L-BUF[0],1048576L);
+	HASH=fmod(1234L*5678L-BUF[0],1048576L);
 	 goto L13;
 
 L30:	if(N == 250)SAVEIO(1,STATE > 0,BUF);
-	N=MOD(N,250)+1;
+	N=fmod(N,250)+1;
 	if(STATE > 0) goto L32;
 	N--; BUF[N]=CKSUM; N++;
 	SAVEIO(1,FALSE,BUF);
@@ -582,7 +590,7 @@ L2:	VOCAB= -1;
 	BUG(5);
 
 L3:	VOCAB=KTAB[I];
-	if(INIT >= 0)VOCAB=MOD(VOCAB,1000);
+	if(INIT >= 0)VOCAB=fmod(VOCAB,1000);
 	return(VOCAB);
 }
 
@@ -763,7 +771,7 @@ long TSTBIT;
 /*  RETURNS TRUE IF THE SPECIFIED BIT IS SET IN THE MASK. */
 
 
-	TSTBIT=MOD(MASK/SETBIT(BIT),2) != 0;
+	TSTBIT=fmod(MASK/SETBIT(BIT),2) != 0;
 	return(TSTBIT);
 }
 
@@ -783,10 +791,10 @@ static long D, R = 0, RAN, T;
 	D=1;
 	if(R != 0 && RANGE >= 0) goto L1;
 	fGetDateTime(&D,&T);
-	R=MOD(T+5,1048576L);
-	D=1000+MOD(D,1000);
+	R=fmod(T+5,1048576L);
+	D=1000+fmod(D,1000);
 L1:	/* 2 */ for (T=1; T<=D; T++) {
-L2:	R=MOD(R*1093L+221587L,1048576L);
+L2:	R=fmod(R*1093L+221587L,1048576L);
 	} /* end loop */
 	RAN=(RANGE*R)/1048576;
 	return(RAN);
@@ -816,7 +824,7 @@ L3:	J=10000;
 	DIV=64L*64L*64L;
 	/* 5 */ for (I=1; I<=TABSIZ; I++) {
 	J=J+7;
-	if(MOD((ATAB[I]-J*J)/DIV,64L) == CHAR) goto L8;
+	if(fmod((ATAB[I]-J*J)/DIV,64L) == CHAR) goto L8;
 L5:	/*etc*/ ;
 	} /* end loop */
 	BUG(5);
@@ -901,23 +909,18 @@ void fMapLine(long FIL)
      *  ASKED TO READ A LINE FROM IT.  THAT IS, THERE IS NO OTHER PLACE WHERE
      *  THE DATA FILE IS OPENED. */
     
-    
     if(MAP2[1] == 0)fMapInit();
-    
     do
     {
         if(FIL)
         {
             if(!OPENED)
             {
-                
                 OPENED=fopen("adventure.text","r" /* NOT binary */);
-                
                 if(!OPENED)
                 {
                     printf("Can't read adventure.text!\n");
                     exit(FALSE);
-                    
                 }
             }
             
@@ -965,18 +968,20 @@ long I, VAL;
  *  I=1,LNLENG MAY BE CHANGED BY THIS ROUTINE. */
 
 
-	if(LineLength != 0) goto L10;
-	printf("\n");
-	return;
+	if(LineLength == 0)
+    {
+        printf("\n");
+        return;
+    }
 
-L10:	if(MAP2[1] == 0)fMapInit();
-	/* 20 */
+	if(MAP2[1] == 0)fMapInit();
+	
     for (I=1; I<=LineLength; I++)
     {
         VAL=INLINE[I];
         long x = VAL+1;
         INLINE[I]=MAP2[x];
-    } /* end loop */
+    }
 	{long x = LineLength+1; INLINE[x]=0;}
 	printf(" %s\n",INLINE+1);
 	return;
@@ -1066,6 +1071,3 @@ L30:	if(IN)fread(ARR,4,250,F);
 
 }
 
-
-long fIABS(N)long N; {return(N<0? -N : N);}
-long fMOD(N,M)long N, M; {return(N%M);}

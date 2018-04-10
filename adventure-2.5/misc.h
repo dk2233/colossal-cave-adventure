@@ -82,10 +82,8 @@ extern void fMapInit(void);
 extern void fSAVEIO(long,long,long*);
 #define SAVEIO(OP,IN,ARR) fSAVEIO(OP,IN,ARR)
 extern void fGetDateTime(long*,long*);
-extern long fIABS(long);
-#define IABS(N) fIABS(N)
-extern long fMOD(long,long);
-#define MOD(N,M) fMOD(N,M)
+
+
 
 
 #endif
