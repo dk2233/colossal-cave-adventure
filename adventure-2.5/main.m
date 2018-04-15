@@ -21,7 +21,7 @@ KTAB[331];
 
 
 long *LINES_ADV;
-long LINK[201], LineLength, LNPOSN,
+long LINK[201], LineLength, LinePosition,
 PARMS[26], PLACE[101],
 PTEXT[101],
 RandomSection6Texts[278],

@@ -22,16 +22,16 @@ long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 L10:	L=labs(LINES_ADV[K])-1;
 	K=K+1;
 	LineLength=0;
-	LNPOSN=1;
+	LinePosition=1;
 	STATE=0;
 	for (I=K; I<=L; I++) {
 L20:	PUTTXT(LINES_ADV[I],STATE,2,I);
 	} /* end loop */
-	LNPOSN=0;
-L30:	LNPOSN=LNPOSN+1;
-L32:	if(LNPOSN > LineLength) goto L40;
-	if(INLINE[LNPOSN] != 63) goto L30;
-	{long x = LNPOSN+1; PRMTYP=INLINE[x];}
+	LinePosition=0;
+L30:	LinePosition=LinePosition+1;
+L32:	if(LinePosition > LineLength) goto L40;
+	if(INLINE[LinePosition] != 63) goto L30;
+	{long x = LinePosition+1; PRMTYP=INLINE[x];}
 /*  63 IS A "%"; THE NEXT CHARACTER DETERMINE THE TYPE OF PARAMETER:  1 (!) =
  *  SUPPRESS MESSAGE COMPLETELY, 29 (S) = NULL IF PARM=1, ELSE 'S' (OPTIONAL
  *  PLURAL ENDING), 33 (W) = WORD (TWO 30-BIT VALUES) WITH TRAILING SPACES
@@ -47,29 +47,29 @@ L32:	if(LNPOSN > LineLength) goto L40;
 		L380;
 	PRMTYP=PRMTYP-64;
 	if(PRMTYP < 1 || PRMTYP > 9) goto L30;
-	SHFTXT(LNPOSN+2,PRMTYP-2);
-	LNPOSN=LNPOSN+PRMTYP;
+	SHFTXT(LinePosition+2,PRMTYP-2);
+	LinePosition=LinePosition+PRMTYP;
 	PARM=labs(PARMS[NPARMS]);
 	NEG=0;
 	if(PARMS[NPARMS] < 0)NEG=9;
 	/* 390 */ for (I=1; I<=PRMTYP; I++) {
-	LNPOSN=LNPOSN-1;
-	INLINE[LNPOSN]=fmod(PARM,10)+64;
+	LinePosition=LinePosition-1;
+	INLINE[LinePosition]=fmod(PARM,10)+64;
 	if(I == 1 || PARM != 0) goto L390;
-	INLINE[LNPOSN]=NEG;
+	INLINE[LinePosition]=NEG;
 	NEG=0;
 L390:	PARM=PARM/10;
 	} /* end loop */
-	LNPOSN=LNPOSN+PRMTYP;
+	LinePosition=LinePosition+PRMTYP;
 L395:	NPARMS=NPARMS+1;
 	 goto L32;
 
-L320:	SHFTXT(LNPOSN+2,-1);
-	INLINE[LNPOSN]=55;
-	if(PARMS[NPARMS] == 1)SHFTXT(LNPOSN+1,-1);
+L320:	SHFTXT(LinePosition+2,-1);
+	INLINE[LinePosition]=55;
+	if(PARMS[NPARMS] == 1)SHFTXT(LinePosition+1,-1);
 	 goto L395;
 
-L340:	SHFTXT(LNPOSN+2,-2);
+L340:	SHFTXT(LinePosition+2,-2);
 	STATE=0;
 	CASE=2;
 L345:	if(PARMS[NPARMS] < 0) goto L395;
@@ -79,20 +79,20 @@ L345:	if(PARMS[NPARMS] < 0) goto L395;
 	 goto L345;
 
 L360:	PRMTYP=PARMS[NPARMS];
-	SHFTXT(LNPOSN+2,PRMTYP-2);
+	SHFTXT(LinePosition+2,PRMTYP-2);
 	if(PRMTYP == 0) goto L395;
 	/* 365 */ for (I=1; I<=PRMTYP; I++) {
-	INLINE[LNPOSN]=0;
-L365:	LNPOSN=LNPOSN+1;
+	INLINE[LinePosition]=0;
+L365:	LinePosition=LinePosition+1;
 	} /* end loop */
 	 goto L395;
 
-L380:	SHFTXT(LNPOSN+2,-2);
+L380:	SHFTXT(LinePosition+2,-2);
 	STATE=0;
 	CASE= -1;
 	if(PRMTYP == 31)CASE=1;
 	if(PRMTYP == 33)CASE=0;
-	I=LNPOSN;
+	I=LinePosition;
 	PUTTXT(PARMS[NPARMS],STATE,CASE,0);
 	{long x = NPARMS+1; PUTTXT(PARMS[x],STATE,CASE,0);}
 	if(PRMTYP == 13 && INLINE[I] >= 37 && INLINE[I] <=
@@ -239,8 +239,6 @@ L20:	YES_ADV=FALSE;
  *  MACHINE DEPENDENT I/O STUFF IS ON THE FOLLOWING PAGE.  SEE THAT PAGE
  *  FOR A DESCRIPTION OF MAPCOM'S INLINE ARRAY. */
 
-#define YES_ADV(X,Y,Z) fYES(X,Y,Z)
-#undef GETNUM
 long fGETNUM(long K)
 {
     long DIGIT, GETNUM = 0, SIGN = 1;
@@ -257,21 +255,21 @@ long fGETNUM(long K)
     
     if(K != 0) fMapLine(K > 0);
     
-L10:	if(LNPOSN > LineLength)return(GETNUM);
-    if(INLINE[LNPOSN] != 0) goto L20;
-    LNPOSN=LNPOSN+1;
+L10:	if(LinePosition > LineLength)return(GETNUM);
+    if(INLINE[LinePosition] != 0) goto L20;
+    LinePosition=LinePosition+1;
     goto L10;
     
 L20:	SIGN=1;
-    if(INLINE[LNPOSN] != 9) goto L32;
+    if(INLINE[LinePosition] != 9) goto L32;
     SIGN= -1;
     
-L30:	LNPOSN=LNPOSN+1;
-L32:	if(LNPOSN > LineLength || INLINE[LNPOSN] == 0) goto L42;
+L30:	LinePosition=LinePosition+1;
+L32:	if(LinePosition > LineLength || INLINE[LinePosition] == 0) goto L42;
 
-    DIGIT=INLINE[LNPOSN]-64;
+    DIGIT=INLINE[LinePosition]-64;
 #ifdef TESTING
-    printf("char : %c nr =  %ld ",INLINE[LNPOSN],DIGIT);
+    printf("char : %c nr =  %ld ",INLINE[LinePosition],DIGIT);
 #endif
     if(DIGIT < 0 || DIGIT > 9) goto L40;
     GETNUM=GETNUM*10+DIGIT;
@@ -279,14 +277,12 @@ L32:	if(LNPOSN > LineLength || INLINE[LNPOSN] == 0) goto L42;
     
 L40:	GETNUM=0;
 L42:	GETNUM=GETNUM*SIGN;
-    LNPOSN=LNPOSN+1;
+    LinePosition=LinePosition+1;
     return(GETNUM);
 }
 
 
 
-#define GETNUM(K) fGETNUM(K)
-#undef GETTXT
 long fGETTXT(SKIP,ONEWRD,UPPER,HASH)long HASH, ONEWRD, SKIP, UPPER; {
 long CHAR, GETTXT, I; static long SPLITTING = -1;
 
@@ -300,11 +296,11 @@ long CHAR, GETTXT, I; static long SPLITTING = -1;
  *  END OF THE LINE, THE WORD IS FILLED UP WITH BLANKS (WHICH ENCODE AS 0'S).
  *  IF WE'RE ALREADY AT END OF LINE WHEN GETTXT IS CALLED, WE RETURN -1. */
 
-	if(LNPOSN != SPLITTING)SPLITTING = -1;
+	if(LinePosition != SPLITTING)SPLITTING = -1;
 	GETTXT= -1;
-L10:	if(LNPOSN > LineLength)return(GETTXT);
-	if((!SKIP) || INLINE[LNPOSN] != 0) goto L11;
-	LNPOSN=LNPOSN+1;
+L10:	if(LinePosition > LineLength)return(GETTXT);
+	if((!SKIP) || INLINE[LinePosition] != 0) goto L11;
+	LinePosition=LinePosition+1;
 	 goto L10;
 
 L11:	GETTXT=0;
@@ -312,8 +308,8 @@ L11:	GETTXT=0;
     for (I=1; I<=5; I++)
     {
         GETTXT=GETTXT*64;
-        if(LNPOSN > LineLength || (ONEWRD && INLINE[LNPOSN] == 0)) goto L15;
-        CHAR=INLINE[LNPOSN];
+        if(LinePosition > LineLength || (ONEWRD && INLINE[LinePosition] == 0)) goto L15;
+        CHAR=INLINE[LinePosition];
        
         tab_s =INLINE;
         //test only
@@ -324,14 +320,14 @@ L11:	GETTXT=0;
         GETTXT=GETTXT+CHAR;
         goto L14;
         
-    L12:	if(SPLITTING == LNPOSN) goto L13;
+    L12:	if(SPLITTING == LinePosition) goto L13;
         GETTXT=GETTXT+63;
-        SPLITTING = LNPOSN;
+        SPLITTING = LinePosition;
         goto L15;
         
     L13:	GETTXT=GETTXT+CHAR-63;
         SPLITTING = -1;
-    L14:	LNPOSN=LNPOSN+1;
+    L14:	LinePosition=LinePosition+1;
     L15:	/*etc*/ ;
     } /* end loop */
 
@@ -382,12 +378,12 @@ void fPUTTXT(WORD,sTATE,CASE,HASH)long CASE, HASH, *sTATE, WORD; {
 long ALPH1, ALPH2, BYTE, DIV, I, W;
 
 /*  UNPACK THE 30-BIT VALUE IN WORD TO OBTAIN UP TO 5 INTEGER-ENCODED CHARS,
- *  AND STORE THEM IN INLINE STARTING AT LNPOSN.  IF LNLENG>=LNPOSN, SHIFT
+ *  AND STORE THEM IN INLINE STARTING AT LinePosition.  IF LNLENG>=LinePosition, SHIFT
  *  EXISTING CHARACTERS TO THE RIGHT TO MAKE ROOM.  HASH MUST BE THE SAME
  *  AS IT WAS WHEN GETTXT CREATED THE 30-BIT WORD.  STATE WILL BE ZERO WHEN
  *  PUTTXT IS CALLED WITH THE FIRST OF A SEQUENCE OF WORDS, BUT IS THEREAFTER
  *  UNCHANGED BY THE CALLER, SO PUTTXT CAN USE IT TO MAINTAIN STATE ACROSS
- *  CALLS.  LNPOSN AND LNLENG ARE INCREMENTED BY THE NUMBER OF CHARS STORED.
+ *  CALLS.  LinePosition AND LNLENG ARE INCREMENTED BY THE NUMBER OF CHARS STORED.
  *  IF CASE=1, ALL LETTERS ARE MADE UPPERCASE; IF -1, LOWERCASE; IF 0, AS IS.
  *  ANY OTHER VALUE FOR CASE IS THE SAME AS 0 BUT ALSO CAUSES TRAILING BLANKS
  *  TO BE INCLUDED (IN ANTICIPATION OF SUBSEQUENT ADDITIONAL TEXT). */
@@ -407,11 +403,11 @@ long ALPH1, ALPH2, BYTE, DIV, I, W;
 	STATE=63;
 	 goto L18;
 
-L12:	SHFTXT(LNPOSN,1);
+L12:	SHFTXT(LinePosition,1);
 	STATE=STATE+BYTE;
 	if(STATE < ALPH2 && STATE >= ALPH1)STATE=STATE-26*CASE;
-	INLINE[LNPOSN]=STATE;
-	LNPOSN=LNPOSN+1;
+	INLINE[LinePosition]=STATE;
+	LinePosition=LinePosition+1;
 	STATE=0;
 L18:	W=(W-BYTE*DIV)*64;
 	} /* end loop */
@@ -427,7 +423,7 @@ void fSHFTXT(FROM,DELTA)long DELTA, FROM; {
 long I, II, JJ;
 
 /*  MOVE INLINE(N) TO INLINE(N+DELTA) FOR N=FROM,LNLENG.  DELTA CAN BE
- *  NEGATIVE.  LNLENG IS UPDATED; LNPOSN IS NOT CHANGED. */
+ *  NEGATIVE.  LNLENG IS UPDATED; LinePosition IS NOT CHANGED. */
 
 
 	if(LineLength < FROM || DELTA == 0) goto L2;
@@ -576,13 +572,15 @@ long HASH, I, VOCAB;
  *  AS AN OBJECT.)  AND IT ALSO MEANS THE KTAB VALUE IS TAKEN MOD 1000. */
 
 	HASH=10000;
-	/* 1 */ for (I=1; I<=TABSIZ; I++) {
-	if(KTAB[I] == -1) goto L2;
-	HASH=HASH+7;
-	if(INIT >= 0 && KTAB[I]/1000 != INIT) goto L1;
-	if(ATAB[I] == ID+HASH*HASH) goto L3;
-L1:	/*etc*/ ;
-	} /* end loop */
+	/* 1 */
+    for (I=1; I<=TABSIZ; I++)
+    {
+        if(KTAB[I] == -1) goto L2;
+        HASH=HASH+7;
+        if(INIT >= 0 && KTAB[I]/1000 != INIT) goto L1;
+        if(ATAB[I] == ID+HASH*HASH) goto L3;
+    L1:	/*etc*/ ;
+    }
 	BUG(21);
 
 L2:	VOCAB= -1;
@@ -879,6 +877,7 @@ void fMapLine(long FIL)
 {
     long I, VAL;
     static FILE *OPENED = NULL;
+    char *tab_s;
     
     /*  READ A LINE OF INPUT, EITHER FROM A FILE (IF FIL=.TRUE.) OR FROM THE
      *  KEYBOARD, TRANSLATE THE CHARS TO INTEGERS IN THE RANGE 0-126 AND STORE
@@ -948,7 +947,7 @@ void fMapLine(long FIL)
             INLINE[I]=MAP1[VAL];
             if(INLINE[I] != 0)LineLength=I;
         } /* end loop */
-        LNPOSN=1;
+        LinePosition=1;
     }
     while((FIL && LineLength == 0));
     /*  ABOVE IS TO GET AROUND AN F40 COMPILER BUG WHEREIN IT READS A BLANK

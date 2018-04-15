@@ -53,7 +53,7 @@
     // test what if letter not digit
     long K = 0;
     long ret;
-    LNPOSN = 0;
+    LinePosition = 0;
     LineLength = 8;
     strcpy(INLINE,"abc723");
     ret = fGETNUM(K);
@@ -68,7 +68,7 @@
     // test what if letter not digit
     long K = 0;
     long ret;
-    LNPOSN = 2;
+    LinePosition = 2;
     LineLength = 8;
     //strcpy(INLINE,"abc723");
     INLINE[0]='a';

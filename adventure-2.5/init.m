@@ -188,7 +188,7 @@ void initialise(void) {
 }
 
 static int raw_init(void ) {
-	printf("Couldn't find adventure.data, using adventure.text...\n");
+    printf("Couldn't find adventure.data, using adventure.text...\n");
 
 /*  CLEAR OUT THE VARIOUS TEXT-POINTER ARRAYS.  ALL TEXT IS STORED IN ARRAY
  *  LINES_ADV; EACH LINE IS PRECEDED BY A WORD POINTING TO THE NEXT POINTER (I.E.
@@ -200,7 +200,7 @@ static int raw_init(void ) {
  *  SECTION 6'S STUFF.  CTEXT(N) POINTS TO A PLAYER-CLASS MESSAGE.  TTEXT IS FOR
  *  SECTION 14.  WE ALSO CLEAR COND (SEE DESCRIPTION OF SECTION 9 FOR DETAILS). */
 
-	/* 1001 */
+	
     for (I=1; I<=300; I++)
     {
         if(I <= 100)PTEXT[I]=0;
@@ -229,8 +229,30 @@ static int raw_init(void ) {
     
 /*  START NEW DATA SECTION.  SECT IS THE SECTION NUMBER. */
 
-L1002:	SECT=GETNUM(1);
-	OLDLOC= -1;
+	
+//    char a;
+//    char *tab_line=malloc(200);
+//    char *line = malloc(200);
+//    int file_position=0;
+//    uint8_t *tab_file=malloc(sizeof(uint8_t)*100);
+    //NSInputStream *stream_file = [[NSInputStream alloc] initWithFileAtPath:@"adventure.text"];
+    
+    //[stream_file initWithFileAtPath:@"adventure.text"];
+    
+    //[stream_file read:tab_file maxLength:10U];
+    
+//    NSLog(@"%s",tab_file);
+    
+
+L1002: SECT=GETNUM(1);
+    OLDLOC= -1;
+    NSLog(@" section -> %ld ",SECT);
+    
+//    NSString *whole_file = [NSString stringWithContentsOfFile:@"adventure.text" encoding:NSASCIIStringEncoding error:nil];
+//
+//    printf("%s",[whole_file cStringUsingEncoding:NSASCIIStringEncoding]);
+    
+    
 	switch (SECT)
     { case 0: return(0);
         case 1: goto L1004;
@@ -279,9 +301,9 @@ L1002:	SECT=GETNUM(1);
 L1004:	KK=LINUSE;
 L1005:	LINUSE=KK;
 	LOC=GETNUM(1);
-	if(LineLength >= LNPOSN+70)BUG(0);
+	if(LineLength >= LinePosition+70)BUG(0);
 	if(LOC == -1) goto L1002;
-	if(LineLength < LNPOSN)BUG(1);
+	if(LineLength < LinePosition)BUG(1);
 L1006:	KK=KK+1;
 	if(KK >= LINSIZ)BUG(2);
 	LINES_ADV[KK]=GETTXT(FALSE,FALSE,FALSE,KK);
