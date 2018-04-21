@@ -110,7 +110,11 @@ int main(int argc, const char * argv[]) {
     //fRSPEAK(141);
     //fPSPEAK(100, -1);
     
-    
+    printf(" Axe %ld ",AXE);
+    printf(" vocword %ld ",VOCWRD(12405,1));
+    printf(" %ld ",funcMakeWorD(12405));
+    PSPEAK(3, -1);
+    SPEAK(1);
     if(SETUP <=0)
     {
         

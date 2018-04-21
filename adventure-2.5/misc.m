@@ -16,6 +16,7 @@ long BLANK, CASE, I, K, L, NEG, NPARMS, PARM, PRMTYP, STATE;
 
 
 	if(N == 0)return;
+    
 	BLANK=BLKLIN;
 	K=N;
 	NPARMS=1;
@@ -24,13 +25,17 @@ L10:	L=labs(LINES_ADV[K])-1;
 	LineLength=0;
 	LinePosition=1;
 	STATE=0;
-	for (I=K; I<=L; I++) {
-L20:	PUTTXT(LINES_ADV[I],STATE,2,I);
-	} /* end loop */
+	for (I=K; I<=L; I++)
+    {
+        PUTTXT(LINES_ADV[I],STATE,2,I);
+    } /* end loop */
 	LinePosition=0;
+    
+    do{
 L30:	LinePosition=LinePosition+1;
 L32:	if(LinePosition > LineLength) goto L40;
-	if(INLINE[LinePosition] != 63) goto L30;
+    }
+    while(INLINE[LinePosition] != 63);
 	{long x = LinePosition+1; PRMTYP=INLINE[x];}
 /*  63 IS A "%"; THE NEXT CHARACTER DETERMINE THE TYPE OF PARAMETER:  1 (!) =
  *  SUPPRESS MESSAGE COMPLETELY, 29 (S) = NULL IF PARM=1, ELSE 'S' (OPTIONAL
@@ -575,21 +580,24 @@ long HASH, I, VOCAB;
 	/* 1 */
     for (I=1; I<=TABSIZ; I++)
     {
-        if(KTAB[I] == -1) goto L2;
+        if(KTAB[I] == -1)
+        {
+            VOCAB= -1;
+            if(INIT < 0)return(VOCAB);
+            BUG(5);
+        }
         HASH=HASH+7;
-        if(INIT >= 0 && KTAB[I]/1000 != INIT) goto L1;
-        if(ATAB[I] == ID+HASH*HASH) goto L3;
-    L1:	/*etc*/ ;
+        if(INIT >= 0 && KTAB[I]/1000 != INIT) continue;
+        if(ATAB[I] == ID+HASH*HASH)
+        {
+            VOCAB=KTAB[I];
+            if(INIT >= 0)VOCAB=fmod(VOCAB,1000);
+            return(VOCAB);
+        }
+    
     }
-	BUG(21);
-
-L2:	VOCAB= -1;
-	if(INIT < 0)return(VOCAB);
-	BUG(5);
-
-L3:	VOCAB=KTAB[I];
-	if(INIT >= 0)VOCAB=fmod(VOCAB,1000);
-	return(VOCAB);
+    BUG(21);
+    return 0;
 }
 
 
@@ -735,10 +743,6 @@ L2:	ATDWRF=I;
 	return(ATDWRF);
 }
 
-
-
-
-#define ATDWRF(WHERE) fATDWRF(WHERE)
 
 
 
