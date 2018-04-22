@@ -36,7 +36,7 @@ extern long fGETTXT(long,long,long,long);
 extern long funcMakeWorD(long);
 
 extern void fPUTTXT(long,long*,long,long);
-#define PUTTXT(WORD,STATE,CASE,HASH) fPUTTXT(WORD,&STATE,CASE,HASH)
+
 extern void fSHFTXT(long,long);
 #define SHFTXT(FROM,DELTA) fSHFTXT(FROM,DELTA)
 extern void fTYPE0(void);
