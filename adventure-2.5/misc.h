@@ -80,7 +80,7 @@ extern void fTYPE(void);
 extern void fMapInit(void);
 
 extern void fSAVEIO(long,long,long*);
-#define SAVEIO(OP,IN,ARR) fSAVEIO(OP,IN,ARR)
+
 extern void fGetDateTime(long*,long*);
 
 

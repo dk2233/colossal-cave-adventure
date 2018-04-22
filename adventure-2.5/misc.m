@@ -520,7 +520,7 @@ static long BUF[250], CKSUM = 0, H1, HASH = 0, N = 0, STATE = 0;
 	if(OP != 0){long ifvar; ifvar=(STATE); switch (ifvar<0? -1 : ifvar>0? 1 :
 		0) { case -1: goto L30; case 0: goto L10; case 1: goto L30; }}
 	if(STATE == 0)return;
-	if(N == 250)SAVEIO(1,STATE > 0,BUF);
+	if(N == 250)fSAVEIO(1,STATE > 0,BUF);
 	N=fmod(N,250)+1;
 	H1=fmod(HASH*1093L+221573L,1048576L);
 	HASH=fmod(H1*1093L+221573L,1048576L);
@@ -533,7 +533,7 @@ static long BUF[250], CKSUM = 0, H1, HASH = 0, N = 0, STATE = 0;
 	return;
 
 L10:	STATE=OP;
-	SAVEIO(0,STATE > 0,BUF);
+	fSAVEIO(0,STATE > 0,BUF);
 	N=1;
 	if(STATE > 0) goto L15;
 	HASH=fmod(WORD,1048576L);
@@ -541,17 +541,17 @@ L10:	STATE=OP;
 L13:	CKSUM=BUF[0];
 	return;
 
-L15:	SAVEIO(1,TRUE,BUF);
+L15:	fSAVEIO(1,TRUE,BUF);
 	HASH=fmod(1234L*5678L-BUF[0],1048576L);
 	 goto L13;
 
-L30:	if(N == 250)SAVEIO(1,STATE > 0,BUF);
+L30:	if(N == 250)fSAVEIO(1,STATE > 0,BUF);
 	N=fmod(N,250)+1;
 	if(STATE > 0) goto L32;
 	N--; BUF[N]=CKSUM; N++;
-	SAVEIO(1,FALSE,BUF);
+	fSAVEIO(1,FALSE,BUF);
 L32:	N--; WORD=BUF[N]-CKSUM; N++;
-	SAVEIO(-1,STATE > 0,BUF);
+	fSAVEIO(-1,STATE > 0,BUF);
 	STATE=0;
 	return;
 }
@@ -875,7 +875,7 @@ void fBUG(NUM)long NUM; {
 
 
 
-/*  MACHINE DEPENDENT ROUTINES (fMapLine, TYPE, MPINIT, SAVEIO) */
+/*  MACHINE DEPENDENT ROUTINES (fMapLine, TYPE, MPINIT, fSAVEIO) */
 
 void fMapLine(long FIL)
 {
@@ -1043,34 +1043,45 @@ void fMapInit(void)
 
 
 
-#undef SAVEIO
-void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP; {
-static FILE *F; char NAME[50];
 
-/*  IF OP=0, ASK FOR A FILE NAME AND OPEN A FILE.  (IF IN=.TRUE., THE FILE IS FOR
- *  INPUT, ELSE OUTPUT.)  IF OP>0, READ/WRITE ARR FROM/INTO THE PREVIOUSLY-OPENED
- *  FILE.  (ARR IS A 250-INTEGER ARRAY.)  IF OP<0, FINISH READING/WRITING THE
- *  FILE.  (FINISHING WRITING CAN BE A NO-OP IF A "STOP" STATEMENT DOES IT
- *  AUTOMATICALLY.  FINISHING READING CAN BE A NO-OP AS LONG AS A SUBSEQUENT
- *  SAVEIO(0,.FALSE.,X) WILL STILL WORK.)  IF YOU CAN CATCH ERRORS (E.G., NO SUCH
- *  FILE) AND TRY AGAIN, GREAT.  DEC F40 CAN'T. */
-
-
-	{long ifvar; ifvar=(OP); switch (ifvar<0? -1 : ifvar>0? 1 : 0) { case -1:
-		goto L10; case 0: goto L20; case 1: goto L30; }}
-
-L10:	fclose(F);
-	return;
-
-L20:	printf("\nFile name: ");
-	gets(NAME);
-	F=fopen(NAME,(IN ? READ_MODE : WRITE_MODE));
-	if(F == NULL) {printf("Can't open file, try again.\n"); goto L20;}
-	return;
-
-L30:	if(IN)fread(ARR,4,250,F);
-	if(!IN)fwrite(ARR,4,250,F);
-	return;
-
+void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP;
+{
+    static FILE *F; char NAME[50];
+    
+    /*  IF OP=0, ASK FOR A FILE NAME AND OPEN A FILE.  (IF IN=.TRUE., THE FILE IS FOR
+     *  INPUT, ELSE OUTPUT.)  IF OP>0, READ/WRITE ARR FROM/INTO THE PREVIOUSLY-OPENED
+     *  FILE.  (ARR IS A 250-INTEGER ARRAY.)  IF OP<0, FINISH READING/WRITING THE
+     *  FILE.  (FINISHING WRITING CAN BE A NO-OP IF A "STOP" STATEMENT DOES IT
+     *  AUTOMATICALLY.  FINISHING READING CAN BE A NO-OP AS LONG AS A SUBSEQUENT
+     *  fSAVEIO(0,.FALSE.,X) WILL STILL WORK.)  IF YOU CAN CATCH ERRORS (E.G., NO SUCH
+     *  FILE) AND TRY AGAIN, GREAT.  DEC F40 CAN'T. */
+    
+    
+    
+    long ifvar;
+    ifvar=(OP);
+    switch (ifvar<0? -1 : ifvar>0? 1 : 0)
+    {
+        case -1:
+            fclose(F);
+            return;
+        case 0:
+            printf("\nFile name: ");
+            gets(NAME);
+            F=fopen(NAME,(IN ? READ_MODE : WRITE_MODE));
+            
+            if(F == NULL)
+                printf("Can't open file, try again.\n");
+            
+            return;
+        case 1:
+            if(IN)fread(ARR,4,250,F);
+            if(!IN)fwrite(ARR,4,250,F);
+            return;
+    }
+    
+    
+    
+    
 }
 
