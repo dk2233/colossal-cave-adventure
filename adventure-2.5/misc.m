@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/*  I/O ROUTINES (SPEAK, PSPEAK, fRSPEAK, SETPRM, GETIN, YES) */
+/*  I/O ROUTINES (SPEAK, PSPEAK, fRSPEAK, fSetParametersForSpeak, GETIN, YES) */
 
 void fSPEAK(long N)
 {
@@ -154,8 +154,8 @@ void RandomMessageSpeakFromSect6(long I)
 
 
 #define fRSPEAK(I) fRSPEAK(I)
-#undef SETPRM
-void fSETPRM(FIRST,P1,P2)long FIRST, P1, P2; {
+
+void fSetParametersForSpeak(FIRST,P1,P2)long FIRST, P1, P2; {
 ;
 
 /*  STORES PARAMETERS INTO THE PRMCOM PARMS ARRAY FOR USE BY SPEAK.  P1 AND P2
@@ -170,7 +170,7 @@ void fSETPRM(FIRST,P1,P2)long FIRST, P1, P2; {
 
 
 
-#define SETPRM(FIRST,P1,P2) fSETPRM(FIRST,P1,P2)
+
 #undef GETIN
 #define WORD1 (*wORD1)
 #define WORD1X (*wORD1X)
@@ -865,7 +865,7 @@ void fBUG(NUM)long NUM; {
  *	26	LOCATION HAS NO TRAVEL ENTRIES
  *	27	HINT NUMBER EXCEEDS GOTO LIST
  *	28	INVALID MONTH RETURNED BY DATE FUNCTION
- *	29	TOO MANY PARAMETERS GIVEN TO SETPRM */
+ *	29	TOO MANY PARAMETERS GIVEN TO fSetParametersForSpeak */
 
 	printf("Fatal error %ld.  See source code for interpretation.\n",
 	   NUM);

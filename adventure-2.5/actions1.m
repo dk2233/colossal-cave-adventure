@@ -37,14 +37,38 @@ int action(long STARTAT)
 
 L4080:	switch (VERB-1)
     {
-        case 0: goto L8010; case 1: return(8000); case 2:
-            return(8000); case 3: goto L8040; case 4: return(2009); case 5: goto L8040;
-        case 6: goto L8070; case 7: goto L8080; case 8: return(8000); case
-            9: return(8000); case 10: return(2011); case 11: goto L9120; case 12:
-            goto L9130; case 13: goto L8140; case 14: goto L9150; case 15:
-            return(8000); case 16: return(8000); case 17: goto L8180; case 18:
-            return(8000); case 19: goto L8200; case 20: return(8000); case 21:
-            goto L9220; case 22: goto L9230; case 23: goto L8240; case 24:
+        case 0: goto L8010;
+        case 1: return(8000);
+        case 2:
+            return(8000);
+        case 3: goto L8040;
+        case 4: return(2009);
+        case 5: goto L8040;
+        case 6: goto L8070;
+        case 7:
+            goto L8080;
+        case 8: return(8000);
+        case
+            9: return(8000);
+        case 10: return(2011);
+        case 11: goto L9120;
+        case 12:
+            goto L9130;
+        case 13: goto L8140;
+        case 14: goto L9150;
+        case 15:
+            return(8000);
+        case 16: return(8000);
+        case 17: goto L8180;
+        case 18:
+            return(8000);
+        case 19: goto L8200;
+        case 20: return(8000);
+        case 21:
+            goto L9220;
+        case 22: goto L9230;
+        case 23: goto L8240;
+        case 24:
             goto L8250;
         case 25:
             
@@ -83,13 +107,27 @@ L4080:	switch (VERB-1)
  */
 
 L4090:	switch (VERB-1) {
-    case 0: goto L9010;
-    case 1: goto L9020;
+        
+        /*  TRANSITIVE CARRY/DROP ARE IN SEPARATE FILE. */
+
+    case 0: return(carry());
+    case 1: return(discard(FALSE));
+        
     case 2: goto L9030;
-    case 3: goto L9040; case 4: return(2009); case 5: goto L9040;
-		case 6: goto L9070; case 7: goto L9080; case 8: goto L9090; case
-		9: return(2011); case 10: return(2011); case 11: goto L9120; case 12:
-		goto L9130; case 13: goto L9140; case 14: goto L9150; case 15:
+    case 3: goto L9040;
+    case 4: return(2009);
+    case 5: goto L9040;
+		case 6: goto L9070;
+    case 7: goto L9080;
+    case 8: goto L9090;
+    case 9: return(2011);
+    case 10: return(2011);
+    case 11: goto L9120;
+    case 12:
+		goto L9130;
+    case 13: goto L9140;
+    case 14: goto L9150;
+    case 15:
 		goto L9160; case 16: goto L9170; case 17: return(2011); case 18:
 		goto L9190; case 19: goto L9190; case 20: goto L9210; case 21:
 		goto L9220; case 22: goto L9230; case 23: return(2011); case 24:
@@ -113,7 +151,7 @@ L5000:	OBJ=K;
 	if(!HERE(K)) goto L5100;
 L5010:	if(WD2 > 0) return(2800);
 	if(VERB != 0) goto L4090;
-	SETPRM(1,WD1,WD1X);
+	fSetParametersForSpeak(1,WD1,WD1X);
 	RandomMessageSpeakFromSect6(255);
 	 return(2600);
 
@@ -137,7 +175,7 @@ L5140:	if(OBJ != ROD || !HERE(ROD2)) goto L5190;
 	OBJ=ROD2;
 	 goto L5010;
 L5190:	if((VERB == FIND_ADV || VERB == INVENT) && WD2 <= 0) goto L5010;
-	SETPRM(1,WD1,WD1X);
+	fSetParametersForSpeak(1,WD1,WD1X);
 	RandomMessageSpeakFromSect6(256);
 	 return(2012);
 
@@ -155,15 +193,12 @@ L5190:	if((VERB == FIND_ADV || VERB == INVENT) && WD2 <= 0) goto L5010;
 L8010:	if(ATLOC[LOC] == 0 || LINK[ATLOC[LOC]] != 0 || ATDWRF(LOC) > 0) return(8000);
 	OBJ=ATLOC[LOC];
 
-/*  TRANSITIVE CARRY/DROP ARE IN SEPARATE FILE. */
 
-L9010:	return(carry());
-L9020:	return(discard(FALSE));
 
 /*  SAY.  ECHO WD2 (OR WD1 IF NO WD2 (SAY WHAT?, ETC.).)  MAGIC WORDS OVERRIDE. */
 
-L9030:	SETPRM(1,WD2,WD2X);
-	if(WD2 <= 0)SETPRM(1,WD1,WD1X);
+L9030:	fSetParametersForSpeak(1,WD2,WD2X);
+	if(WD2 <= 0)fSetParametersForSpeak(1,WD1,WD1X);
 	if(WD2 > 0)WD1=WD2;
 	I=VOCAB(WD1,-1);
 	if(I == 62 || I == 65 || I == 71 || I == 2025 || I == 2034) goto L9035;
@@ -436,8 +471,8 @@ L9230:	if(PROP[ROD2] < 0 || !CLOSED) return(2011);
 /*  SCORE.  CALL SCORING ROUTINE BUT TELL IT TO RETURN. */
 
 L8240:	score(-1);
-	SETPRM(1,SCORE,MXSCOR);
-	SETPRM(3,TURNS,TURNS);
+	fSetParametersForSpeak(1,SCORE,MXSCOR);
+	fSetParametersForSpeak(3,TURNS,TURNS);
 	RandomMessageSpeakFromSect6(259);
 	 return(2012);
 
@@ -563,8 +598,8 @@ L8310:	KK=1;
 	if(!YES_ADV(200,54,54)) return(2012);
 	 goto L8305;
 
-L8312:	SETPRM(1,K/10,fmod(K,10));
-	SETPRM(3,VRSION/10,fmod(VRSION,10));
+L8312:	fSetParametersForSpeak(1,K/10,fmod(K,10));
+	fSetParametersForSpeak(3,VRSION/10,fmod(VRSION,10));
 	RandomMessageSpeakFromSect6(269);
 	 return(2000);
 
@@ -597,7 +632,7 @@ L8330:	SPK=228;
     RandomMessageSpeakFromSect6(labs(K));
 	if(K < 0) return(2012);
 	SPK=0;
-L8332:	SETPRM(1,ZZWORD-MESH*2,0);
+L8332:	fSetParametersForSpeak(1,ZZWORD-MESH*2,0);
 	/* 8335 */ for (I=1; I<=100; I++) {
 	if(!HERE(I) || OBJSND[I] == 0 || PROP[I] < 0) goto L8335;
 	PSPEAK(I,OBJSND[I]+PROP[I]);

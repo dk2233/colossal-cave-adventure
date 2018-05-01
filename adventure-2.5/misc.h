@@ -23,8 +23,8 @@ extern void fPSPEAK(long,long);
 #define PSPEAK(MSG,SKIP) fPSPEAK(MSG,SKIP)
 extern void RandomMessageSpeakFromSect6(long);
 
-extern void fSETPRM(long,long,long);
-#define SETPRM(FIRST,P1,P2) fSETPRM(FIRST,P1,P2)
+extern void fSetParametersForSpeak(long,long,long);
+
 extern void fGETIN(long*,long*,long*,long*);
 #define GETIN(WORD1,WORD1X,WORD2,WORD2X) fGETIN(&WORD1,&WORD1X,&WORD2,&WORD2X)
 extern long fYES(long,long,long);

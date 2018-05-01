@@ -152,12 +152,19 @@ L2:    if(!OUTSID(NEWLOC) || NEWLOC == 0 || !CLOSNG) goto L71;
      *  (DWARVES ROOTED IN PLACE) LET HIM GET OUT (AND ATTACKED). */
     
 L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3)) goto L74;
-    /* 73 */ for (I=1; I<=5; I++) {
-        if(ODLOC[I] != NEWLOC || !DSEEN[I]) goto L73;
-        NEWLOC=LOC;
-        RandomMessageSpeakFromSect6(2);
-        goto L74;
-    L73:    /*etc*/ ;
+    
+    for (I=1; I<=5; I++)
+    {
+        if(ODLOC[I] != NEWLOC || !DSEEN[I])
+        {
+            ;
+        }
+        else
+        {
+            NEWLOC=LOC;
+            RandomMessageSpeakFromSect6(2);
+            break;
+        }
     } /* end loop */
 L74:    LOC=NEWLOC;
     
@@ -236,7 +243,8 @@ L6010:    DTOTAL=0;
         
         if(LOC == CHLOC || PROP[CHEST] >= 0) goto L6030;
         K=0;
-        /* 6020 */ for (J=50; J<=MAXTRS; J++) {
+        for (J=50; J<=MAXTRS; J++)
+        {
             /*  PIRATE WON'T TAKE PYRAMID FROM PLOVER ROOM OR DARK ROOM (TOO EASY!). */
             if(J == PYRAM && (LOC == PLAC[PYRAM] || LOC == PLAC[EMRALD])) goto L6020;
             if(TOTING(J)) goto L6021;
@@ -247,12 +255,15 @@ L6010:    DTOTAL=0;
         if(ODLOC[6] != DLOC[6] && PCT(20))RandomMessageSpeakFromSect6(127);
         goto L6030;
         
-    L6021:    if(PLACE[CHEST] != 0) goto L6022;
+    L6021:    if(PLACE[CHEST] == 0)
+    {
         /*  INSTALL CHEST ONLY ONCE, TO INSURE IT IS THE LAST TREASURE IN THE LIST. */
         MOVE(CHEST,CHLOC);
         MOVE(MESSAG,CHLOC2);
-    L6022:    RandomMessageSpeakFromSect6(128);
-        /* 6023 */ for (J=50; J<=MAXTRS; J++) {
+    }
+     RandomMessageSpeakFromSect6(128);
+        for (J=50; J<=MAXTRS; J++)
+        {
             if(J == PYRAM && (LOC == PLAC[PYRAM] || LOC == PLAC[EMRALD])) goto L6023;
             if(AT(J) && FIXED[J] == 0)CARRY(J,LOC);
             if(TOTING(J))DROP(J,CHLOC);
@@ -283,15 +294,15 @@ L6010:    DTOTAL=0;
      *  POSITIONS IN THE fRSPEAK DATABASE. */
     
     if(DTOTAL == 0) goto L2000;
-    SETPRM(1,DTOTAL,0);
+    fSetParametersForSpeak(1,DTOTAL,0);
     RandomMessageSpeakFromSect6(4+1/DTOTAL);
     if(ATTACK == 0) goto L2000;
     if(DFLAG == 2)DFLAG=3;
-    SETPRM(1,ATTACK,0);
+    fSetParametersForSpeak(1,ATTACK,0);
     K=6;
     if(ATTACK > 1)K=250;
     RandomMessageSpeakFromSect6(K);
-    SETPRM(1,STICK,0);
+    fSetParametersForSpeak(1,STICK,0);
     RandomMessageSpeakFromSect6(K+1+2/(1+STICK));
     if(STICK == 0) goto L2000;
     OLDLC2=LOC;
@@ -307,7 +318,9 @@ L6010:    DTOTAL=0;
     /*  PRINT TEXT FOR CURRENT LOC. */
     
 L2000:    if(LOC == 0) goto L99;
+    printf("\n my location %ld \n",LOC );
     KK=STEXT[LOC];
+    printf("\n KK is %ld \n",KK );
     if(fmod(ABB[LOC],ABBNUM) == 0 || KK == 0)KK=LTEXT[LOC];
     if(FORCED(LOC) || !DARK(0)) goto L2001;
     if(WZDARK && PCT(35)) goto L90;
@@ -411,11 +424,11 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
     {
         PROP[GRATE]=0;
         PROP[FISSUR]=0;
-        /* 10010 */
+        
         for (I=1; I<=6; I++)
         {
             DSEEN[I]=FALSE;
-        L10010: DLOC[I]=0;
+            DLOC[I]=0;
             
         } /* end loop */
         MOVE(TROLL,0);
@@ -549,8 +562,14 @@ L2630:    I=VOCAB(WD1,-1);
     if(I == -1) goto L3000;
     K=fmod(I,1000);
     KQ=I/1000+1;
-    switch (KQ-1) { case 0: goto L8; case 1: goto L5000; case 2: goto L4000;
-        case 3: goto L2010; }
+    switch (KQ-1)
+    {
+        case 0: goto L8;
+        case 1: goto L5000;
+        case 2: goto L4000;
+        case 3: goto L2010;
+            
+    }
     BUG(22);
     
     /*  GET SECOND WORD FOR ANALYSIS. */
@@ -562,7 +581,7 @@ L2800:    WD1=WD2;
     
     /*  GEE, I DON'T UNDERSTAND. */
     
-L3000:    SETPRM(1,WD1,WD1X);
+L3000:    fSetParametersForSpeak(1,WD1,WD1X);
     RandomMessageSpeakFromSect6(254);
     goto L2600;
     
@@ -600,7 +619,7 @@ Laction:
     
     
     
-L8000:    SETPRM(1,WD1,WD1X);
+L8000:    fSetParametersForSpeak(1,WD1,WD1X);
     RandomMessageSpeakFromSect6(257);
     OBJ=0;
     goto L2600;
@@ -839,17 +858,30 @@ L95:    RandomMessageSpeakFromSect6(131);
      *  MET AND WE WANT TO OFFER THE HINT.  GOTO 40020 TO CLEAR HINTLC BACK TO ZERO,
      *  40030 TO TAKE NO ACTION YET. */
     
-L40000:    switch (HINT-1) { case 0: goto L40100; case 1: goto L40200; case 2: goto
-        L40300; case 3: goto L40400; case 4: goto L40500; case 5: goto
-        L40600; case 6: goto L40700; case 7: goto L40800; case 8: goto
-    L40900; case 9: goto L41000; }
+L40000:    switch (HINT-1)
+    {
+        case 0: goto L40100;
+        case 1: goto L40200;
+        case 2: goto
+            L40300;
+        case 3: goto L40400;
+        case 4: goto L40500;
+        case 5: goto
+            L40600;
+        case 6: goto L40700;
+        case 7: goto L40800;
+        case 8: goto
+        L40900;
+        case 9: goto L41000;
+            
+    }
     /*        CAVE  BIRD  SNAKE MAZE  DARK  WITT  URN   WOODS OGRE
      *        JADE */
     BUG(27);
     
 L40010: HINTLC[HINT]=0;
     if(!YES_ADV(HINTS[HINT][3],0,54)) goto L2602;
-    SETPRM(1,HINTS[HINT][2],HINTS[HINT][2]);
+    fSetParametersForSpeak(1,HINTS[HINT][2],HINTS[HINT][2]);
     RandomMessageSpeakFromSect6(261);
     HINTED[HINT]=YES_ADV(175,HINTS[HINT][4],54);
     if(HINTED[HINT] && LIMIT > 30)LIMIT=LIMIT+30*HINTS[HINT][2];

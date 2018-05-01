@@ -501,7 +501,7 @@ static int finish_init()
     
     MAXTRS=79;
     TALLY=0;
-    /* 1200 */
+    
     for (I=50; I<=MAXTRS; I++)
     {
         if(PTEXT[I] != 0)PROP[I]= -1;
@@ -662,7 +662,8 @@ static int finish_init()
     ABBNUM=5;
     for (I=0; I<=4; I++)
     {
-        {long x = 2*I+81; if(RandomSection6Texts[x] != 0)MAXDIE=I+1;}
+        long x = 2*I+81;
+        if(RandomSection6Texts[x] != 0)MAXDIE=I+1;
     } /* end loop */
     NUMDIE=0;
     HOLDNG=0;
@@ -687,40 +688,45 @@ static int finish_init()
 
 /*  REPORT ON AMOUNT OF ARRAYS ACTUALLY USED, TO PERMIT REDUCTIONS. */
 
-static void report(void ) {
-	/* 1998 */ for (K=1; K<=LOCSIZ; K++) {
-	KK=LOCSIZ+1-K;
-	if(LTEXT[KK] != 0) goto L1997;
-L1998:	/*etc*/ ;
-	} /* end loop */
-
-	OBJ=0;
-L1997:	/* 1996 */ for (K=1; K<=100; K++) {
-L1996:	if(PTEXT[K] != 0)OBJ=OBJ+1;
-	} /* end loop */
-
-	/* 1995 */ for (K=1; K<=TABNDX; K++) {
-L1995:	if(KTAB[K]/1000 == 2)VERB=KTAB[K]-2000;
-	} /* end loop */
-
-	/* 1994 */ for (K=1; K<=RTXSIZ; K++) {
-	J=RTXSIZ+1-K;
-	if(RandomSection6Texts[J] != 0) goto L1993;
-L1994:	/*etc*/ ;
-	} /* end loop */
-
-L1993:	SETPRM(1,LINUSE,LINSIZ);
-	SETPRM(3,TRVS,TRVSIZ);
-	SETPRM(5,TABNDX,TABSIZ);
-	SETPRM(7,KK,LOCSIZ);
-	SETPRM(9,OBJ,100);
-	SETPRM(11,VERB,VRBSIZ);
-	SETPRM(13,J,RTXSIZ);
-	SETPRM(15,CLSSES,CLSMAX);
-	SETPRM(17,HNTMAX,HNTSIZ);
-	SETPRM(19,TRNVLS,TRNSIZ);
-	RandomMessageSpeakFromSect6(267);
-	TYPE0();
+static void report(void )
+{
+    for (K=1; K<=LOCSIZ; K++)
+    {
+        KK=LOCSIZ+1-K;
+        if(LTEXT[KK] != 0) goto L1997;
+    
+    } /* end loop */
+    
+    OBJ=0;
+L1997:	/* 1996 */ for (K=1; K<=100; K++)
+{
+    if(PTEXT[K] != 0)OBJ=OBJ+1;
+} /* end loop */
+    
+    for (K=1; K<=TABNDX; K++)
+    {
+        if(KTAB[K]/1000 == 2)VERB=KTAB[K]-2000;
+    } /* end loop */
+    
+    for (K=1; K<=RTXSIZ; K++)
+    {
+        J=RTXSIZ+1-K;
+        if(RandomSection6Texts[J] != 0) goto L1993;
+        
+    } /* end loop */
+    
+L1993:	fSetParametersForSpeak(1,LINUSE,LINSIZ);
+    fSetParametersForSpeak(3,TRVS,TRVSIZ);
+    fSetParametersForSpeak(5,TABNDX,TABSIZ);
+    fSetParametersForSpeak(7,KK,LOCSIZ);
+    fSetParametersForSpeak(9,OBJ,100);
+    fSetParametersForSpeak(11,VERB,VRBSIZ);
+    fSetParametersForSpeak(13,J,RTXSIZ);
+    fSetParametersForSpeak(15,CLSSES,CLSMAX);
+    fSetParametersForSpeak(17,HNTMAX,HNTSIZ);
+    fSetParametersForSpeak(19,TRNVLS,TRNSIZ);
+    RandomMessageSpeakFromSect6(267);
+    TYPE0();
 }
 
 static long init_reading, init_cksum;

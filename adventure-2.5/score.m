@@ -97,8 +97,8 @@ L20030: if(HINTED[I])SCORE=SCORE-HINTS[I][2];
 
 	if(SCORE+TRNLUZ+1 >= MXSCOR && TRNLUZ != 0)RandomMessageSpeakFromSect6(242);
 	if(SCORE+SAVED+1 >= MXSCOR && SAVED != 0)RandomMessageSpeakFromSect6(143);
-	SETPRM(1,SCORE,MXSCOR);
-	SETPRM(3,TURNS,TURNS);
+	fSetParametersForSpeak(1,SCORE,MXSCOR);
+	fSetParametersForSpeak(3,TURNS,TURNS);
 	RandomMessageSpeakFromSect6(262);
 	/* 20200 */ for (I=1; I<=CLSSES; I++) {
 	if(CVAL[I] >= SCORE) goto L20210;
@@ -111,7 +111,7 @@ L20210: SPEAK(CTEXT[I]);
 	SPK=264;
 	if(I >= CLSSES) goto L25000;
 	I=CVAL[I]+1-SCORE;
-	SETPRM(1,I,I);
+	fSetParametersForSpeak(1,I,I);
 	SPK=263;
 L25000: RandomMessageSpeakFromSect6(SPK);
 	exit(FALSE);
