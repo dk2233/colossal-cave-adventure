@@ -725,7 +725,7 @@ L1993:	fSetParametersForSpeak(1,LINUSE,LINSIZ);
     fSetParametersForSpeak(15,CLSSES,CLSMAX);
     fSetParametersForSpeak(17,HNTMAX,HNTSIZ);
     fSetParametersForSpeak(19,TRNVLS,TRNSIZ);
-    RandomMessageSpeakFromSect6(267);
+    SpeakMessageFromSect6(267);
     TYPE0();
 }
 

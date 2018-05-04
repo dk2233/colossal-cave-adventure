@@ -31,22 +31,23 @@ void score(long MODE)
  *  POINTS CAN ALSO BE DEDUCTED FOR USING HINTS OR TOO MANY TURNS, OR FOR
  *  SAVING INTERMEDIATE POSITIONS. */
 
-L20000: SCORE=0;
+    SCORE=0;
 	MXSCOR=0;
 
 /*  FIRST TALLY UP THE TREASURES.  MUST BE IN BUILDING AND NOT BROKEN.
  *  GIVE THE POOR GUY 2 POINTS JUST FOR FINDING EACH TREASURE. */
 
-	/* 20010 */ for (I=50; I<=MAXTRS; I++) {
-	if(PTEXT[I] == 0) goto L20010;
-	K=12;
-	if(I == CHEST)K=14;
-	if(I > CHEST)K=16;
-	if(PROP[I] >= 0)SCORE=SCORE+2;
-	if(PLACE[I] == 3 && PROP[I] == 0)SCORE=SCORE+K-2;
-	MXSCOR=MXSCOR+K;
-L20010: /*etc*/ ;
-	} /* end loop */
+    for (I=50; I<=MAXTRS; I++)
+    {
+        if(PTEXT[I] == 0) goto L20010;
+        K=12;
+        if(I == CHEST)K=14;
+        if(I > CHEST)K=16;
+        if(PROP[I] >= 0)SCORE=SCORE+2;
+        if(PLACE[I] == 3 && PROP[I] == 0)SCORE=SCORE+K-2;
+        MXSCOR=MXSCOR+K;
+    L20010: /*etc*/ ;
+    } /* end loop */
 
 /*  NOW LOOK AT HOW HE FINISHED AND HOW FAR HE GOT.  MAXDIE AND NUMDIE TELL US
  *  HOW WELL HE SURVIVED.  DFLAG WILL
@@ -95,11 +96,11 @@ L20030: if(HINTED[I])SCORE=SCORE-HINTS[I][2];
 
 /*  THAT SHOULD BE GOOD ENOUGH.  LET'S TELL HIM ALL ABOUT IT. */
 
-	if(SCORE+TRNLUZ+1 >= MXSCOR && TRNLUZ != 0)RandomMessageSpeakFromSect6(242);
-	if(SCORE+SAVED+1 >= MXSCOR && SAVED != 0)RandomMessageSpeakFromSect6(143);
+	if(SCORE+TRNLUZ+1 >= MXSCOR && TRNLUZ != 0)SpeakMessageFromSect6(242);
+	if(SCORE+SAVED+1 >= MXSCOR && SAVED != 0)SpeakMessageFromSect6(143);
 	fSetParametersForSpeak(1,SCORE,MXSCOR);
 	fSetParametersForSpeak(3,TURNS,TURNS);
-	RandomMessageSpeakFromSect6(262);
+	SpeakMessageFromSect6(262);
 	/* 20200 */ for (I=1; I<=CLSSES; I++) {
 	if(CVAL[I] >= SCORE) goto L20210;
 L20200: /*etc*/ ;
@@ -113,7 +114,7 @@ L20210: SPEAK(CTEXT[I]);
 	I=CVAL[I]+1-SCORE;
 	fSetParametersForSpeak(1,I,I);
 	SPK=263;
-L25000: RandomMessageSpeakFromSect6(SPK);
+L25000: SpeakMessageFromSect6(SPK);
 	exit(FALSE);
 
 }

@@ -66,7 +66,7 @@ int discard(just_do_it)long just_do_it;
 	if(TOTING(ROD2) && OBJ == ROD && !TOTING(ROD))OBJ=ROD2;
 	if(!TOTING(OBJ)) return(2011);
 	if(OBJ != BIRD || !HERE(SNAKE)) goto L9023;
-	RandomMessageSpeakFromSect6(30);
+	SpeakMessageFromSect6(30);
 	if(CLOSED) return(19000);
 	DSTROY(SNAKE);
 /*  SET PROP FOR USE BY TRAVEL OPTIONS */
@@ -82,7 +82,7 @@ L9021:	K=LIQ(0);
 	 return(2012);
 
 L9023:	if(!(GSTONE(OBJ) && AT(CAVITY) && PROP[CAVITY] != 0)) goto L9024;
-	RandomMessageSpeakFromSect6(218);
+	SpeakMessageFromSect6(218);
 	PROP[OBJ]=1;
 	PROP[CAVITY]=0;
 	if(!HERE(RUG) || !((OBJ == EMRALD && PROP[RUG] != 2) || (OBJ == RUBY &&
@@ -90,7 +90,7 @@ L9023:	if(!(GSTONE(OBJ) && AT(CAVITY) && PROP[CAVITY] != 0)) goto L9024;
 	SPK=219;
 	if(TOTING(RUG))SPK=220;
 	if(OBJ == RUBY)SPK=221;
-	RandomMessageSpeakFromSect6(SPK);
+	SpeakMessageFromSect6(SPK);
 	if(SPK == 220) goto L9021;
 	K=2-PROP[RUG];
 	PROP[RUG]=K;
@@ -105,13 +105,13 @@ L9024:	if(OBJ != COINS || !HERE(VEND)) goto L9025;
 	 return(2012);
 
 L9025:	if(OBJ != BIRD || !AT(DRAGON) || PROP[DRAGON] != 0) goto L9026;
-	RandomMessageSpeakFromSect6(154);
+	SpeakMessageFromSect6(154);
 	DSTROY(BIRD);
 	PROP[BIRD]=0;
 	 return(2012);
 
 L9026:	if(OBJ != BEAR || !AT(TROLL)) goto L9027;
-	RandomMessageSpeakFromSect6(163);
+	SpeakMessageFromSect6(163);
 	MOVE(TROLL,0);
 	MOVE(TROLL+100,0);
 	MOVE(TROLL2,PLAC[TROLL]);
@@ -121,7 +121,7 @@ L9026:	if(OBJ != BEAR || !AT(TROLL)) goto L9027;
 	 goto L9021;
 
 L9027:	if(OBJ == VASE && LOC != PLAC[PILLOW]) goto L9028;
-	RandomMessageSpeakFromSect6(54);
+	SpeakMessageFromSect6(54);
 	 goto L9021;
 
 L9028:	PROP[VASE]=2;
@@ -177,7 +177,7 @@ L9126:	if(OBJ == 0)SPK=44;
 /*  FUN STUFF FOR DRAGON.  IF HE INSISTS ON ATTACKING IT, WIN!  SET PROP TO DEAD,
  *  MOVE DRAGON TO CENTRAL LOC (STILL FIXED), MOVE RUG THERE (NOT FIXED), AND
  *  MOVE HIM THERE, TOO.  THEN DO A NULL MOTION TO GET NEW DESCRIPTION. */
-	RandomMessageSpeakFromSect6(49);
+	SpeakMessageFromSect6(49);
 	VERB=0;
 	OBJ=0;
 	GETIN(WD1,WD1X,WD2,WD2X);
@@ -199,8 +199,8 @@ L9127:	/*etc*/ ;
 	K=NUL;
 	 return(8);
 
-L9128:	RandomMessageSpeakFromSect6(SPK);
-	RandomMessageSpeakFromSect6(6);
+L9128:	SpeakMessageFromSect6(SPK);
+	SpeakMessageFromSect6(6);
 	DSTROY(OGRE);
 	K=0;
 	/* 9129 */ for (I=1; I<=5; I++) {
@@ -243,7 +243,7 @@ L9172:	SPK=48;
 	SPK=47;
 	DKILL=DKILL+1;
 	if(DKILL == 1)SPK=149;
-L9175:	RandomMessageSpeakFromSect6(SPK);
+L9175:	SpeakMessageFromSect6(SPK);
 	DROP(AXE,LOC);
 	K=NUL;
 	 return(8);
@@ -336,7 +336,7 @@ int fill(void) {
 L9222:	SPK=29;
 	if(LIQLOC(LOC) == 0)SPK=144;
 	if(LIQLOC(LOC) == 0 || !TOTING(VASE)) return(2011);
-	RandomMessageSpeakFromSect6(145);
+	SpeakMessageFromSect6(145);
 	PROP[VASE]=2;
 	FIXED[VASE]= -1;
 	 return(discard(TRUE));

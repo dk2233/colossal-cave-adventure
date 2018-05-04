@@ -21,7 +21,7 @@ extern void fSPEAK(long);
 #define SPEAK(N) fSPEAK(N)
 extern void fPSPEAK(long,long);
 #define PSPEAK(MSG,SKIP) fPSPEAK(MSG,SKIP)
-extern void RandomMessageSpeakFromSect6(long);
+extern void SpeakMessageFromSect6(long);
 
 extern void fSetParametersForSpeak(long,long,long);
 

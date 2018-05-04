@@ -17,11 +17,13 @@
 
 int action(long STARTAT)
 {
+    printf("\n run actions %ld \n",STARTAT);
 	switch(STARTAT)
     {
         case 4000:
             VERB=K;
             SPK=ACTSPK[VERB];
+            printf(" 4000 -> %ld ", SPK);
             if(WD2 > 0 && VERB != SAY) return(2800);
             if(VERB == SAY)OBJ=WD2;
             if(OBJ > 0) goto L4090;
@@ -35,12 +37,20 @@ int action(long STARTAT)
 
 /*  ANALYSE AN INTRANSITIVE VERB (IE, NO OBJECT GIVEN YET). */
 
-L4080:	switch (VERB-1)
+L4080: printf("\n Verb %ld \n",VERB);
+    //SpeakMessageFromSect6(141);
+    /* here VERB holds number which corresponds to number in section 4
+     
+     
+     0  corresponds to 2001
+     
+     */
+     
+    switch (VERB-1)
     {
         case 0: goto L8010;
         case 1: return(8000);
-        case 2:
-            return(8000);
+        case 2: return(8000);
         case 3: goto L8040;
         case 4: return(2009);
         case 5: goto L8040;
@@ -67,9 +77,25 @@ L4080:	switch (VERB-1)
         case 21:
             goto L9220;
         case 22: goto L9230;
-        case 23: goto L8240;
+        case 23:
+            /*  SCORE.  CALL SCORING ROUTINE BUT TELL IT TO RETURN. */
+            score(-1);
+            fSetParametersForSpeak(1,SCORE,MXSCOR);
+            fSetParametersForSpeak(3,TURNS,TURNS);
+            SpeakMessageFromSect6(259);
+            return(2012);
+            break;
+            
         case 24:
-            goto L8250;
+            /*  FEE FIE FOE FOO (AND FUM).  ADVANCE TO NEXT STATE IF GIVEN IN PROPER ORDER.
+             *  LOOK UP WD1 IN SECTION 3 OF VOCAB TO DETERMINE WHICH WORD WE'VE GOT.  LAST
+             *  WORD ZIPS THE EGGS BACK TO THE GIANT ROOM (UNLESS ALREADY THERE). */
+            
+            K=VOCAB(WD1,3);
+            SPK=42;
+            if(FOOBAR == 1-K) goto L8252;
+            if(FOOBAR != 0)SPK=151;
+            return(2011);
         case 25:
             
             /*  BRIEF.  INTRANSITIVE ONLY.  SUPPRESS LONG DESCRIPTIONS AFTER FIRST TIME. */
@@ -129,12 +155,28 @@ L4090:	switch (VERB-1) {
     case 14: goto L9150;
     case 15:
 		goto L9160; case 16: goto L9170; case 17: return(2011); case 18:
-		goto L9190; case 19: goto L9190; case 20: goto L9210; case 21:
-		goto L9220; case 22: goto L9230; case 23: return(2011); case 24:
-		return(2011); case 25: return(2011); case 26: goto L9270; case 27:
-		goto L9280; case 28: goto L9290; case 29: return(2011); case 30:
-		return(2011); case 31: goto L9320; case 32: return(2011); case 33:
-		goto L8340; }
+		goto L9190; case 19: goto L9190;
+    case 20: return(feed());
+    case 21:
+		goto L9220;
+    case 22: goto L9230;
+    case 23: return(2011);
+    case 24:
+		return(2011);
+    case 25: return(2011);
+    case 26: goto L9270;
+    case 27:
+		goto L9280;
+    case 28: goto L9290;
+    case 29: return(2011);
+    case 30:
+		return(2011);
+    case 31: goto L9320;
+    case 32: return(2011);
+    case 33:
+		goto L8340;
+        
+}
 /*	     TAKE DROP  SAY OPEN NOTH LOCK   ON  OFF WAVE CALM
  *	     WALK KILL POUR  EAT DRNK  RUB TOSS QUIT FIND INVN
  *	     FEED FILL BLST SCOR  FOO  BRF READ BREK WAKE SUSP
@@ -152,7 +194,7 @@ L5000:	OBJ=K;
 L5010:	if(WD2 > 0) return(2800);
 	if(VERB != 0) goto L4090;
 	fSetParametersForSpeak(1,WD1,WD1X);
-	RandomMessageSpeakFromSect6(255);
+	SpeakMessageFromSect6(255);
 	 return(2600);
 
 L5100:	if(K != GRATE) goto L5110;
@@ -176,7 +218,7 @@ L5140:	if(OBJ != ROD || !HERE(ROD2)) goto L5190;
 	 goto L5010;
 L5190:	if((VERB == FIND_ADV || VERB == INVENT) && WD2 <= 0) goto L5010;
 	fSetParametersForSpeak(1,WD1,WD1X);
-	RandomMessageSpeakFromSect6(256);
+	SpeakMessageFromSect6(256);
 	 return(2012);
 
 
@@ -202,7 +244,7 @@ L9030:	fSetParametersForSpeak(1,WD2,WD2X);
 	if(WD2 > 0)WD1=WD2;
 	I=VOCAB(WD1,-1);
 	if(I == 62 || I == 65 || I == 71 || I == 2025 || I == 2034) goto L9035;
-	RandomMessageSpeakFromSect6(258);
+	SpeakMessageFromSect6(258);
 	 return(2012);
 
 L9035:	WD2=0;
@@ -296,7 +338,7 @@ L9070:
 	SPK=184;
 	if(LIMIT < 0) return(2011);
 	PROP[LAMP]=1;
-	RandomMessageSpeakFromSect6(39);
+	SpeakMessageFromSect6(39);
 	if(WZDARK) return(2000);
 	 return(2012);
 
@@ -318,8 +360,8 @@ L9083:	PROP[URN]=PROP[URN]/2;
 	 return(2011);
 
 L9086:	PROP[LAMP]=0;
-	RandomMessageSpeakFromSect6(40);
-	if(DARK(0))RandomMessageSpeakFromSect6(16);
+	SpeakMessageFromSect6(40);
+	if(DARK(0))SpeakMessageFromSect6(16);
 	 return(2012);
 
 /*  WAVE.  NO EFFECT UNLESS WAVING ROD AT FISSURE OR AT BIRD. */
@@ -331,7 +373,7 @@ L9090:	if((!TOTING(OBJ)) && (OBJ != ROD || !TOTING(ROD2)))SPK=29;
 	if(SPK == 206 && LOC == PLACE[STEPS] && PROP[JADE] < 0) goto L9094;
 	if(CLOSED) return(18999);
 	if(CLOSNG || !AT(FISSUR)) return(2011);
-	if(HERE(BIRD))RandomMessageSpeakFromSect6(SPK);
+	if(HERE(BIRD))SpeakMessageFromSect6(SPK);
 	PROP[FISSUR]=1-PROP[FISSUR];
 	PSPEAK(FISSUR,2-PROP[FISSUR]);
 	 return(2012);
@@ -444,7 +486,7 @@ L9190:	if(AT(OBJ) || (LIQ(0) == OBJ && AT(BOTTLE)) || K == LIQLOC(LOC) || (OBJ =
 L8200:	SPK=98;
 	/* 8201 */ for (I=1; I<=100; I++) {
 	if(I == BEAR || !TOTING(I)) goto L8201;
-	if(SPK == 98)RandomMessageSpeakFromSect6(99);
+	if(SPK == 98)SpeakMessageFromSect6(99);
 	BLKLIN=FALSE;
 	PSPEAK(I,-1);
 	BLKLIN=TRUE;
@@ -456,7 +498,7 @@ L8201:	/*etc*/ ;
 
 /* FEED/FILL ARE IN THE OTHER MODULE. */
 
-L9210:	return(feed());
+	
 L9220:	return(fill());
 
 /*  BLAST.  NO EFFECT UNLESS YOU'VE GOT DYNAMITE, WHICH IS A NEAT TRICK! */
@@ -465,26 +507,10 @@ L9230:	if(PROP[ROD2] < 0 || !CLOSED) return(2011);
 	BONUS=133;
 	if(LOC == 115)BONUS=134;
 	if(HERE(ROD2))BONUS=135;
-	RandomMessageSpeakFromSect6(BONUS);
+	SpeakMessageFromSect6(BONUS);
 	 score(0);
 
-/*  SCORE.  CALL SCORING ROUTINE BUT TELL IT TO RETURN. */
 
-L8240:	score(-1);
-	fSetParametersForSpeak(1,SCORE,MXSCOR);
-	fSetParametersForSpeak(3,TURNS,TURNS);
-	RandomMessageSpeakFromSect6(259);
-	 return(2012);
-
-/*  FEE FIE FOE FOO (AND FUM).  ADVANCE TO NEXT STATE IF GIVEN IN PROPER ORDER.
- *  LOOK UP WD1 IN SECTION 3 OF VOCAB TO DETERMINE WHICH WORD WE'VE GOT.  LAST
- *  WORD ZIPS THE EGGS BACK TO THE GIANT ROOM (UNLESS ALREADY THERE). */
-
-L8250:	K=VOCAB(WD1,3);
-	SPK=42;
-	if(FOOBAR == 1-K) goto L8252;
-	if(FOOBAR != 0)SPK=151;
-	 return(2011);
 
 L8252:	FOOBAR=K;
 	if(K != 4) return(2009);
@@ -506,7 +532,7 @@ L8252:	FOOBAR=K;
 /*  READ.  PRINT STUFF BASED ON OBJTXT.  OYSTER (?) IS SPECIAL CASE. */
 
 L8270:	/* 8275 */ for (I=1; I<=100; I++) {
-L8275:	if(HERE(I) && OBJTXT[I] != 0 && PROP[I] >= 0)OBJ=OBJ*100+I;
+	if(HERE(I) && OBJTXT[I] != 0 && PROP[I] >= 0)OBJ=OBJ*100+I;
 	} /* end loop */
 	if(OBJ > 100 || OBJ == 0 || DARK(0)) return(8000);
 
@@ -544,7 +570,7 @@ L9290:	if(OBJ != DWARF || !CLOSED) return(2011);
  *  LEARNING ZZWORD). */
 
 L8300:	SPK=201;
-	RandomMessageSpeakFromSect6(260);
+	SpeakMessageFromSect6(260);
 	if(!YES_ADV(200,54,54)) return(2012);
 	SAVED=SAVED+5;
 	KK= -1;
@@ -587,23 +613,23 @@ L8305:	fGetDateTime(&I,&K);
 	K=NUL;
 	ZZWORD=RNDVOC(3,ZZWORD-MESH*2)+MESH*2;
 	if(KK > 0) return(8);
-	RandomMessageSpeakFromSect6(266);
+	SpeakMessageFromSect6(266);
 	exit(FALSE);
 
 /*  RESUME.  READ A SUSPENDED GAME BACK FROM A FILE. */
 
 L8310:	KK=1;
 	if(LOC == 1 && ABB[1] == 1) goto L8305;
-	RandomMessageSpeakFromSect6(268);
+	SpeakMessageFromSect6(268);
 	if(!YES_ADV(200,54,54)) return(2012);
 	 goto L8305;
 
 L8312:	fSetParametersForSpeak(1,K/10,fmod(K,10));
 	fSetParametersForSpeak(3,VRSION/10,fmod(VRSION,10));
-	RandomMessageSpeakFromSect6(269);
+	SpeakMessageFromSect6(269);
 	 return(2000);
 
-L8318:	RandomMessageSpeakFromSect6(270);
+L8318:	SpeakMessageFromSect6(270);
 	exit(FALSE);
 
 /*  FLY.  SNIDE REMARKS UNLESS HOVERING RUG IS HERE. */
@@ -621,7 +647,7 @@ L9320:	if(OBJ != RUG) return(2011);
 	NEWLOC=PLACE[RUG]+FIXED[RUG]-LOC;
 	SPK=226;
 	if(PROP[SAPPH] >= 0)SPK=227;
-	RandomMessageSpeakFromSect6(SPK);
+	SpeakMessageFromSect6(SPK);
 	 return(2);
 
 /*  LISTEN.  INTRANSITIVE ONLY.  PRINT STUFF BASED ON OBJSND/LOCSND. */
@@ -629,7 +655,7 @@ L9320:	if(OBJ != RUG) return(2011);
 L8330:	SPK=228;
 	K=LOCSND[LOC];
 	if(K == 0) goto L8332;
-    RandomMessageSpeakFromSect6(labs(K));
+    SpeakMessageFromSect6(labs(K));
 	if(K < 0) return(2012);
 	SPK=0;
 L8332:	fSetParametersForSpeak(1,ZZWORD-MESH*2,0);
@@ -650,7 +676,7 @@ L8340:	if(!AT(RESER) && LOC != FIXED[RESER]-1) return(2011);
 	if(AT(RESER)) return(2012);
 	OLDLC2=LOC;
 	NEWLOC=0;
-	RandomMessageSpeakFromSect6(241);
+	SpeakMessageFromSect6(241);
 	 return(2);
 
 }

@@ -142,7 +142,7 @@ void fPSPEAK(MSG,SKIP)long MSG, SKIP;
 }
 
 
-void RandomMessageSpeakFromSect6(long I)
+void SpeakMessageFromSect6(long I)
 {
     
     /*  PRINT THE I-TH "RANDOM" MESSAGE (SECTION 6 OF DATABASE). */
@@ -198,7 +198,7 @@ L12:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 L22:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 	if(JUNK > 0) goto L22;
 	if(GETTXT(TRUE,TRUE,TRUE,0) <= 0)return;
-	RandomMessageSpeakFromSect6(53);
+	SpeakMessageFromSect6(53);
 	 goto L10;
 }
 
@@ -217,17 +217,17 @@ long YES_ADV, REPLY, JUNK1, JUNK2, JUNK3;
 /*  PRINT MESSAGE X, WAIT FOR YES/NO ANSWER.  IF YES, PRINT Y AND RETURN TRUE;
  *  IF NO, PRINT Z AND RETURN FALSE. */
 
-L1:	RandomMessageSpeakFromSect6(X);
+L1:	SpeakMessageFromSect6(X);
 	GETIN(REPLY,JUNK1,JUNK2,JUNK3);
 	if(REPLY == funcMakeWorD(250519) || REPLY == funcMakeWorD(25)) goto L10;
 	if(REPLY == funcMakeWorD(1415) || REPLY == funcMakeWorD(14)) goto L20;
-	RandomMessageSpeakFromSect6(185);
+	SpeakMessageFromSect6(185);
 	 goto L1;
 L10:	YES_ADV=TRUE;
-	RandomMessageSpeakFromSect6(Y);
+	SpeakMessageFromSect6(Y);
 	return(YES_ADV);
 L20:	YES_ADV=FALSE;
-	RandomMessageSpeakFromSect6(Z);
+	SpeakMessageFromSect6(Z);
 	return(YES_ADV);
 }
 
@@ -806,34 +806,41 @@ L2:	R=fmod(R*1093L+221587L,1048576L);
 
 
 #define RAN(RANGE) fRAN(RANGE)
-#undef RNDVOC
-long fRNDVOC(CHAR,FORCE)long CHAR, FORCE; {
-long DIV, I, J, RNDVOC;
 
-/*  SEARCHES THE VOCABULARY FOR A WORD WHOSE SECOND CHARACTER IS CHAR, AND
- *  CHANGES THAT WORD SUCH THAT EACH OF THE OTHER FOUR CHARACTERS IS A
- *  RANDOM LETTER.  IF FORCE IS NON-ZERO, IT IS USED AS THE NEW WORD.
- *  RETURNS THE NEW WORD. */
-
-
-	RNDVOC=FORCE;
-	if(RNDVOC != 0) goto L3;
-	/* 1 */ for (I=1; I<=5; I++) {
-	J=11+RAN(26);
-	if(I == 2)J=CHAR;
-L1:	RNDVOC=RNDVOC*64+J;
-	} /* end loop */
-L3:	J=10000;
-	DIV=64L*64L*64L;
-	/* 5 */ for (I=1; I<=TABSIZ; I++) {
-	J=J+7;
-	if(fmod((ATAB[I]-J*J)/DIV,64L) == CHAR) goto L8;
-L5:	/*etc*/ ;
-	} /* end loop */
-	BUG(5);
-
-L8:	ATAB[I]=RNDVOC+J*J;
-	return(RNDVOC);
+long fRNDVOC(long CHAR,long FORCE)
+{
+    long DIV, I, J, RNDVOC = FORCE;
+    
+    /*  SEARCHES THE VOCABULARY FOR A WORD WHOSE SECOND CHARACTER IS CHAR, AND
+     *  CHANGES THAT WORD SUCH THAT EACH OF THE OTHER FOUR CHARACTERS IS A
+     *  RANDOM LETTER.  IF FORCE IS NON-ZERO, IT IS USED AS THE NEW WORD.
+     *  RETURNS THE NEW WORD. */
+        
+    
+    if(RNDVOC == 0)
+    {
+        
+        for (I=1; I<=5; I++)
+        {
+            J=11+RAN(26);
+            if(I == 2)J=CHAR;
+            RNDVOC=RNDVOC*64+J;
+        }
+    }
+	J=10000;
+    DIV=64L*64L*64L;
+    for (I=1; I<=TABSIZ; I++)
+    {
+        J=J+7;
+        if(fmod((ATAB[I]-J*J)/DIV,64L) == CHAR)
+        {
+            ATAB[I]=RNDVOC+J*J;
+            return(RNDVOC);
+        }
+        
+    } /* end loop */
+    BUG(5);
+    return 0;
 }
 
 

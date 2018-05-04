@@ -96,6 +96,14 @@
 }
 
 
+-(void) testRndVoc{
+    
+    long char1 = 0x45;
+    long ret;
+    ret = fRNDVOC(char1, 10);
+    printf(" new word %ld ",ret);
+}
+
 -(void)testMapLine{
     INLINE[0]=' ';
     INLINE[1]='A';

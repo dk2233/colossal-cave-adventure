@@ -110,11 +110,14 @@ int main(int argc, const char * argv[]) {
     //fRSPEAK(141);
     //fPSPEAK(100, -1);
     
-    printf(" Axe %ld ",AXE);
-    printf(" vocword %ld ",VOCWRD(12405,1));
-    printf(" %ld ",funcMakeWorD(12405));
-    PSPEAK(3, -1);
-    SPEAK(1);
+    //printf(" Axe %ld ",AXE);
+    //printf(" vocword %ld ",VOCWRD(12405,1));
+    //printf(" %ld ",funcMakeWorD(12405));
+    //PSPEAK(3, -1);
+    
+    //fYES(193, 50, 54);
+    
+    //SPEAK(1);
     if(SETUP <=0)
     {
         
@@ -123,7 +126,7 @@ int main(int argc, const char * argv[]) {
          *  HAVING TO BE ABLE TO UNDO THE CHANGES LATER.)  IF A "USED" COPY IS
          *  RERUN, WE COME HERE AND TELL THE PLAYER TO RUN A FRESH COPY. */
         
-        RandomMessageSpeakFromSect6(201);
+        SpeakMessageFromSect6(201);
         exit(FALSE);
     }
     
@@ -133,7 +136,11 @@ int main(int argc, const char * argv[]) {
     SETUP= -1;
     I=RAN(-1);
     ZZWORD=RNDVOC(3,0)+MESH*2;
+    
+    //SpeakMessageFromSect6(65);
+    //question about Instructions nr 65
     NOVICE=YES_ADV(65,1,0);
+    
     NEWLOC=1;
     LOC=1;
     LIMIT=330;
@@ -142,7 +149,7 @@ int main(int argc, const char * argv[]) {
     /*  CAN'T LEAVE CAVE ONCE IT'S CLOSING (EXCEPT BY MAIN OFFICE). */
     
 L2:    if(!OUTSID(NEWLOC) || NEWLOC == 0 || !CLOSNG) goto L71;
-    RandomMessageSpeakFromSect6(130);
+    SpeakMessageFromSect6(130);
     NEWLOC=LOC;
     if(!PANIC)CLOCK2=15;
     PANIC=TRUE;
@@ -162,7 +169,7 @@ L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3)) goto L74;
         else
         {
             NEWLOC=LOC;
-            RandomMessageSpeakFromSect6(2);
+            SpeakMessageFromSect6(2);
             break;
         }
     } /* end loop */
@@ -197,7 +204,7 @@ L6000:    if(DFLAG != 1) goto L6010;
         if(DLOC[I] == LOC)DLOC[I]=DALTLC;
     L6002:    ODLOC[I]=DLOC[I];
     } /* end loop */
-    RandomMessageSpeakFromSect6(3);
+    SpeakMessageFromSect6(3);
     DROP(AXE,LOC);
     goto L2000;
     
@@ -252,7 +259,7 @@ L6010:    DTOTAL=0;
         } /* end loop */
         if(TALLY == 1 && K == 0 && PLACE[CHEST] == 0 && HERE(LAMP) && PROP[LAMP]
            == 1) goto L6025;
-        if(ODLOC[6] != DLOC[6] && PCT(20))RandomMessageSpeakFromSect6(127);
+        if(ODLOC[6] != DLOC[6] && PCT(20))SpeakMessageFromSect6(127);
         goto L6030;
         
     L6021:    if(PLACE[CHEST] == 0)
@@ -261,7 +268,7 @@ L6010:    DTOTAL=0;
         MOVE(CHEST,CHLOC);
         MOVE(MESSAG,CHLOC2);
     }
-     RandomMessageSpeakFromSect6(128);
+     SpeakMessageFromSect6(128);
         for (J=50; J<=MAXTRS; J++)
         {
             if(J == PYRAM && (LOC == PLAC[PYRAM] || LOC == PLAC[EMRALD])) goto L6023;
@@ -274,7 +281,7 @@ L6010:    DTOTAL=0;
         DSEEN[6]=FALSE;
         goto L6030;
         
-    L6025:    RandomMessageSpeakFromSect6(186);
+    L6025:    SpeakMessageFromSect6(186);
         MOVE(CHEST,CHLOC);
         MOVE(MESSAG,CHLOC2);
         goto L6024;
@@ -295,15 +302,15 @@ L6010:    DTOTAL=0;
     
     if(DTOTAL == 0) goto L2000;
     fSetParametersForSpeak(1,DTOTAL,0);
-    RandomMessageSpeakFromSect6(4+1/DTOTAL);
+    SpeakMessageFromSect6(4+1/DTOTAL);
     if(ATTACK == 0) goto L2000;
     if(DFLAG == 2)DFLAG=3;
     fSetParametersForSpeak(1,ATTACK,0);
     K=6;
     if(ATTACK > 1)K=250;
-    RandomMessageSpeakFromSect6(K);
+    SpeakMessageFromSect6(K);
     fSetParametersForSpeak(1,STICK,0);
-    RandomMessageSpeakFromSect6(K+1+2/(1+STICK));
+    SpeakMessageFromSect6(K+1+2/(1+STICK));
     if(STICK == 0) goto L2000;
     OLDLC2=LOC;
     goto L99;
@@ -325,11 +332,11 @@ L2000:    if(LOC == 0) goto L99;
     if(FORCED(LOC) || !DARK(0)) goto L2001;
     if(WZDARK && PCT(35)) goto L90;
     KK=RandomSection6Texts[16];
-L2001:    if(TOTING(BEAR))RandomMessageSpeakFromSect6(141);
+L2001:    if(TOTING(BEAR))SpeakMessageFromSect6(141);
     SPEAK(KK);
     K=1;
     if(FORCED(LOC)) goto L8;
-    if(LOC == 33 && PCT(25) && !CLOSNG)RandomMessageSpeakFromSect6(7);
+    if(LOC == 33 && PCT(25) && !CLOSNG)SpeakMessageFromSect6(7);
     
     /*  PRINT OUT DESCRIPTIONS OF OBJECTS AT THIS LOCATION.  IF NOT CLOSING AND
      *  PROPERTY VALUE IS NEGATIVE, TALLY OFF ANOTHER TREASURE.  RUG IS SPECIAL
@@ -368,7 +375,7 @@ L2008:    I=LINK[I];
     
 L2009:    K=54;
 L2010:    SPK=K;
-L2011:    RandomMessageSpeakFromSect6(SPK);
+L2011:    SpeakMessageFromSect6(SPK);
     
 L2012:    VERB=0;
     OLDOBJ=OBJ;
@@ -416,7 +423,11 @@ L2607:    FOOBAR=(FOOBAR>0 ? -FOOBAR : 0);
     THRESH= -1;
     if(TRNDEX <= TRNVLS)THRESH=fmod(TRNVAL[TRNDEX],100000)+1;
 L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
-    if(VERB == SAY) goto L4090;
+    if(VERB == SAY)
+    {
+        I=4090;
+        goto Laction;
+    }
     
     if(TALLY == 0 && INDEEP(LOC) && LOC != 33)CLOCK1=CLOCK1-1;
     
@@ -441,7 +452,7 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
         FIXED[CHAIN]=0;
         PROP[AXE]=0;
         FIXED[AXE]=0;
-        RandomMessageSpeakFromSect6(129);
+        SpeakMessageFromSect6(129);
         CLOCK1= -1;
         CLOSNG=TRUE;
         goto L19999;
@@ -497,47 +508,46 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
         L11010: if(TOTING(I))DSTROY(I);
         } /* end loop */
         
-        RandomMessageSpeakFromSect6(132);
+        SpeakMessageFromSect6(132);
         CLOSED=TRUE;
         goto L2;
     }
     
     
     if(PROP[LAMP] == 1)LIMIT=LIMIT-1;
-    if(LIMIT <= 30 && HERE(BATTER) && PROP[BATTER] == 0 && HERE(LAMP)) goto L12000;
-    if(LIMIT == 0) goto L12400;
-    if(LIMIT <= 30) goto L12200;
-    
     /*  ANOTHER WAY WE CAN FORCE AN END TO THINGS IS BY HAVING THE LAMP GIVE OUT.
      *  WHEN IT GETS CLOSE, WE COME HERE TO WARN HIM.  WE GO TO 12000 IF THE LAMP
      *  AND FRESH BATTERIES ARE HERE, IN WHICH CASE WE REPLACE THE BATTERIES AND
      *  CONTINUE.  12200 IS FOR OTHER CASES OF LAMP DYING.  12400 IS WHEN IT GOES
      *  OUT.  EVEN THEN, HE CAN EXPLORE OUTSIDE FOR A WHILE IF DESIRED. */
     
-L12000: RandomMessageSpeakFromSect6(188);
-    PROP[BATTER]=1;
-    if(TOTING(BATTER))DROP(BATTER,LOC);
-    LIMIT=LIMIT+2500;
-    LMWARN=FALSE;
-    goto L19999;
-    
-L12200: if(LMWARN || !HERE(LAMP)) goto L19999;
-    LMWARN=TRUE;
-    SPK=187;
-    if(PLACE[BATTER] == 0)SPK=183;
-    if(PROP[BATTER] == 1)SPK=189;
-    RandomMessageSpeakFromSect6(SPK);
-    goto L19999;
-    
-L12400: LIMIT= -1;
-    PROP[LAMP]=0;
-    if(HERE(LAMP))RandomMessageSpeakFromSect6(184);
-    goto L19999;
-    
 
-    
-    
-    
+    printf(" Limit %ld battery? %d ", LIMIT,HERE(BATTER));
+    if(LIMIT <= 30 && HERE(BATTER) && PROP[BATTER] == 0 && HERE(LAMP))
+    {
+        SpeakMessageFromSect6(188);
+        PROP[BATTER]=1;
+        if(TOTING(BATTER))DROP(BATTER,LOC);
+        LIMIT=LIMIT+2500;
+        LMWARN=FALSE;
+        goto L19999;
+    }
+    if(LIMIT == 0) {
+        LIMIT= -1;
+        PROP[LAMP]=0;
+        if(HERE(LAMP))SpeakMessageFromSect6(184);
+        goto L19999;
+    }
+    if(LIMIT <= 30)
+    {
+        if(LMWARN || !HERE(LAMP)) goto L19999;
+        LMWARN=TRUE;
+        SPK=187;
+        if(PLACE[BATTER] == 0)SPK=183;
+        if(PROP[BATTER] == 1)SPK=189;
+        SpeakMessageFromSect6(SPK);
+        goto L19999;
+    }
     
     
     
@@ -554,10 +564,10 @@ L2610:    if(V1 == 1000+CAGE && V2 == 1000+BIRD && HERE(CAGE) &&
              HERE(BIRD))WD1=funcMakeWorD(301200308);
 L2620:    if(WD1 != funcMakeWorD(23051920)) goto L2625;
     IWEST=IWEST+1;
-    if(IWEST == 10)RandomMessageSpeakFromSect6(17);
+    if(IWEST == 10)SpeakMessageFromSect6(17);
 L2625:    if(WD1 != funcMakeWorD( 715) || WD2 == 0) goto L2630;
     IGO=IGO+1;
-    if(IGO == 10)RandomMessageSpeakFromSect6(276);
+    if(IGO == 10)SpeakMessageFromSect6(276);
 L2630:    I=VOCAB(WD1,-1);
     if(I == -1) goto L3000;
     K=fmod(I,1000);
@@ -565,8 +575,8 @@ L2630:    I=VOCAB(WD1,-1);
     switch (KQ-1)
     {
         case 0: goto L8;
-        case 1: goto L5000;
-        case 2: goto L4000;
+        case 1: I=5000; goto Laction;
+        case 2: I=4000; goto Laction;
         case 3: goto L2010;
             
     }
@@ -582,14 +592,11 @@ L2800:    WD1=WD2;
     /*  GEE, I DON'T UNDERSTAND. */
     
 L3000:    fSetParametersForSpeak(1,WD1,WD1X);
-    RandomMessageSpeakFromSect6(254);
+    SpeakMessageFromSect6(254);
     goto L2600;
     
     /* VERB AND OBJECT ANALYSIS MOVED TO SEPARATE MODULE. */
-    
-L4000:    I=4000; goto Laction;
-L4090:    I=4090; goto Laction;
-L5000:    I=5000;
+
 Laction:
     switch (action(I)) {
         case 2: goto L2;
@@ -606,9 +613,9 @@ Laction:
         case 8000: goto L8000;
             /*  OH DEAR, HE'S DISTURBED THE DWARVES. */
         case 18999:
-            RandomMessageSpeakFromSect6(SPK);
+            SpeakMessageFromSect6(SPK);
         case 19000:
-            RandomMessageSpeakFromSect6(136);
+            SpeakMessageFromSect6(136);
             score(0);
     }
     BUG(99);
@@ -620,7 +627,7 @@ Laction:
     
     
 L8000:    fSetParametersForSpeak(1,WD1,WD1X);
-    RandomMessageSpeakFromSect6(257);
+    SpeakMessageFromSect6(257);
     OBJ=0;
     goto L2600;
   
@@ -673,7 +680,7 @@ L14:    if(NEWLOC != 0 && !PCT(NEWLOC)) goto L12;
 L16:    NEWLOC=fmod(LL,1000);
     if(NEWLOC <= 300) goto L2;
     if(NEWLOC <= 500) goto L30000;
-    RandomMessageSpeakFromSect6(NEWLOC-500);
+    SpeakMessageFromSect6(NEWLOC-500);
     NEWLOC=LOC;
     goto L2;
     
@@ -681,8 +688,19 @@ L16:    NEWLOC=fmod(LL,1000);
      *  (XX=00-99) ARE USED FOR SPECIAL CASE NUMBER NNN (NNN=301-500). */
     
 L30000: NEWLOC=NEWLOC-300;
-    switch (NEWLOC) { case 1: goto L30100; case 2: goto L30200; case 3: goto
-        L30300; }
+    switch (NEWLOC)
+    {
+        case 1: goto L30100;
+        case 2:
+            /*  TRAVEL 302.  PLOVER TRANSPORT.  DROP THE EMERALD (ONLY USE SPECIAL TRAVEL IF
+             *  TOTING IT), SO HE'S FORCED TO USE THE PLOVER-PASSAGE TO GET IT OUT.  HAVING
+             *  DROPPED IT, GO BACK AND PRETEND HE WASN'T CARRYING IT AFTER ALL. */
+            
+            DROP(EMRALD,LOC);
+            goto L12;
+        case 3: goto L30300;
+            
+    }
     BUG(20);
     
     /*  TRAVEL 301.  PLOVER-ALCOVE PASSAGE.  CAN CARRY ONLY EMERALD.  NOTE: TRAVEL
@@ -692,15 +710,10 @@ L30000: NEWLOC=NEWLOC-300;
 L30100: NEWLOC=99+100-LOC;
     if(HOLDNG == 0 || (HOLDNG == 1 && TOTING(EMRALD))) goto L2;
     NEWLOC=LOC;
-    RandomMessageSpeakFromSect6(117);
+    SpeakMessageFromSect6(117);
     goto L2;
     
-    /*  TRAVEL 302.  PLOVER TRANSPORT.  DROP THE EMERALD (ONLY USE SPECIAL TRAVEL IF
-     *  TOTING IT), SO HE'S FORCED TO USE THE PLOVER-PASSAGE TO GET IT OUT.  HAVING
-     *  DROPPED IT, GO BACK AND PRETEND HE WASN'T CARRYING IT AFTER ALL. */
-    
-L30200: DROP(EMRALD,LOC);
-    goto L12;
+
     
     /*  TRAVEL 303.  TROLL BRIDGE.  MUST BE DONE ONLY AS SPECIAL MOTION SO THAT
      *  DWARVES WON'T WANDER ACROSS AND ENCOUNTER THE BEAR.  (THEY WON'T FOLLOW THE
@@ -722,7 +735,7 @@ L30300: if(PROP[TROLL] != 1) goto L30310;
 L30310: NEWLOC=PLAC[TROLL]+FIXD[TROLL]-LOC;
     if(PROP[TROLL] == 0)PROP[TROLL]=1;
     if(!TOTING(BEAR)) goto L2;
-    RandomMessageSpeakFromSect6(162);
+    SpeakMessageFromSect6(162);
     PROP[CHASM]=1;
     PROP[TROLL]=2;
     DROP(BEAR,NEWLOC);
@@ -744,7 +757,7 @@ L20:    K=OLDLOC;
     if(K == LOC)K2=91;
     if(CNDBIT(LOC,4))K2=274;
     if(K2 == 0) goto L21;
-    RandomMessageSpeakFromSect6(K2);
+    SpeakMessageFromSect6(K2);
     goto L2;
     
 L21:    LL=fmod((labs(TRAVEL[KK])/1000),1000);
@@ -758,7 +771,7 @@ L22:    if(TRAVEL[KK] < 0) goto L23;
     
 L23:    KK=K2;
     if(KK != 0) goto L25;
-    RandomMessageSpeakFromSect6(140);
+    SpeakMessageFromSect6(140);
     goto L2;
     
 L25:    K=fmod(labs(TRAVEL[KK]),1000);
@@ -768,7 +781,7 @@ L25:    K=fmod(labs(TRAVEL[KK]),1000);
     /*  LOOK.  CAN'T GIVE MORE DETAIL.  PRETEND IT WASN'T DARK (THOUGH IT MAY "NOW"
      *  BE DARK) SO HE WON'T FALL INTO A PIT WHILE STARING INTO THE GLOOM. */
     
-L30:    if(DETAIL < 3)RandomMessageSpeakFromSect6(15);
+L30:    if(DETAIL < 3)SpeakMessageFromSect6(15);
     DETAIL=DETAIL+1;
     WZDARK=FALSE;
     ABB[LOC]=0;
@@ -778,7 +791,7 @@ L30:    if(DETAIL < 3)RandomMessageSpeakFromSect6(15);
     
 L40:    K=58;
     if(OUTSID(LOC) && LOC != 8)K=57;
-    RandomMessageSpeakFromSect6(K);
+    SpeakMessageFromSect6(K);
     goto L2;
     
     /*  NON-APPLICABLE MOTION.  VARIOUS MESSAGES DEPENDING ON WORD GIVEN. */
@@ -791,7 +804,7 @@ L50:    SPK=12;
     if(VERB == FIND_ADV || VERB == INVENT)SPK=59;
     if(K == 62 || K == 65)SPK=42;
     if(K == 17)SPK=80;
-    RandomMessageSpeakFromSect6(SPK);
+    SpeakMessageFromSect6(SPK);
     goto L2;
     
     
@@ -817,7 +830,7 @@ L50:    SPK=12;
     
     /*  THE EASIEST WAY TO GET KILLED IS TO FALL INTO A PIT IN PITCH DARKNESS. */
     
-L90:    RandomMessageSpeakFromSect6(23);
+L90:    SpeakMessageFromSect6(23);
     OLDLC2=LOC;
     
     /*  OKAY, HE'S DEAD.  LET'S GET ON WITH IT. */
@@ -843,7 +856,7 @@ L99:    if(CLOSNG) goto L95;
     
     /*  HE DIED DURING CLOSING TIME.  NO RESURRECTION.  TALLY UP A DEATH AND EXIT. */
     
-L95:    RandomMessageSpeakFromSect6(131);
+L95:    SpeakMessageFromSect6(131);
     NUMDIE=NUMDIE+1;
     score(0);
     
@@ -882,7 +895,7 @@ L40000:    switch (HINT-1)
 L40010: HINTLC[HINT]=0;
     if(!YES_ADV(HINTS[HINT][3],0,54)) goto L2602;
     fSetParametersForSpeak(1,HINTS[HINT][2],HINTS[HINT][2]);
-    RandomMessageSpeakFromSect6(261);
+    SpeakMessageFromSect6(261);
     HINTED[HINT]=YES_ADV(175,HINTS[HINT][4],54);
     if(HINTED[HINT] && LIMIT > 30)LIMIT=LIMIT+30*HINTS[HINT][2];
 L40020: HINTLC[HINT]=0;
@@ -899,8 +912,7 @@ L40200: if(PLACE[BIRD] == LOC && TOTING(ROD) && OLDOBJ == BIRD) goto L40010;
 L40300: if(HERE(SNAKE) && !HERE(BIRD)) goto L40010;
     goto L40020;
     
-L40400: if(ATLOC[LOC] == 0 && ATLOC[OLDLOC] == 0 && ATLOC[OLDLC2] == 0 && HOLDNG >
-           1) goto L40010;
+L40400: if(ATLOC[LOC] == 0 && ATLOC[OLDLOC] == 0 && ATLOC[OLDLC2] == 0 && HOLDNG > 1) goto L40010;
     goto L40020;
     
 L40500: if(PROP[EMRALD] != -1 && PROP[PYRAM] == -1) goto L40010;
