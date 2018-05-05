@@ -246,7 +246,7 @@ static int raw_init(void ) {
 
 L1002: SECT=GETNUM(1);
     OLDLOC= -1;
-    NSLog(@" section -> %ld ",SECT);
+    //NSLog(@" section -> %ld ",SECT);
     
 //    NSString *whole_file = [NSString stringWithContentsOfFile:@"adventure.text" encoding:NSASCIIStringEncoding error:nil];
 //

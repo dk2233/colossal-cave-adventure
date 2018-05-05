@@ -3,6 +3,9 @@
 #include "exec/types.h"
 #include "intuition/intuition.h"
 
+
+#import <Foundation/Foundation.h>
+
 #define INTUITIONREV 1
 
 struct IntuitionBase *IntuitionBase = NULL;
@@ -37,5 +40,6 @@ void fGetDateTime(long *X, long  *Y) {
 	gettimeofday(&now, 0);
 	*X = now.tv_sec;
 	*Y = now.tv_usec;
+    printf(" sec %ld usec %ld ",*X,*Y);
 }
 #endif

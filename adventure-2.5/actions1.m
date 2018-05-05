@@ -108,7 +108,9 @@ L4080: printf("\n Verb %ld \n",VERB);
         case 27:
             return(8000);
         case 28: return(8000);
-        case 29: goto L8300;
+        case 29:
+            //Save command
+            goto L8300;
         case 30:
             goto L8310;
         case 31: goto L8320;
@@ -470,7 +472,7 @@ L9170:	return(throw());
 
 /*  QUIT.  INTRANSITIVE ONLY.  VERIFY INTENT AND EXIT IF THAT'S WHAT HE WANTS. */
 
-L8180:	if(YES_ADV(22,54,54)) score(1);
+L8180:	if(fYES(22,54,54)) score(1);
 	 return(2012);
 
 /*  FIND.  MIGHT BE CARRYING IT, OR IT MIGHT BE HERE.  ELSE GIVE CAVEAT. */
@@ -542,7 +544,7 @@ L9270:	if(DARK(0)) goto L5190;
 	PSPEAK(OBJ,OBJTXT[OBJ]+PROP[OBJ]);
 	 return(2012);
 
-L9275:	CLSHNT=YES_ADV(192,193,54);
+L9275:	CLSHNT=fYES(192,193,54);
 	 return(2012);
 
 /*  BREAK.  ONLY WORKS FOR MIRROR IN REPOSITORY AND, OF COURSE, THE VASE. */
@@ -571,7 +573,7 @@ L9290:	if(OBJ != DWARF || !CLOSED) return(2011);
 
 L8300:	SPK=201;
 	SpeakMessageFromSect6(260);
-	if(!YES_ADV(200,54,54)) return(2012);
+	if(!fYES(200,54,54)) return(2012);
 	SAVED=SAVED+5;
 	KK= -1;
 
@@ -579,6 +581,7 @@ L8300:	SPK=201;
  *  DISTINGUISHED BY THE VALUE OF KK (-1 FOR SUSPEND, +1 FOR RESUME). */
 
 L8305:	fGetDateTime(&I,&K);
+    
 	K=I+650*K;
 	SAVWRD(KK,K);
 	K=VRSION;
@@ -609,7 +612,12 @@ L8305:	fGetDateTime(&I,&K);
 	SAVARR(PLACE,100);
 	SAVARR(PROP,100);
 	SAVWRD(KK,K);
-	if(K != 0) goto L8318;
+    if(K != 0)
+    {
+        printf(" K value is %ld ",K);
+        SpeakMessageFromSect6(270);
+        exit(FALSE);
+    }
 	K=NUL;
 	ZZWORD=RNDVOC(3,ZZWORD-MESH*2)+MESH*2;
 	if(KK > 0) return(8);
@@ -621,7 +629,7 @@ L8305:	fGetDateTime(&I,&K);
 L8310:	KK=1;
 	if(LOC == 1 && ABB[1] == 1) goto L8305;
 	SpeakMessageFromSect6(268);
-	if(!YES_ADV(200,54,54)) return(2012);
+	if(!fYES(200,54,54)) return(2012);
 	 goto L8305;
 
 L8312:	fSetParametersForSpeak(1,K/10,fmod(K,10));
@@ -629,8 +637,7 @@ L8312:	fSetParametersForSpeak(1,K/10,fmod(K,10));
 	SpeakMessageFromSect6(269);
 	 return(2000);
 
-L8318:	SpeakMessageFromSect6(270);
-	exit(FALSE);
+
 
 /*  FLY.  SNIDE REMARKS UNLESS HOVERING RUG IS HERE. */
 

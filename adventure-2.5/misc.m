@@ -209,26 +209,34 @@ L22:	JUNK=GETTXT(FALSE,TRUE,TRUE,0);
 #undef WORD2
 #undef WORD2X
 #define GETIN(WORD1,WORD1X,WORD2,WORD2X) fGETIN(&WORD1,&WORD1X,&WORD2,&WORD2X)
-#undef YES_ADV
-long fYES(X,Y,Z)long X, Y, Z; {
 
-long YES_ADV, REPLY, JUNK1, JUNK2, JUNK3;
+long fYES(long X,long Y,long Z)
+{
+
+    long ret_answer;
+    long    REPLY, JUNK1, JUNK2, JUNK3;
 
 /*  PRINT MESSAGE X, WAIT FOR YES/NO ANSWER.  IF YES, PRINT Y AND RETURN TRUE;
  *  IF NO, PRINT Z AND RETURN FALSE. */
-
-L1:	SpeakMessageFromSect6(X);
+    do{
+	SpeakMessageFromSect6(X);
 	GETIN(REPLY,JUNK1,JUNK2,JUNK3);
-	if(REPLY == funcMakeWorD(250519) || REPLY == funcMakeWorD(25)) goto L10;
-	if(REPLY == funcMakeWorD(1415) || REPLY == funcMakeWorD(14)) goto L20;
+	if(REPLY == funcMakeWorD(250519) || REPLY == funcMakeWorD(25))
+    {
+        ret_answer=TRUE;
+        SpeakMessageFromSect6(Y);
+        return(ret_answer);
+    }
+	else if(REPLY == funcMakeWorD(1415) || REPLY == funcMakeWorD(14))
+    {
+        ret_answer=FALSE;
+        SpeakMessageFromSect6(Z);
+        return(ret_answer);
+    }
 	SpeakMessageFromSect6(185);
-	 goto L1;
-L10:	YES_ADV=TRUE;
-	SpeakMessageFromSect6(Y);
-	return(YES_ADV);
-L20:	YES_ADV=FALSE;
-	SpeakMessageFromSect6(Z);
-	return(YES_ADV);
+    } while(1 );
+
+	
 }
 
 
@@ -494,8 +502,9 @@ long I;
 /*  WRITE OR READ AN ARRAY OF N WORDS.  SEE SAVWRD. */
 
 
-	/* 1 */ for (I=1; I<=N; I++) {
-L1:	SAVWRD(0,ARR[I]);
+	for (I=1; I<=N; I++)
+    {
+        SAVWRD(0,ARR[I]);
 	} /* end loop */
 	return;
 }

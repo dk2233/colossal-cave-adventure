@@ -139,7 +139,7 @@ int main(int argc, const char * argv[]) {
     
     //SpeakMessageFromSect6(65);
     //question about Instructions nr 65
-    NOVICE=YES_ADV(65,1,0);
+    NOVICE=fYES(65,1,0);
     
     NEWLOC=1;
     LOC=1;
@@ -837,7 +837,7 @@ L90:    SpeakMessageFromSect6(23);
     
 L99:    if(CLOSNG) goto L95;
     NUMDIE=NUMDIE+1;
-    if(!YES_ADV(79+NUMDIE*2,80+NUMDIE*2,54)) score(0);
+    if(!fYES(79+NUMDIE*2,80+NUMDIE*2,54)) score(0);
     if(NUMDIE == MAXDIE) score(0);
     PLACE[WATER]=0;
     PLACE[OIL]=0;
@@ -893,10 +893,10 @@ L40000:    switch (HINT-1)
     BUG(27);
     
 L40010: HINTLC[HINT]=0;
-    if(!YES_ADV(HINTS[HINT][3],0,54)) goto L2602;
+    if(!fYES(HINTS[HINT][3],0,54)) goto L2602;
     fSetParametersForSpeak(1,HINTS[HINT][2],HINTS[HINT][2]);
     SpeakMessageFromSect6(261);
-    HINTED[HINT]=YES_ADV(175,HINTS[HINT][4],54);
+    HINTED[HINT]=fYES(175,HINTS[HINT][4],54);
     if(HINTED[HINT] && LIMIT > 30)LIMIT=LIMIT+30*HINTS[HINT][2];
 L40020: HINTLC[HINT]=0;
 L40030:  goto L2602;
