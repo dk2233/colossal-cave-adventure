@@ -99,7 +99,8 @@ int main(int argc, const char * argv[]) {
     //@autoreleasepool {
         
     LINES_ADV = (long *)calloc(LINSIZ+1,sizeof(long));
-    if(!LINES_ADV){
+    if(!LINES_ADV)
+    {
         printf("Not enough memory!\n");
         exit(FALSE);
     }
@@ -130,7 +131,6 @@ int main(int argc, const char * argv[]) {
         exit(FALSE);
     }
     
-    
     /*  START-UP, DWARF STUFF */
     
     SETUP= -1;
@@ -139,6 +139,7 @@ int main(int argc, const char * argv[]) {
     
     //SpeakMessageFromSect6(65);
     //question about Instructions nr 65
+    //wheter or not you are Novice
     NOVICE=fYES(65,1,0);
     
     NEWLOC=1;
@@ -158,8 +159,12 @@ L2:    if(!OUTSID(NEWLOC) || NEWLOC == 0 || !CLOSNG) goto L71;
      *  THE DWARF'S BLOCKING HIS WAY.  IF COMING FROM PLACE FORBIDDEN TO PIRATE
      *  (DWARVES ROOTED IN PLACE) LET HIM GET OUT (AND ATTACKED). */
     
-L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3)) goto L74;
+L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3))
+{
     
+}
+else
+{
     for (I=1; I<=5; I++)
     {
         if(ODLOC[I] != NEWLOC || !DSEEN[I])
@@ -173,22 +178,29 @@ L71:    if(NEWLOC == LOC || FORCED(LOC) || CNDBIT(LOC,3)) goto L74;
             break;
         }
     } /* end loop */
-L74:    LOC=NEWLOC;
+
+}
     
-    /*  DWARF STUFF.  SEE EARLIER COMMENTS FOR DESCRIPTION OF VARIABLES.  REMEMBER
-     *  SIXTH DWARF IS PIRATE AND IS THUS VERY DIFFERENT EXCEPT FOR MOTION RULES. */
     
-    /*  FIRST OFF, DON'T LET THE DWARVES FOLLOW HIM INTO A PIT OR A WALL.  ACTIVATE
-     *  THE WHOLE MESS THE FIRST TIME HE GETS AS FAR AS THE HALL OF MISTS (LOC 15).
-     *  IF NEWLOC IS FORBIDDEN TO PIRATE (IN PARTICULAR, IF IT'S BEYOND THE TROLL
-     *  BRIDGE), BYPASS DWARF STUFF.  THAT WAY PIRATE CAN'T STEAL RETURN TOLL, AND
-     *  DWARVES CAN'T MEET THE BEAR.  ALSO MEANS DWARVES WON'T FOLLOW HIM INTO DEAD
-     *  END IN MAZE, BUT C'EST LA VIE.  THEY'LL WAIT FOR HIM OUTSIDE THE DEAD END. */
+        LOC=NEWLOC;
+        
+        /*  DWARF STUFF.  SEE EARLIER COMMENTS FOR DESCRIPTION OF VARIABLES.  REMEMBER
+         *  SIXTH DWARF IS PIRATE AND IS THUS VERY DIFFERENT EXCEPT FOR MOTION RULES. */
+        
+        /*  FIRST OFF, DON'T LET THE DWARVES FOLLOW HIM INTO A PIT OR A WALL.  ACTIVATE
+         *  THE WHOLE MESS THE FIRST TIME HE GETS AS FAR AS THE HALL OF MISTS (LOC 15).
+         *  IF NEWLOC IS FORBIDDEN TO PIRATE (IN PARTICULAR, IF IT'S BEYOND THE TROLL
+         *  BRIDGE), BYPASS DWARF STUFF.  THAT WAY PIRATE CAN'T STEAL RETURN TOLL, AND
+         *  DWARVES CAN'T MEET THE BEAR.  ALSO MEANS DWARVES WON'T FOLLOW HIM INTO DEAD
+         *  END IN MAZE, BUT C'EST LA VIE.  THEY'LL WAIT FOR HIM OUTSIDE THE DEAD END. */
+        
+        if(LOC == 0 || FORCED(LOC) || CNDBIT(NEWLOC,3)) goto L2000;
+        if(DFLAG != 0) goto L6000;
+        if(INDEEP(LOC))DFLAG=1;
+        goto L2000;
     
-    if(LOC == 0 || FORCED(LOC) || CNDBIT(NEWLOC,3)) goto L2000;
-    if(DFLAG != 0) goto L6000;
-    if(INDEEP(LOC))DFLAG=1;
-    goto L2000;
+    
+    
     
     /*  WHEN WE ENCOUNTER THE FIRST DWARF, WE KILL 0, 1, OR 2 OF THE 5 DWARVES.  IF
      *  ANY OF THE SURVIVORS IS AT LOC, REPLACE HIM WITH THE ALTERNATE. */
@@ -327,7 +339,7 @@ L6010:    DTOTAL=0;
 L2000:    if(LOC == 0) goto L99;
     printf("\n my location %ld \n",LOC );
     KK=STEXT[LOC];
-    printf("\n KK is %ld \n",KK );
+    printf("\n Detail is %ld \n",DETAIL );
     if(fmod(ABB[LOC],ABBNUM) == 0 || KK == 0)KK=LTEXT[LOC];
     if(FORCED(LOC) || !DARK(0)) goto L2001;
     if(WZDARK && PCT(35)) goto L90;
@@ -616,6 +628,7 @@ Laction:
             SpeakMessageFromSect6(SPK);
         case 19000:
             SpeakMessageFromSect6(136);
+            //END
             score(0);
     }
     BUG(99);
@@ -835,14 +848,23 @@ L90:    SpeakMessageFromSect6(23);
     
     /*  OKAY, HE'S DEAD.  LET'S GET ON WITH IT. */
     
-L99:    if(CLOSNG) goto L95;
+L99:    if(CLOSNG)
+{
+    /*  HE DIED DURING CLOSING TIME.  NO RESURRECTION.  TALLY UP A DEATH AND EXIT. */
+    
+    SpeakMessageFromSect6(131);
+    NUMDIE=NUMDIE+1;
+    //end game
+    score(0);
+}
     NUMDIE=NUMDIE+1;
     if(!fYES(79+NUMDIE*2,80+NUMDIE*2,54)) score(0);
     if(NUMDIE == MAXDIE) score(0);
     PLACE[WATER]=0;
     PLACE[OIL]=0;
     if(TOTING(LAMP))PROP[LAMP]=0;
-    /* 98 */ for (J=1; J<=100; J++) {
+    for (J=1; J<=100; J++)
+    {
         I=101-J;
         if(!TOTING(I)) goto L98;
         K=OLDLC2;
@@ -854,11 +876,8 @@ L99:    if(CLOSNG) goto L95;
     OLDLOC=LOC;
     goto L2000;
     
-    /*  HE DIED DURING CLOSING TIME.  NO RESURRECTION.  TALLY UP A DEATH AND EXIT. */
-    
-L95:    SpeakMessageFromSect6(131);
-    NUMDIE=NUMDIE+1;
-    score(0);
+   
+
     
     
     
