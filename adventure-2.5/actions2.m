@@ -327,7 +327,7 @@ int fill(void) {
 	if(HERE(URN) && PROP[URN] != 0)SPK=214;
 	if(LIQ(0) != 0)SPK=105;
 	if(SPK != 107) return(2011);
-	PROP[BOTTLE]=fmod(COND[LOC],4)/2*2;
+	PROP[BOTTLE]=Misc_ModuloFunction(COND[LOC],4)/2*2;
 	K=LIQ(0);
 	if(TOTING(BOTTLE))PLACE[K]= -1;
 	if(K == OIL)SPK=108;

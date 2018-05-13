@@ -112,7 +112,12 @@ L4080: printf("\n Verb %ld \n",VERB);
             //Save command
             goto L8300;
         case 30:
-            goto L8310;
+            /*  RESUME.  READ A SUSPENDED GAME BACK FROM A FILE. */
+            KK=1;
+            if(LOC == 1 && ABB[1] == 1) goto L8305;
+            SpeakMessageFromSect6(268);
+            if(!fYES(200,54,54)) return(2012);
+            goto L8305;
         case 31: goto L8320;
         case 32: goto L8330;
         case 33:
@@ -371,7 +376,7 @@ L9086:	PROP[LAMP]=0;
 L9090:	if((!TOTING(OBJ)) && (OBJ != ROD || !TOTING(ROD2)))SPK=29;
 	if(OBJ != ROD || !TOTING(OBJ) || (!HERE(BIRD) && (CLOSNG || !AT(FISSUR))))
 		return(2011);
-	if(HERE(BIRD))SPK=206+fmod(PROP[BIRD],2);
+	if(HERE(BIRD))SPK=206+Misc_ModuloFunction(PROP[BIRD],2);
 	if(SPK == 206 && LOC == PLACE[STEPS] && PROP[JADE] < 0) goto L9094;
 	if(CLOSED) return(18999);
 	if(CLOSNG || !AT(FISSUR)) return(2011);
@@ -408,7 +413,7 @@ L9130:	if(OBJ == BOTTLE || OBJ == 0)OBJ=LIQ(0);
 	SPK=112;
 	if(OBJ != WATER) return(2011);
 	PSPEAK(PLANT,PROP[PLANT]+3);
-	PROP[PLANT]=fmod(PROP[PLANT]+1,3);
+	PROP[PLANT]=Misc_ModuloFunction(PROP[PLANT]+1,3);
 	PROP[PLANT2]=PROP[PLANT];
 	K=NUL;
 	 return(8);
@@ -575,6 +580,7 @@ L8300:	SPK=201;
 	SpeakMessageFromSect6(260);
 	if(!fYES(200,54,54)) return(2012);
 	SAVED=SAVED+5;
+    //this definitions of KK actually make all SAVWRD to save properly
 	KK= -1;
 
 /*  THIS NEXT PART IS SHARED WITH THE "RESUME" CODE.  THE TWO CASES ARE
@@ -586,7 +592,13 @@ L8305:	fGetDateTime(&I,&K);
 	SAVWRD(KK,K);
 	K=VRSION;
 	SAVWRD(0,K);
-	if(K != VRSION) goto L8312;
+	if(K != VRSION)
+    {
+        fSetParametersForSpeak(1,K/10,Misc_ModuloFunction(K,10));
+        fSetParametersForSpeak(3,VRSION/10,Misc_ModuloFunction(VRSION,10));
+        SpeakMessageFromSect6(269);
+        return(2000);
+    }
 /*  HEREWITH ARE ALL THE VARIABLES WHOSE VALUES CAN CHANGE DURING A GAME,
  *  OMITTING A FEW (SUCH AS I, J, ATTACK) WHOSE VALUES BETWEEN TURNS ARE
  *  IRRELEVANT AND SOME WHOSE VALUES WHEN A GAME IS
@@ -611,10 +623,11 @@ L8305:	fGetDateTime(&I,&K);
 	SAVARR(ODLOC,6);
 	SAVARR(PLACE,100);
 	SAVARR(PROP,100);
+    printf(" K value is %ld \n",K);
 	SAVWRD(KK,K);
     if(K != 0)
     {
-        printf(" K value is %ld ",K);
+        printf(" K value is %ld \n",K);
         SpeakMessageFromSect6(270);
         exit(FALSE);
     }
@@ -624,18 +637,7 @@ L8305:	fGetDateTime(&I,&K);
 	SpeakMessageFromSect6(266);
 	exit(FALSE);
 
-/*  RESUME.  READ A SUSPENDED GAME BACK FROM A FILE. */
 
-L8310:	KK=1;
-	if(LOC == 1 && ABB[1] == 1) goto L8305;
-	SpeakMessageFromSect6(268);
-	if(!fYES(200,54,54)) return(2012);
-	 goto L8305;
-
-L8312:	fSetParametersForSpeak(1,K/10,fmod(K,10));
-	fSetParametersForSpeak(3,VRSION/10,fmod(VRSION,10));
-	SpeakMessageFromSect6(269);
-	 return(2000);
 
 
 

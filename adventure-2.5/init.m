@@ -467,7 +467,7 @@ static int finish_init()
         ABB[I]=0;
         if(LTEXT[I] == 0 || KEY[I] == 0) goto L1102;
         K=KEY[I];
-        if(fmod(labs(TRAVEL[K]),1000) == 1)COND[I]=2;
+        if(Misc_ModuloFunction(labs(TRAVEL[K]),1000) == 1)COND[I]=2;
     L1102:	ATLOC[I]=0;
     } /* end loop */
     
@@ -652,7 +652,7 @@ static int finish_init()
     TURNS=0;
     TRNDEX=1;
     THRESH= -1;
-    if(TRNVLS > 0)THRESH=fmod(TRNVAL[1],100000)+1;
+    if(TRNVLS > 0)THRESH=Misc_ModuloFunction(TRNVAL[1],100000)+1;
     TRNLUZ=0;
     LMWARN=FALSE;
     IGO=0;
@@ -804,12 +804,12 @@ static int quick_io(void) {
 
 static void quick_item(W)long *W; {
 	if(init_reading && fread(W,4,1,f) != 1)return;
-	init_cksum = fmod(init_cksum*13+(*W),60000000);
+	init_cksum = Misc_ModuloFunction(init_cksum*13+(*W),60000000);
 	if(!init_reading)fwrite(W,4,1,f);
 }
 
 static void quick_array(A,N)long *A, N; { long I;
 	if(init_reading && fread(A,4,N+1,f) != N+1)printf("Read error!\n");
-	for(I=1;I<=N;I++)init_cksum = fmod(init_cksum*13+A[I],60000000);
+	for(I=1;I<=N;I++)init_cksum = Misc_ModuloFunction(init_cksum*13+A[I],60000000);
 	if(!init_reading && fwrite(A,4,N+1,f)!=N+1)printf("Write error!\n");
 }

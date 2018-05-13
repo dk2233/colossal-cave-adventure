@@ -235,7 +235,7 @@ L6010:    DTOTAL=0;
         KK=DLOC[I];
         KK=KEY[KK];
         if(KK == 0) goto L6016;
-    L6012:    NEWLOC=fmod(labs(TRAVEL[KK])/1000,1000);
+    L6012:    NEWLOC=Misc_ModuloFunction(labs(TRAVEL[KK])/1000,1000);
         {long x = J-1;
             if(NEWLOC > 300 || !INDEEP(NEWLOC) || NEWLOC == ODLOC[I] || (J > 1 &&
                                                                          NEWLOC == TK[x]) || J >= 20 || NEWLOC == DLOC[I] ||
@@ -340,7 +340,7 @@ L2000:    if(LOC == 0) goto L99;
     printf("\n my location %ld \n",LOC );
     KK=STEXT[LOC];
     printf("\n Detail is %ld \n",DETAIL );
-    if(fmod(ABB[LOC],ABBNUM) == 0 || KK == 0)KK=LTEXT[LOC];
+    if(Misc_ModuloFunction(ABB[LOC],ABBNUM) == 0 || KK == 0)KK=LTEXT[LOC];
     if(FORCED(LOC) || !DARK(0)) goto L2001;
     if(WZDARK && PCT(35)) goto L90;
     KK=RandomSection6Texts[16];
@@ -433,7 +433,7 @@ L2607:    FOOBAR=(FOOBAR>0 ? -FOOBAR : 0);
     TRNLUZ=TRNLUZ+TRNVAL[TRNDEX]/100000;
     TRNDEX=TRNDEX+1;
     THRESH= -1;
-    if(TRNDEX <= TRNVLS)THRESH=fmod(TRNVAL[TRNDEX],100000)+1;
+    if(TRNDEX <= TRNVLS)THRESH=Misc_ModuloFunction(TRNVAL[TRNDEX],100000)+1;
 L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
     if(VERB == SAY)
     {
@@ -582,7 +582,7 @@ L2625:    if(WD1 != funcMakeWorD( 715) || WD2 == 0) goto L2630;
     if(IGO == 10)SpeakMessageFromSect6(276);
 L2630:    I=VOCAB(WD1,-1);
     if(I == -1) goto L3000;
-    K=fmod(I,1000);
+    K=Misc_ModuloFunction(I,1000);
     KQ=I/1000+1;
     switch (KQ-1)
     {
@@ -668,14 +668,14 @@ L8:    KK=KEY[LOC];
     OLDLOC=LOC;
     
 L9:    LL=labs(TRAVEL[KK]);
-    if(fmod(LL,1000) == 1 || fmod(LL,1000) == K) goto L10;
+    if(Misc_ModuloFunction(LL,1000) == 1 || Misc_ModuloFunction(LL,1000) == K) goto L10;
     if(TRAVEL[KK] < 0) goto L50;
     KK=KK+1;
     goto L9;
     
 L10:    LL=LL/1000;
 L11:    NEWLOC=LL/1000;
-    K=fmod(NEWLOC,100);
+    K=Misc_ModuloFunction(NEWLOC,100);
     if(NEWLOC <= 300) goto L13;
     if(PROP[K] != NEWLOC/100-3) goto L16;
 L12:    if(TRAVEL[KK] < 0)BUG(25);
@@ -690,7 +690,7 @@ L13:    if(NEWLOC <= 100) goto L14;
     goto L12;
     
 L14:    if(NEWLOC != 0 && !PCT(NEWLOC)) goto L12;
-L16:    NEWLOC=fmod(LL,1000);
+L16:    NEWLOC=Misc_ModuloFunction(LL,1000);
     if(NEWLOC <= 300) goto L2;
     if(NEWLOC <= 500) goto L30000;
     SpeakMessageFromSect6(NEWLOC-500);
@@ -773,11 +773,11 @@ L20:    K=OLDLOC;
     SpeakMessageFromSect6(K2);
     goto L2;
     
-L21:    LL=fmod((labs(TRAVEL[KK])/1000),1000);
+L21:    LL=Misc_ModuloFunction((labs(TRAVEL[KK])/1000),1000);
     if(LL == K) goto L25;
     if(LL > 300) goto L22;
     J=KEY[LL];
-    if(FORCED(LL) && fmod((labs(TRAVEL[J])/1000),1000) == K)K2=KK;
+    if(FORCED(LL) && Misc_ModuloFunction((labs(TRAVEL[J])/1000),1000) == K)K2=KK;
 L22:    if(TRAVEL[KK] < 0) goto L23;
     KK=KK+1;
     goto L21;
@@ -787,7 +787,7 @@ L23:    KK=K2;
     SpeakMessageFromSect6(140);
     goto L2;
     
-L25:    K=fmod(labs(TRAVEL[KK]),1000);
+L25:    K=Misc_ModuloFunction(labs(TRAVEL[KK]),1000);
     KK=KEY[LOC];
     goto L9;
     

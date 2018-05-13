@@ -20,7 +20,7 @@
 #define HERE(OBJ)	(AT(OBJ) || TOTING(OBJ))
 #define LIQ2(PBOTL)	((1-(PBOTL))*WATER+((PBOTL)/2)*(WATER+OIL))
 #define LIQ(DUMMY)	(LIQ2(PROP[BOTTLE]<0 ? -1-PROP[BOTTLE] : PROP[BOTTLE]))
-#define LIQLOC(LOC)	(LIQ2((fmod(COND[LOC]/2*2,8)-5)*fmod(COND[LOC]/4,2)+1))
+#define LIQLOC(LOC)	(LIQ2((Misc_ModuloFunction(COND[LOC]/2*2,8)-5)*Misc_ModuloFunction(COND[LOC]/4,2)+1))
 #define CNDBIT(L,N)	(TSTBIT(COND[L],N))
 #define FORCED(LOC)	(COND[LOC] == 2)
 #define DARK(DUMMY)	((!CNDBIT(LOC,0)) && (PROP[LAMP] == 0 || !HERE(LAMP)))

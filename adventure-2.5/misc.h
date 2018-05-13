@@ -45,7 +45,7 @@ extern void fSAVWDS(long*,long*,long*,long*,long*,long*,long*);
 #define SAVWDS(W1,W2,W3,W4,W5,W6,W7) fSAVWDS(&W1,&W2,&W3,&W4,&W5,&W6,&W7)
 extern void fSAVARR(long*,long);
 #define SAVARR(ARR,N) fSAVARR(ARR,N)
-extern void fSAVWRD(long,long*);
+extern void fSAVWRD(long OP,long *wORD);
 #define SAVWRD(OP,WORD) fSAVWRD(OP,&WORD)
 extern long fVOCAB(long,long);
 #define VOCAB(ID,INIT) fVOCAB(ID,INIT)
@@ -83,6 +83,7 @@ extern void fSAVEIO(long,long,long*);
 
 extern void fGetDateTime(long*,long*);
 
+extern long Misc_ModuloFunction(long var, long mod);
 
 
 

@@ -59,7 +59,7 @@ L32:	if(LinePosition > LineLength) goto L40;
 	if(PARMS[NPARMS] < 0)NEG=9;
 	/* 390 */ for (I=1; I<=PRMTYP; I++) {
 	LinePosition=LinePosition-1;
-	INLINE[LinePosition]=fmod(PARM,10)+64;
+	INLINE[LinePosition]=Misc_ModuloFunction(PARM,10)+64;
 	if(I == 1 || PARM != 0) goto L390;
 	INLINE[LinePosition]=NEG;
 	NEG=0;
@@ -344,7 +344,7 @@ L11:	GETTXT=0;
     L15:	/*etc*/ ;
     } /* end loop */
 
-	if(HASH)GETTXT=GETTXT+fmod(HASH*13579L+5432L,97531L)*12345L+HASH;
+	if(HASH)GETTXT=GETTXT+Misc_ModuloFunction(HASH*13579L+5432L,97531L)*12345L+HASH;
 	return(GETTXT);
 }
 
@@ -370,9 +370,9 @@ long I, L, MWord;
     
     do
     {
-        MWord=MWord+I*(fmod(L,50)+10);
+        MWord=MWord+I*(Misc_ModuloFunction(L,50)+10);
         I=I*64;
-        if(fmod(L,100) > 50)MWord=MWord+I*5;
+        if(Misc_ModuloFunction(L,100) > 50)MWord=MWord+I*5;
         L=L/100;
         
         
@@ -409,7 +409,7 @@ void fPUTTXT(long WORD,long *sTATE, long CASE, long HASH)
     /*  ALPH1&2 DEFINE RANGE OF WRONG-CASE CHARS, 11-36 OR 37-62 OR EMPTY. */
     DIV=64L*64L*64L*64L;
     W=WORD;
-    if(HASH)W=W-fmod(HASH*13579L+5432L,97531L)*12345L-HASH;
+    if(HASH)W=W-Misc_ModuloFunction(HASH*13579L+5432L,97531L)*12345L-HASH;
     /* 18 */ for (I=1; I<=5; I++) {
         if(W <= 0 && STATE == 0 && labs(CASE) <= 1)return;
         BYTE=W/DIV;
@@ -477,11 +477,10 @@ long TEMP;
 /*  SUSPEND/RESUME I/O ROUTINES (SAVWDS, SAVARR, SAVWRD) */
 
 #undef SAVWDS
-void fSAVWDS(W1,W2,W3,W4,W5,W6,W7)long *W1, *W2, *W3, *W4, *W5, *W6, *W7; {
-;
+void fSAVWDS(long *W1, long *W2, long *W3, long *W4, long *W5, long *W6, long *W7)
+{
 
-/*  WRITE OR READ 7 VARIABLES.  SEE SAVWRD. */
-
+    /*  WRITE OR READ 7 VARIABLES.  SEE SAVWRD. */
 
 	SAVWRD(0,(*W1));
 	SAVWRD(0,(*W2));
@@ -511,59 +510,74 @@ long I;
 
 
 
-#define SAVARR(ARR,N) fSAVARR(ARR,N)
-#undef SAVWRD
-#define WORD (*wORD)
-void fSAVWRD(OP,wORD)long OP, *wORD; {
-static long BUF[250], CKSUM = 0, H1, HASH = 0, N = 0, STATE = 0;
 
-/*  IF OP<0, START WRITING A FILE, USING WORD TO INITIALISE ENCRYPTION; SAVE
- *  WORD IN THE FILE.  IF OP>0, START READING A FILE; READ THE FILE TO FIND
- *  THE VALUE WITH WHICH TO DECRYPT THE REST.  IN EITHER CASE, IF A FILE IS
- *  ALREADY OPEN, FINISH WRITING/READING IT AND DON'T START A NEW ONE.  IF OP=0,
- *  READ/WRITE A SINGLE WORD.  WORDS ARE BUFFERED IN CASE THAT MAKES FOR MORE
- *  EFFICIENT DISK USE.  WE ALSO COMPUTE A SIMPLE CHECKSUM TO CATCH ELEMENTARY
- *  POKING WITHIN THE SAVED FILE.  WHEN WE FINISH READING/WRITING THE FILE,
- *  WE STORE ZERO INTO WORD IF THERE'S NO CHECKSUM ERROR, ELSE NONZERO. */
-
-
-	if(OP != 0){long ifvar; ifvar=(STATE); switch (ifvar<0? -1 : ifvar>0? 1 :
-		0) { case -1: goto L30; case 0: goto L10; case 1: goto L30; }}
-	if(STATE == 0)return;
-	if(N == 250)fSAVEIO(1,STATE > 0,BUF);
-	N=fmod(N,250)+1;
-	H1=fmod(HASH*1093L+221573L,1048576L);
-	HASH=fmod(H1*1093L+221573L,1048576L);
-	H1=fmod(H1,1234)*765432+fmod(HASH,123);
-	N--;
-	if(STATE > 0)WORD=BUF[N]+H1;
-	BUF[N]=WORD-H1;
-	N++;
-	CKSUM=fmod(CKSUM*13+WORD,1000000000L);
-	return;
-
-L10:	STATE=OP;
-	fSAVEIO(0,STATE > 0,BUF);
-	N=1;
-	if(STATE > 0) goto L15;
-	HASH=fmod(WORD,1048576L);
-	BUF[0]=1234L*5678L-HASH;
-L13:	CKSUM=BUF[0];
-	return;
-
-L15:	fSAVEIO(1,TRUE,BUF);
-	HASH=fmod(1234L*5678L-BUF[0],1048576L);
-	 goto L13;
-
+void fSAVWRD(long OP,long *wORD)
+{
+    static long BUF[250], CKSUM = 0, H1, HASH = 0, N = 0, STATE = 0;
+    printf(" HASH %ld \n",HASH );
+    /*  IF OP<0, START WRITING A FILE, USING WORD TO INITIALISE ENCRYPTION; SAVE
+     *  WORD IN THE FILE.  IF OP>0, START READING A FILE; READ THE FILE TO FIND
+     *  THE VALUE WITH WHICH TO DECRYPT THE REST.  IN EITHER CASE, IF A FILE IS
+     *  ALREADY OPEN, FINISH WRITING/READING IT AND DON'T START A NEW ONE.  IF OP=0,
+     *  READ/WRITE A SINGLE WORD.  WORDS ARE BUFFERED IN CASE THAT MAKES FOR MORE
+     *  EFFICIENT DISK USE.  WE ALSO COMPUTE A SIMPLE CHECKSUM TO CATCH ELEMENTARY
+     *  POKING WITHIN THE SAVED FILE.  WHEN WE FINISH READING/WRITING THE FILE,
+     *  WE STORE ZERO INTO WORD IF THERE'S NO CHECKSUM ERROR, ELSE NONZERO. */
+    
+    
+    if(OP != 0)
+    {
+        long ifvar;
+        ifvar=(STATE);
+        switch (ifvar<0? -1 : ifvar>0? 1 :  0)
+        {
+            case -1: goto L30;
+            case 0:
+                STATE=OP;
+                fSAVEIO(0,STATE > 0,BUF);
+                N=1;
+                if(STATE > 0)
+                {
+                    fSAVEIO(1,TRUE,BUF);
+                    HASH=Misc_ModuloFunction(1234L*5678L-BUF[0],1048576L);
+                    CKSUM=BUF[0];
+                    return;
+                }
+                HASH=Misc_ModuloFunction(*wORD,1048576L);
+                BUF[0]=1234L*5678L-HASH;
+                CKSUM=BUF[0];
+                return;
+            case 1: goto L30;
+                
+        }
+        
+    }
+    //printf(" state %ld ",STATE);
+    if(STATE == 0)return;
+    if(N == 250)
+        fSAVEIO(1,STATE > 0,BUF);
+    
+    N=Misc_ModuloFunction(N,250)+1;
+    H1=Misc_ModuloFunction(HASH*1093L+221573L,1048576L);
+    HASH=Misc_ModuloFunction(H1*1093L+221573L,1048576L);
+    H1=Misc_ModuloFunction(H1,1234)*765432+Misc_ModuloFunction(HASH,123);
+    N--;
+    if(STATE > 0)*wORD=BUF[N]+H1;
+    BUF[N]=*wORD-H1;
+    N++;
+    CKSUM=Misc_ModuloFunction(CKSUM*13+*wORD,1000000000L);
+    return;
+ 
+    
 L30:	if(N == 250)fSAVEIO(1,STATE > 0,BUF);
-	N=fmod(N,250)+1;
-	if(STATE > 0) goto L32;
-	N--; BUF[N]=CKSUM; N++;
-	fSAVEIO(1,FALSE,BUF);
-L32:	N--; WORD=BUF[N]-CKSUM; N++;
-	fSAVEIO(-1,STATE > 0,BUF);
-	STATE=0;
-	return;
+    N=Misc_ModuloFunction(N,250)+1;
+    if(STATE > 0) goto L32;
+    N--; BUF[N]=CKSUM; N++;
+    fSAVEIO(1,FALSE,BUF);
+L32:	N--; *wORD=BUF[N]-CKSUM; N++;
+    fSAVEIO(-1,STATE > 0,BUF);
+    STATE=0;
+    return;
 }
 
 
@@ -573,21 +587,21 @@ L32:	N--; WORD=BUF[N]-CKSUM; N++;
 /*  DATA STRUC. ROUTINES (VOCAB, DSTROY, JUGGLE, MOVE, PUT, CARRY, DROP, ATDWRF)
 		*/
 
-#undef WORD
-#define SAVWRD(OP,WORD) fSAVWRD(OP,&WORD)
-#undef VOCAB
-long fVOCAB(ID,INIT)long ID, INIT; {
-long HASH, I, VOCAB;
 
-/*  LOOK UP ID IN THE VOCABULARY (ATAB) AND RETURN ITS "DEFINITION" (KTAB), OR
- *  -1 IF NOT FOUND.  IF INIT IS POSITIVE, THIS IS AN INITIALISATION CALL SETTING
- *  UP A KEYWORD VARIABLE, AND NOT FINDING IT CONSTITUTES A BUG.  IT ALSO MEANS
- *  THAT ONLY KTAB VALUES WHICH TAKEN OVER 1000 EQUAL INIT MAY BE CONSIDERED.
- *  (THUS "STEPS", WHICH IS A MOTION VERB AS WELL AS AN OBJECT, MAY BE LOCATED
- *  AS AN OBJECT.)  AND IT ALSO MEANS THE KTAB VALUE IS TAKEN MOD 1000. */
 
-	HASH=10000;
-	/* 1 */
+long fVOCAB(ID,INIT)long ID, INIT;
+{
+    long HASH, I, VOCAB;
+    
+    /*  LOOK UP ID IN THE VOCABULARY (ATAB) AND RETURN ITS "DEFINITION" (KTAB), OR
+     *  -1 IF NOT FOUND.  IF INIT IS POSITIVE, THIS IS AN INITIALISATION CALL SETTING
+     *  UP A KEYWORD VARIABLE, AND NOT FINDING IT CONSTITUTES A BUG.  IT ALSO MEANS
+     *  THAT ONLY KTAB VALUES WHICH TAKEN OVER 1000 EQUAL INIT MAY BE CONSIDERED.
+     *  (THUS "STEPS", WHICH IS A MOTION VERB AS WELL AS AN OBJECT, MAY BE LOCATED
+     *  AS AN OBJECT.)  AND IT ALSO MEANS THE KTAB VALUE IS TAKEN MOD 1000. */
+    
+    HASH=10000;
+    /* 1 */
     for (I=1; I<=TABSIZ; I++)
     {
         if(KTAB[I] == -1)
@@ -601,10 +615,10 @@ long HASH, I, VOCAB;
         if(ATAB[I] == ID+HASH*HASH)
         {
             VOCAB=KTAB[I];
-            if(INIT >= 0)VOCAB=fmod(VOCAB,1000);
+            if(INIT >= 0)VOCAB=Misc_ModuloFunction(VOCAB,1000);
             return(VOCAB);
         }
-    
+        
     }
     BUG(21);
     return 0;
@@ -614,12 +628,9 @@ long HASH, I, VOCAB;
 
 #define VOCAB(ID,INIT) fVOCAB(ID,INIT)
 #undef DSTROY
-void fDSTROY(OBJECT)long OBJECT; {
-;
-
+void fDSTROY(OBJECT)long OBJECT;
+{
 /*  PERMANENTLY ELIMINATE "OBJECT" BY MOVING TO A NON-EXISTENT LOCATION. */
-
-
 	MOVE(OBJECT,0);
 	return;
 }
@@ -783,7 +794,7 @@ long TSTBIT;
 /*  RETURNS TRUE IF THE SPECIFIED BIT IS SET IN THE MASK. */
 
 
-	TSTBIT=fmod(MASK/SETBIT(BIT),2) != 0;
+	TSTBIT=Misc_ModuloFunction(MASK/SETBIT(BIT),2) != 0;
 	return(TSTBIT);
 }
 
@@ -803,10 +814,10 @@ static long D, R = 0, RAN, T;
 	D=1;
 	if(R != 0 && RANGE >= 0) goto L1;
 	fGetDateTime(&D,&T);
-	R=fmod(T+5,1048576L);
-	D=1000+fmod(D,1000);
+	R=Misc_ModuloFunction(T+5,1048576L);
+	D=1000+Misc_ModuloFunction(D,1000);
 L1:	/* 2 */ for (T=1; T<=D; T++) {
-L2:	R=fmod(R*1093L+221587L,1048576L);
+L2:	R=Misc_ModuloFunction(R*1093L+221587L,1048576L);
 	} /* end loop */
 	RAN=(RANGE*R)/1048576;
 	return(RAN);
@@ -841,7 +852,7 @@ long fRNDVOC(long CHAR,long FORCE)
     for (I=1; I<=TABSIZ; I++)
     {
         J=J+7;
-        if(fmod((ATAB[I]-J*J)/DIV,64L) == CHAR)
+        if(Misc_ModuloFunction((ATAB[I]-J*J)/DIV,64L) == CHAR)
         {
             ATAB[I]=RNDVOC+J*J;
             return(RNDVOC);
@@ -1092,7 +1103,15 @@ void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP;
             
             return;
         case 1:
-            if(IN)fread(ARR,4,250,F);
+            if(IN)
+            {
+                fread(ARR,4,250,F);
+                for(int i = 0; i< sizeof(ARR);i++)
+                {
+                    printf(" %d - %ld \n",i,ARR[i]);
+                }
+            }
+            
             if(!IN)fwrite(ARR,4,250,F);
             return;
     }
@@ -1102,3 +1121,7 @@ void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP;
     
 }
 
+long Misc_ModuloFunction(long var, long mod)
+{
+    return((long)(var% mod));
+}
