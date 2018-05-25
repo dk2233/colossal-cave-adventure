@@ -2,27 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../actions1.m">
-   </FileRef>
-   <FileRef
-      location = "group:../actions2.m">
-   </FileRef>
-   <FileRef
-      location = "group:../datime.m">
-   </FileRef>
-   <FileRef
-      location = "group:../init.m">
-   </FileRef>
-   <FileRef
-      location = "group:../main.m">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/danielk/Documents/coding/adventureFromGithub/adventure-2.5/misc.m">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/danielk/Documents/coding/adventureFromGithub/adventure-2.5/score.m">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>

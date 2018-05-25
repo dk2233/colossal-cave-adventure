@@ -7,9 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
+#if !defined(TRUE)
 #define TRUE 	(1==1)
+#endif
+#if !defined(FALSE)
 #define FALSE   (!TRUE)
-
+#endif
 extern long ABB[], ATAB[], ATLOC[], BLKLIN, DFLAG, DLOC[], FIXED[], HOLDNG,
 		KTAB[], *LINES_ADV, LINK[], LineLength, LinePosition,
 		PARMS[], PLACE[], PTEXT[], RandomSection6Texts[], TABSIZ;

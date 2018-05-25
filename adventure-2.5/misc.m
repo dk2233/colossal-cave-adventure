@@ -1072,7 +1072,7 @@ void fMapInit(void)
 
 
 
-void fSAVEIO(OP,IN,ARR)long ARR[], IN, OP;
+void fSAVEIO(long OP,long IN,long *ARR)
 {
     static FILE *F; char NAME[50];
     

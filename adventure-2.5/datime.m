@@ -4,7 +4,6 @@
 #include "intuition/intuition.h"
 
 
-#import <Foundation/Foundation.h>
 
 #define INTUITIONREV 1
 
@@ -34,6 +33,8 @@ static int GOTX = 0, GOTY;
 #ifndef _TIME_
 #include "sys/time.h"
 #include "misc.h"
+#import <Foundation/Foundation.h>
+#include <stdio.h>
 
 void fGetDateTime(long *X, long  *Y) {
 	struct timeval now;
