@@ -280,10 +280,14 @@ L1002: SECT=GETNUM(1);
             
         case 8:
             /*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
+
+			while(1)
+{
             VERB=GETNUM(1);
 			NSLog(@" verb %ld ",VERB);
             if(VERB == -1) goto L1002;
             ACTSPK[VERB]=GETNUM(0);
+}
             
         case 9: goto L1070;
         case 10: goto L1004;
@@ -422,8 +426,9 @@ L1080:	HNTMAX=0;
 L1081:	K=GETNUM(1);
 	if(K == -1) goto L1002;
 	if(K <= 0 || K > HNTSIZ)BUG(7);
-	/* 1083 */ for (I=1; I<=4; I++) {
-L1083:	HINTS[K][I] =GETNUM(0);
+	for (I=1; I<=4; I++) 
+{
+	HINTS[K][I] =GETNUM(0);
 	} /* end loop */
 	HNTMAX=(HNTMAX>K ? HNTMAX : K);
 	 goto L1081;
