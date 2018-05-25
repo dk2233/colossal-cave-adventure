@@ -955,7 +955,7 @@ void fMapLine(long FIL)
                 }
             }
             
-            fgets(INLINE+1,100,OPENED);
+            (void)fgets(INLINE+1,100,OPENED);
             
             char *tab_s;
             
@@ -964,8 +964,9 @@ void fMapLine(long FIL)
         }
         else
         {
-            gets(INLINE+1);
+            scanf("%s",INLINE+1);
             if(feof(stdin)) score(1);
+            NSLog(@"%@",[NSString stringWithCString:(INLINE+1)]);
             
         }
         LineLength=0;
@@ -1095,7 +1096,11 @@ void fSAVEIO(long OP,long IN,long *ARR)
             return;
         case 0:
             printf("\nFile name: ");
-            gets(NAME);
+            scanf("%s",NAME);
+            printf("-> %s \n",NAME); 
+            
+            //NSS
+            
             F=fopen(NAME,(IN ? READ_MODE : WRITE_MODE));
             
             if(F == NULL)

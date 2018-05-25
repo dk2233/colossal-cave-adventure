@@ -75,6 +75,7 @@ WZDARK = FALSE, ZZWORD;
 
 
 int main(int argc, const char * argv[]) {
+
     
     /*  ADVENTURE (REV 2: 20 TREASURES) */
     
@@ -96,8 +97,10 @@ int main(int argc, const char * argv[]) {
     
     
     /*  READ THE DATABASE IF WE HAVE NOT YET DONE SO */
-    //@autoreleasepool {
-        
+
+     
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init]; 
+     
     LINES_ADV = (long *)calloc(LINSIZ+1,sizeof(long));
     if(!LINES_ADV)
     {
@@ -516,9 +519,9 @@ L2608:    if(VERB == SAY && WD2 > 0)VERB=0;
         PROP[MIRROR]=PUT(MIRROR,115,0);
         FIXED[MIRROR]=116;
         
-        /* 11010 */ for (I=1; I<=100; I++) {
-        L11010: if(TOTING(I))DSTROY(I);
-        } /* end loop */
+        for (I=1; I<=100; I++) {
+            if(TOTING(I))DSTROY(I);
+        } 
         
         SpeakMessageFromSect6(132);
         CLOSED=TRUE;
@@ -953,6 +956,10 @@ L40900: I=ATDWRF(LOC);
     
 L41000: if(TALLY == 1 && PROP[JADE] < 0) goto L40010;
     goto L40020;
+    
+    
+    
+    [pool drain]; 
     
     }
     

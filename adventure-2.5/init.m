@@ -267,27 +267,28 @@ L1002: SECT=GETNUM(1);
              *  OBJECTS (INCLUDING THE SNAKE), OR = SECOND LOC FOR TWO-PLACED OBJECTS. */
             
             OBJ = 0;
-			NSLog(@" obj %ld",OBJ);
+            //NSLog(@" obj %ld",OBJ);
             while (OBJ != -1)
             {
                 
                 PLAC[OBJ]=GETNUM(0);
                 FIXD[OBJ]=GETNUM(0);
                 OBJ=GETNUM(1);
-				NSLog(@" obj %ld",OBJ);
+                
+                NSLog(@" obj %ld",OBJ);
             }
             goto L1002;
             
         case 8:
             /*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
 
-			while(1)
-{
+        while(1)
+        {
             VERB=GETNUM(1);
-			NSLog(@" verb %ld ",VERB);
+            NSLog(@" verb %ld ",VERB);
             if(VERB == -1) goto L1002;
             ACTSPK[VERB]=GETNUM(0);
-}
+        }
             
         case 9: goto L1070;
         case 10: goto L1004;
@@ -308,7 +309,7 @@ L1002: SECT=GETNUM(1);
 L1004:	KK=LINUSE;
 L1005:	LINUSE=KK;
 	LOC=GETNUM(1);
-NSLog(@"  %ld \n",LOC);
+    //NSLog(@"  %ld \n",LOC);
 	if(LineLength >= LinePosition+70)BUG(0);
 	if(LOC == -1) goto L1002;
 	if(LineLength < LinePosition)BUG(1);
