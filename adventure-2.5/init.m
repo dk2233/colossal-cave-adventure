@@ -246,7 +246,7 @@ static int raw_init(void ) {
 
 L1002: SECT=GETNUM(1);
     OLDLOC= -1;
-    //NSLog(@" section -> %ld ",SECT);
+    NSLog(@" !section -> %ld ",SECT);
     
 //    NSString *whole_file = [NSString stringWithContentsOfFile:@"adventure.text" encoding:NSASCIIStringEncoding error:nil];
 //
@@ -267,18 +267,21 @@ L1002: SECT=GETNUM(1);
              *  OBJECTS (INCLUDING THE SNAKE), OR = SECOND LOC FOR TWO-PLACED OBJECTS. */
             
             OBJ = 0;
+			NSLog(@" obj %ld",OBJ);
             while (OBJ != -1)
             {
                 
                 PLAC[OBJ]=GETNUM(0);
                 FIXD[OBJ]=GETNUM(0);
                 OBJ=GETNUM(1);
+				NSLog(@" obj %ld",OBJ);
             }
             goto L1002;
             
         case 8:
             /*  READ DEFAULT MESSAGE NUMBERS FOR ACTION VERBS, STORE IN ACTSPK. */
             VERB=GETNUM(1);
+			NSLog(@" verb %ld ",VERB);
             if(VERB == -1) goto L1002;
             ACTSPK[VERB]=GETNUM(0);
             
@@ -301,6 +304,7 @@ L1002: SECT=GETNUM(1);
 L1004:	KK=LINUSE;
 L1005:	LINUSE=KK;
 	LOC=GETNUM(1);
+NSLog(@"  %ld \n",LOC);
 	if(LineLength >= LinePosition+70)BUG(0);
 	if(LOC == -1) goto L1002;
 	if(LineLength < LinePosition)BUG(1);
@@ -407,6 +411,7 @@ L1070:	K=GETNUM(1);
 	if(K == -1) goto L1002;
 L1071:	LOC=GETNUM(0);
 	if(LOC == 0) goto L1070;
+	printf("%ld ",K);
 	if(CNDBIT(LOC,K)) BUG(8);
 	COND[LOC]=COND[LOC]+SETBIT(K);
 	 goto L1071;
