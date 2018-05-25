@@ -223,7 +223,9 @@ static int raw_init(void ) {
 	TRNVLS=0;
 
     
-    
+ NSString *whole_file = [NSString stringWithContentsOfFile:@"adventure.text" encoding:NSASCIIStringEncoding error:nil];
+//
+    NSLog(@"%s",[whole_file cStringUsingEncoding:NSASCIIStringEncoding]);   
     
     
     
@@ -248,9 +250,7 @@ L1002: SECT=GETNUM(1);
     OLDLOC= -1;
     NSLog(@" !section -> %ld ",SECT);
     
-//    NSString *whole_file = [NSString stringWithContentsOfFile:@"adventure.text" encoding:NSASCIIStringEncoding error:nil];
-//
-//    printf("%s",[whole_file cStringUsingEncoding:NSASCIIStringEncoding]);
+   
     
     
 	switch (SECT)
@@ -275,7 +275,7 @@ L1002: SECT=GETNUM(1);
                 FIXD[OBJ]=GETNUM(0);
                 OBJ=GETNUM(1);
                 
-                NSLog(@" obj %ld",OBJ);
+                //NSLog(@" obj %ld",OBJ);
             }
             goto L1002;
             
@@ -285,7 +285,7 @@ L1002: SECT=GETNUM(1);
         while(1)
         {
             VERB=GETNUM(1);
-            NSLog(@" verb %ld ",VERB);
+            //NSLog(@" verb %ld ",VERB);
             if(VERB == -1) goto L1002;
             ACTSPK[VERB]=GETNUM(0);
         }

@@ -1099,8 +1099,6 @@ void fSAVEIO(long OP,long IN,long *ARR)
             scanf("%s",NAME);
             printf("-> %s \n",NAME); 
             
-            //NSS
-            
             F=fopen(NAME,(IN ? READ_MODE : WRITE_MODE));
             
             if(F == NULL)
